@@ -1,7 +1,6 @@
 import { createConfig } from "ponder";
 import { http } from "viem";
 import deployedContracts from "./contracts/deployedContracts";
-import scaffoldConfig from "@se-2/nextjs/scaffold.config";
 import { baseSepolia, hardhat } from "viem/chains";
 
 const isDev = process.env.NODE_ENV === "development";
