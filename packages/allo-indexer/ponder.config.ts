@@ -5,7 +5,8 @@ import { baseSepolia, hardhat } from "viem/chains";
 
 const isDev = process.env.NODE_ENV === "development";
 
-const targetNetwork = isDev ? hardhat : baseSepolia;
+const targetNetwork = baseSepolia;
+// const targetNetwork = isDev ? hardhat : baseSepolia;
 const START_BLOCK = isDev ? 0 : 19501634;
 
 const networks = {
@@ -23,17 +24,17 @@ export default createConfig({
     Allocator: {
       network: targetNetwork.name,
       abi: Allocator.abi,
-      startBlock: START_BLOCK,
+      startBlock: Allocator.startBlock || START_BLOCK,
     },
     Strategy: {
       network: targetNetwork.name,
       abi: Strategy.abi,
-      startBlock: START_BLOCK,
+      startBlock: Strategy.startBlock || START_BLOCK,
     },
     Registry: {
       network: targetNetwork.name,
       abi: Registry.abi,
-      startBlock: START_BLOCK,
+      startBlock: Registry.startBlock || START_BLOCK,
     },
   },
 });
