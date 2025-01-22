@@ -10,6 +10,8 @@ import {
 } from "~/components/ui/table";
 import { IndexerQuery } from "~/hooks/use-indexer";
 import { useAllocations } from "~/components/allocation/use-allocate";
+import { TokenAmount } from "../token/token-amount";
+import { EnsName } from "../ens";
 
 export function AllocationsTable({ query }: { query: IndexerQuery }) {
   const { data: allocations } = useAllocations(query);
@@ -18,6 +20,7 @@ export function AllocationsTable({ query }: { query: IndexerQuery }) {
       <TableHeader>
         <TableRow>
           <TableHead>Amount</TableHead>
+          <TableHead>To</TableHead>
           <TableHead>From</TableHead>
           <TableHead>Date</TableHead>
         </TableRow>
@@ -25,8 +28,18 @@ export function AllocationsTable({ query }: { query: IndexerQuery }) {
       <TableBody>
         {allocations?.items.map((allocation) => (
           <TableRow key={allocation.id}>
-            <TableCell>{allocation.amount}</TableCell>
-            <TableCell>{allocation.from}</TableCell>
+            <TableCell>
+              <TokenAmount
+                amount={allocation.amount}
+                token={allocation.token.address!}
+              />
+            </TableCell>
+            <TableCell>
+              <EnsName address={allocation.to} />
+            </TableCell>{" "}
+            <TableCell>
+              <EnsName address={allocation.from} />
+            </TableCell>
             <TableCell>
               {new Intl.DateTimeFormat("en-GB", {
                 dateStyle: "short",

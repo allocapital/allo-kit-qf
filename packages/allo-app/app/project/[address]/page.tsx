@@ -1,7 +1,6 @@
 "use client";
 
 import { Address } from "viem";
-import { QRCodeSVG } from "qrcode.react";
 
 import { useParams, useRouter } from "next/navigation";
 import { BackgroundImage } from "~/components/background-image";
@@ -11,7 +10,6 @@ import { Button } from "~/components/ui/button";
 
 import { useCart } from "~/components/cart/use-cart";
 import { useProjectById } from "~/components/registration/use-register";
-import { RegistrationApproveButton } from "~/components/registration/approve-button";
 import { AllocationsTable } from "~/components/allocation/allocations-table";
 
 export default function ProjectDetailsPage() {
@@ -31,7 +29,6 @@ export default function ProjectDetailsPage() {
       }
       actions={
         <div className="flex gap-1">
-          <RegistrationApproveButton id={project?.id!} />
           <Button
             onClick={() => {
               cart.set(address, 1);
@@ -49,12 +46,6 @@ export default function ProjectDetailsPage() {
       />
       <div className="py-8">{project?.metadata.description}</div>
 
-      <div className="flex justify-center">
-        <details className="min-w-64">
-          <summary className="py-2 cursor-pointer">Show QR</summary>
-          <QRCodeSVG value={global.location?.href} size={256} />
-        </details>
-      </div>
       <h3 className=" font-semibold">Allocations</h3>
       <AllocationsTable
         query={{

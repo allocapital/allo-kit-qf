@@ -28,14 +28,16 @@ export function AllocationForm({
   const projects = useProjects({
     where: { address_in: Object.keys(cart.items) as Address[] },
   });
-
   const error = projects.error || allocate.error;
   return (
     <form
       className="space-y-2"
       onSubmit={async (e) => {
         e.preventDefault();
-        const [recipients, amounts] = buildAllocations(cart.items, 0);
+        const [recipients, amounts] = buildAllocations(
+          cart.items,
+          token.data?.decimals
+        );
 
         allocate
           .mutateAsync([
@@ -85,11 +87,12 @@ export function AllocationForm({
           spenderAddress={strategyAddress}
         >
           <Button
+            className="w-48"
             type="submit"
             disabled={!cart.list.length}
             isLoading={allocate.isPending}
           >
-            Vote
+            Transfer tokens
           </Button>
         </AllowanceCheck>
       </div>

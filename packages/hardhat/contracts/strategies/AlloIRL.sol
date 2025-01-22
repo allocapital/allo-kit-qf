@@ -1,15 +1,15 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { ERC20 } from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import { Allocator } from "./extensions/Allocator.sol";
-import { Registry, IRegistry } from "./extensions/Registry.sol";
-import { MerkleClaim } from "./extensions/MerkleClaim.sol";
-import { Strategy } from "./base/Strategy.sol";
+import {Allocator} from "../extensions/Allocator.sol";
+import {Registry, IRegistry} from "../extensions/Registry.sol";
+import {MerkleClaim} from "../extensions/MerkleClaim.sol";
+import {Strategy} from "../base/Strategy.sol";
 
 /**
  * A simple Strategy contract for quadratic voting on projects and distribution
@@ -26,23 +26,20 @@ contract AlloIRL is Strategy, Allocator, Registry, Ownable {
         matchingToken = _matchingToken;
     }
 
-    function distribute(
-        address[] memory recipients,
-        uint256[] memory amounts,
-        address token,
-        bytes[] memory data
-    ) public override {
+    function distribute(address[] memory recipients, uint256[] memory amounts, address token, bytes[] memory data)
+        public
+        override
+    {
         require(token == matchingToken, "Must be matching token");
         super.distribute(recipients, amounts, token, data);
     }
 
     // Only owners can approve projects
-    function approve(
-        address project,
-        uint256 id,
-        string memory metadataURI,
-        bytes memory data
-    ) public override onlyOwner {
+    function approve(address project, uint256 id, string memory metadataURI, bytes memory data)
+        public
+        override
+        onlyOwner
+    {
         super.approve(project, id, metadataURI, data);
     }
 

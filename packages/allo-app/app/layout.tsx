@@ -47,15 +47,12 @@ export default function RootLayout({
                 <Link href="/project/create">
                   <Button variant={"link"}>Register Project</Button>
                 </Link>
-                <Link href="/project/approve">
-                  <Button variant={"link"}>Approve Projects</Button>
-                </Link>
-                <Link href="/distribute">
-                  <Button variant={"link"}>Distribute</Button>
-                </Link>
 
                 <Link href="/checkout">
                   <Button variant={"link"}>Checkout</Button>
+                </Link>
+                <Link href="/distribute">
+                  <Button variant={"link"}>Quadratic Funding</Button>
                 </Link>
               </div>
               <div className="flex gap-1">
