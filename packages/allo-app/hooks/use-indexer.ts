@@ -5,6 +5,8 @@ import { OperationResult, TypedDocumentNode } from "urql";
 import { Address, Hex } from "viem";
 import { useChainId } from "wagmi";
 import { createClient } from "~/lib/graphql";
+import { useCurrentChainName } from "./use-current-chain";
+import { chains } from "~/config";
 
 export type RegistrationWhere = {
   id?: Hex;
@@ -52,11 +54,12 @@ export function useIndexer<T>({
   variables: IndexerQuery;
   enabled?: boolean;
 }) {
-  const chainId = useChainId();
+  const network = useCurrentChainName();
+  const chainId = chains[network as keyof typeof chains]?.id;
   const client = createClient(chainId!);
   const res = useQuery({
     enabled: !!client && enabled,
-    queryKey,
+    queryKey: [...queryKey, network],
     queryFn: async () => {
       return client
         ?.query(query, variables)

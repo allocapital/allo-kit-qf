@@ -9,11 +9,11 @@ export default function CheckoutPage() {
   return (
     <Page title="Checkout">
       <AllocationForm
-        strategyAddress={SimpleGrants.address}
-        tokenAddress={ERC20Mock.address}
+        strategyAddress={SimpleGrants?.address}
+        tokenAddress={ERC20Mock?.address}
       />
       <div className="mt-4">
-        <MintTokens tokenAddress={ERC20Mock.address} />
+        <MintTokens tokenAddress={ERC20Mock?.address} />
       </div>
     </Page>
   );

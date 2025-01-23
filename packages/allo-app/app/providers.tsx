@@ -1,19 +1,54 @@
 "use client";
 import { PropsWithChildren } from "react";
 
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { WagmiProvider } from "wagmi";
-import { mainnet, polygon, optimism, arbitrum, base } from "wagmi/chains";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import {
+  Chain,
+  getDefaultConfig,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
+import {
+  safeWallet,
+  rainbowWallet,
+  coinbaseWallet,
+  metaMaskWallet,
+  walletConnectWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 
-import { wagmiConfig } from "@se-2/nextjs/services/web3/wagmiConfig";
+import { rainbowkitBurnerWallet } from "burner-connector";
+import { chains, defaultChain } from "~/config";
 export const queryClient = new QueryClient();
+
+const config = getDefaultConfig({
+  appName: "Commit App",
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
+  chains: Object.values(chains) as [Chain, ...Chain[]],
+  wallets: [
+    {
+      groupName: "Popular",
+      wallets: [
+        safeWallet,
+        rainbowWallet,
+        coinbaseWallet,
+        metaMaskWallet,
+        walletConnectWallet,
+        ...(process.env.NODE_ENV === "development"
+          ? [rainbowkitBurnerWallet]
+          : []),
+      ],
+    },
+  ],
+  ssr: true, // If your dApp uses server side rendering (SSR)
+});
 
 export function Providers(props: PropsWithChildren) {
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{props.children}</RainbowKitProvider>
+        <RainbowKitProvider initialChain={chains[defaultChain]}>
+          {props.children}
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

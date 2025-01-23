@@ -3675,13 +3675,13 @@ __metadata:
     "@radix-ui/react-slot": ^1.1.1
     "@radix-ui/react-toast": ^1.2.4
     "@rainbow-me/rainbowkit": ^2.2.1
-    "@se-2/nextjs": "*"
     "@tanstack/react-query": ^5.62.7
     "@types/node": ^20
     "@types/react": ^19
     "@types/react-dom": ^19
     "@urql/core": ^5.1.0
     "@wagmi/cli": ^2.1.22
+    burner-connector: ^0.0.9
     class-variance-authority: ^0.7.1
     clsx: ^2.1.1
     eslint: ^9
@@ -3764,7 +3764,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@se-2/nextjs@*, @se-2/nextjs@workspace:packages/nextjs":
+"@se-2/nextjs@workspace:packages/nextjs":
   version: 0.0.0-use.local
   resolution: "@se-2/nextjs@workspace:packages/nextjs"
   dependencies:
@@ -6719,7 +6719,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"burner-connector@npm:0.0.9":
+"burner-connector@npm:0.0.9, burner-connector@npm:^0.0.9":
   version: 0.0.9
   resolution: "burner-connector@npm:0.0.9"
   dependencies:

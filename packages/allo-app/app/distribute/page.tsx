@@ -32,29 +32,29 @@ export default function DistributePage() {
   const invalidate = useInvalidate();
   const { SimpleGrants, ERC20Mock } = useContracts();
   const { address } = useAccount();
-  const tokenAddress = ERC20Mock.address;
+  const tokenAddress = ERC20Mock?.address;
   const allocations = useAllocations({
     where: {
       // Only fetch allocations for this strategy
-      strategy_in: [SimpleGrants.address],
+      strategy_in: [SimpleGrants?.address],
       // Not any transfers to or from this contract (fund / withdraw)
-      to_not_in: [SimpleGrants.address],
-      from_not_in: [SimpleGrants.address],
+      to_not_in: [SimpleGrants?.address],
+      from_not_in: [SimpleGrants?.address],
     },
   });
   const distributions = useAllocations({
     where: {
       // Only fetch allocations for this strategy and distributions of matching funds (from === strategy address)
-      strategy_in: [SimpleGrants.address],
-      from_in: [SimpleGrants.address],
+      strategy_in: [SimpleGrants?.address],
+      from_in: [SimpleGrants?.address],
     },
   });
 
   const donations = allocations.data?.items ?? [];
 
   const voterCountById = getContributions(donations);
-  const token = useToken(tokenAddress, SimpleGrants.address);
-  const distribute = useDistribute({ strategyAddress: SimpleGrants.address });
+  const token = useToken(tokenAddress, SimpleGrants?.address);
+  const distribute = useDistribute({ strategyAddress: SimpleGrants?.address });
   const matchingFunds = token.data?.balance ?? BigInt(0);
   const matching = calculateQuadraticMatching(donations, matchingFunds);
 
@@ -112,7 +112,7 @@ export default function DistributePage() {
         Matching funds:{" "}
         <TokenAmount amount={matchingFunds} token={tokenAddress} />
         <MatchingFunds
-          strategyAddress={SimpleGrants.address}
+          strategyAddress={SimpleGrants?.address}
           tokenAddress={tokenAddress}
         />
       </div>
@@ -145,10 +145,10 @@ export default function DistributePage() {
         query={{
           where: {
             // Only fetch allocations for this strategy
-            strategy_in: [SimpleGrants.address],
+            strategy_in: [SimpleGrants?.address],
             // Not any transfers to or from this contract (fund / withdraw)
             to_not_in: [address!],
-            from_in: [SimpleGrants.address],
+            from_in: [SimpleGrants?.address],
           },
           orderBy: "createdAt",
           orderDirection: "desc",
@@ -173,7 +173,7 @@ function MatchingFunds({
   const [value, setValue] = useState<string>("");
   const fund = useDeposit({ strategyAddress });
   const withdraw = useWithdraw({ strategyAddress });
-  const token = useToken(tokenAddress, SimpleGrants.address);
+  const token = useToken(tokenAddress, SimpleGrants?.address);
 
   return (
     <form

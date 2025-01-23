@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Toaster } from "~/components/ui/toaster";
 import { Button } from "~/components/ui/button";
 import { FaucetButton } from "~/components/faucet-button";
+import { NetworkSelector } from "~/components/network-selector";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,6 +57,7 @@ export default function RootLayout({
                 </Link>
               </div>
               <div className="flex gap-1">
+                <NetworkSelector />
                 <ConnectButton />
                 <FaucetButton />
               </div>

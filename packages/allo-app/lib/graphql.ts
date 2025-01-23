@@ -8,6 +8,5 @@ const urls = {
 export function createClient(chainId: number) {
   const url = urls[chainId as keyof typeof urls];
   if (!url) return;
-  console.log(url);
   return new Client({ url, exchanges: [cacheExchange, fetchExchange] });
 }
