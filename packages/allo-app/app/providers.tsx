@@ -21,7 +21,7 @@ import { chains, defaultChain } from "~/config";
 export const queryClient = new QueryClient();
 
 const config = getDefaultConfig({
-  appName: "Commit App",
+  appName: "Allo Simple Grants",
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
   chains: Object.values(chains) as [Chain, ...Chain[]],
   wallets: [
