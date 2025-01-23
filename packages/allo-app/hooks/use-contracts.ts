@@ -6,5 +6,5 @@ import deployedContracts from "@se-2/nextjs/contracts/deployedContracts";
 export function useContracts() {
   const chainId = useChainId();
 
-  return deployedContracts[chainId];
+  return deployedContracts[chainId] ?? {};
 }
