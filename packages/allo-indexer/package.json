@@ -14,6 +14,7 @@
   "dependencies": {
     "abitype": "^0.10.2",
     "hono": "^4.5.0",
+    "node-fetch-cache": "^5.0.2",
     "p-retry": "^6.2.1",
     "ponder": "^0.8.21",
     "viem": "^2.21.3"
