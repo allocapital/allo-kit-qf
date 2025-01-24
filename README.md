@@ -4,6 +4,20 @@ Allo Kit gets you up and running building Allocation Strategies in no time!
 
 https://github.com/allocapital/allo-kit
 
+## Features
+
+- Register Project
+- Browse Projects
+- Directly Allocate tokens to Projects (currently configured to ERC20Mock)
+- Quadratic Funding
+  - Fund Matching Pool to SimpleGrants strategy contract
+  - Client-side calculation of quadratic based on Allocations to Projects
+  - Distribute Matching Pool to Projects based on quadratic shares
+- Indexer
+  - Project registration and approval events
+  - Token transfers to and from addresses via Allocate
+  - Token amounts also in USD amount at time of transfer
+
 ## Getting Started
 
 ### Update .env variables
@@ -21,6 +35,12 @@ Update the Pinata variables. This is needed for the creation and fetching of met
 PINATA_GATEWAY_KEY=
 PINATA_JWT=
 PINATA_GATEWAY_URL=
+```
+
+Update the Alchemy key. This is needed to fetch the token price in USD.
+
+```sh
+ALCHEMY_API_KEY=
 ```
 
 ### Development
