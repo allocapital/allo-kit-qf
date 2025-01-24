@@ -62,7 +62,7 @@ export function AllocationForm({
         }}
         renderItem={(project, i) => (
           <AllocationItem
-            key={project?.address}
+            key={project?.id}
             {...project}
             value={cart.items[project?.address as Address]}
             onUpdate={(value) => cart.set(project?.address, value)}

@@ -18,7 +18,7 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
       isPending={isPending}
       renderItem={(project) => (
         <RegistrationCard
-          key={project.address}
+          key={project.id}
           {...project}
           inCart={cart.contains(project.address)}
           onSelect={() =>
