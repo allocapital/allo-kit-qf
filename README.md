@@ -1,4 +1,4 @@
-# Allo Kit Extension for Scaffold-ETH 2
+# Allo Simple Grants
 
 Allo Kit gets you up and running building Allocation Strategies in no time!
 
@@ -17,6 +17,19 @@ https://github.com/allocapital/allo-kit
   - Project registration and approval events
   - Token transfers to and from addresses via Allocate
   - Token amounts also in USD amount at time of transfer
+
+## Architecture
+
+This document outlines the thought process of building SimpleGrants and AlloKit.
+https://hackmd.io/@carlb/allogram
+
+### Contracts
+
+The contracts are designed to be minimal and modular. A Strategy contract can easily be created by composing extensions and gates.
+
+### Indexer
+
+The indexer is built with Ponder and can be easily extended to support new events.
 
 ## Getting Started
 
