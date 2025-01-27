@@ -13,6 +13,7 @@ import { useToken } from "~/components/token/use-token";
 import { useProjects } from "../registration/use-register";
 import { Grid } from "../grid";
 import { Registration } from "~/schemas";
+import { EnsName } from "../ens";
 
 export function AllocationForm({
   strategyAddress,
@@ -115,7 +116,9 @@ function AllocationItem({
     <div className="relative sm:flex border p-2 rounded">
       <div className="flex-1">
         <h3 className="text-lg font-semibold">{metadata?.title}</h3>
-        <code className="text-sm">{address}</code>
+        <code className="text-sm">
+          <EnsName address={address} />
+        </code>
       </div>
       <Input
         name={address}
