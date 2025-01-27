@@ -28,10 +28,9 @@ export function useCart() {
 
   // Sum the cart allocations
   const sum = Object.values(items).reduce(
-    (sum, x) => (x ? sum + BigInt(x) : sum),
-    BigInt(0)
+    (sum, x) => (x ? (sum ?? 0) + x : sum),
+    0
   );
-
   // Persist cart state to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(items));
