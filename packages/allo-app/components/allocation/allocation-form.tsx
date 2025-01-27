@@ -103,11 +103,11 @@ export function AllocationForm({
 function AllocationItem({
   address,
   metadata,
-  value,
+  value = "",
   onUpdate,
   onRemove,
 }: Registration & {
-  value?: number;
+  value?: number | string;
   onUpdate: (value?: number) => void;
   onRemove: () => void;
 }) {
@@ -123,6 +123,7 @@ function AllocationItem({
         placeholder="0"
         type="number"
         min={0}
+        step={0.0000000001}
         value={value}
         onChange={(e) =>
           onUpdate(e.target.value ? Number(e.target.value) : undefined)

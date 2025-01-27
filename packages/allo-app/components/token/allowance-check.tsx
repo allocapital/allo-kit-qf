@@ -15,7 +15,7 @@ export function AllowanceCheck({
   tokenAddress,
   spenderAddress,
 }: PropsWithChildren<{
-  amount: bigint;
+  amount?: bigint | number;
   tokenAddress: Address;
   spenderAddress: Address;
 }>) {
