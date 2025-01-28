@@ -14,7 +14,7 @@ export function ApplicationsList({ query }: { query: IndexerQuery }) {
       error={error}
       isPending={isPending}
       renderItem={(application) => (
-        <ApproveItem key={application.address} {...application} />
+        <ApproveItem {...application} key={application.address} />
       )}
     />
   );

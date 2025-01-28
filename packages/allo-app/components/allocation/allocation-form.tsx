@@ -13,6 +13,7 @@ import { useToken } from "~/components/token/use-token";
 import { useProjects } from "../registration/use-register";
 import { Grid } from "../grid";
 import { Registration } from "~/schemas";
+import { EnsName } from "../ens";
 
 export function AllocationForm({
   strategyAddress,
@@ -62,8 +63,8 @@ export function AllocationForm({
         }}
         renderItem={(project, i) => (
           <AllocationItem
-            key={project?.address}
             {...project}
+            key={project?.id}
             value={cart.items[project?.address as Address]}
             onUpdate={(value) => cart.set(project?.address, value)}
             onRemove={() => () => cart.set(project.address)}
@@ -103,11 +104,11 @@ export function AllocationForm({
 function AllocationItem({
   address,
   metadata,
-  value,
+  value = "",
   onUpdate,
   onRemove,
 }: Registration & {
-  value?: number;
+  value?: number | string;
   onUpdate: (value?: number) => void;
   onRemove: () => void;
 }) {
@@ -115,7 +116,9 @@ function AllocationItem({
     <div className="relative sm:flex border p-2 rounded">
       <div className="flex-1">
         <h3 className="text-lg font-semibold">{metadata?.title}</h3>
-        <code className="text-sm">{address}</code>
+        <code className="text-sm">
+          <EnsName address={address} />
+        </code>
       </div>
       <Input
         name={address}
@@ -123,6 +126,7 @@ function AllocationItem({
         placeholder="0"
         type="number"
         min={0}
+        step={0.0000000001}
         value={value}
         onChange={(e) =>
           onUpdate(e.target.value ? Number(e.target.value) : undefined)

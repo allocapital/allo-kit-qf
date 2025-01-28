@@ -2,10 +2,16 @@ import { Context, Event, ponder } from "ponder:registry";
 import schemas from "ponder:schema";
 import { Address, erc20Abi, Hex, zeroAddress } from "viem";
 import pRetry, { AbortError } from "p-retry";
+import NodeFetchCache, { FileSystemCache } from "node-fetch-cache";
 
+const fetch = NodeFetchCache.create({
+  shouldCacheResponse: (res) => res.ok,
+  cache: new FileSystemCache({ ttl: 1000 * 60 * 60, cacheDirectory: ".cache" }),
+});
+
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const PINATA_GATEWAY_URL = process.env.PINATA_GATEWAY_URL;
 const PINATA_GATEWAY_KEY = process.env.PINATA_GATEWAY_KEY;
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 
 const MAX_RETRY_COUNT = 5;
 
@@ -62,6 +68,7 @@ ponder.on("Allocator:Allocate", async ({ event, context }) => {
 
   const tokenPrice = await fetchTokenPrice(symbol);
   const amountInUSD = toAmountInUSD(amount, tokenPrice);
+
   await context.db.insert(schemas.allocation).values({
     id: `${event.log.id}`,
     strategy: event.log.address,
@@ -80,31 +87,31 @@ const registrationId = (event: Event) =>
   `${event.args.project}_${event.log.address}_${event.args.index}` as Hex;
 
 async function fetchMetadata(cid: string) {
+  console.log("Fetching metadata for:", cid);
   return pRetry(
     () => {
       const ipfsUrl = `https://${PINATA_GATEWAY_URL}/ipfs/${cid}?pinataGatewayToken=${PINATA_GATEWAY_KEY}`;
       return cid
-        ? fetch(ipfsUrl)
-            .then(async (r) => {
-              if (r.status === 404) {
-                throw new AbortError(r.statusText);
-              }
-              return (await r.json()) as {
-                title: string;
-                description?: string;
-                image?: string;
-              };
-            })
-            .catch((err) => ({}))
+        ? fetch(ipfsUrl).then((r) => {
+            if (!r.ok) throw new Error(r.statusText);
+            if (r.status === 404) {
+              throw new AbortError(r.statusText);
+            }
+            return r.json();
+          })
         : {};
     },
     { retries: MAX_RETRY_COUNT }
-  );
+  ).catch((err) => {
+    console.log("fetchMetadata error:", err);
+    return {};
+  });
 }
 
 async function fetchToken(address: Address, client: Context["client"]) {
   if (address === zeroAddress) return [18, "ETH"] as const;
 
+  console.log("Fetching token decimal and symbol for: ", address);
   return pRetry(
     () => {
       const tokenContract = {
@@ -129,6 +136,8 @@ async function fetchTokenPrice(symbol: string) {
   }
   // Our ERC20Mock token used for testing
   if (symbol === "tUSD") symbol = "USDC";
+  console.log({ ALCHEMY_API_KEY, symbol });
+  if (!ALCHEMY_API_KEY) return 0;
   return pRetry(
     () => {
       return fetch(
@@ -147,7 +156,7 @@ async function fetchTokenPrice(symbol: string) {
     { retries: MAX_RETRY_COUNT }
   ).catch((err) => {
     console.log("fetchTokenPrice error:", err);
-    return String(0);
+    return "0";
   });
 }
 

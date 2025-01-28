@@ -18,7 +18,7 @@ import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { useIpfsUpload } from "~/hooks/use-ipfs-upload";
-import { BalanceCheck } from "~/components/balance-check";
+import { BalanceCheck } from "~/components/token/balance-check";
 import { ImageUpload } from "~/components/image-upload";
 import { RegistrationSchema } from "./schemas";
 import { useRegister } from "./use-register";
