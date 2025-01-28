@@ -1,10 +1,11 @@
 import { Context, Event, ponder } from "ponder:registry";
 import schemas from "ponder:schema";
-import { Address, erc20Abi, Hex } from "viem";
+import { Address, erc20Abi, Hex, zeroAddress } from "viem";
 import pRetry, { AbortError } from "p-retry";
 
 const PINATA_GATEWAY_URL = process.env.PINATA_GATEWAY_URL;
 const PINATA_GATEWAY_KEY = process.env.PINATA_GATEWAY_KEY;
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 
 const MAX_RETRY_COUNT = 5;
 
@@ -59,12 +60,15 @@ ponder.on("Allocator:Allocate", async ({ event, context }) => {
 
   const [decimals, symbol] = await fetchToken(token, context.client);
 
+  const tokenPrice = await fetchTokenPrice(symbol);
+  const amountInUSD = toAmountInUSD(amount, tokenPrice);
   await context.db.insert(schemas.allocation).values({
     id: `${event.log.id}`,
     strategy: event.log.address,
     to,
     from,
-    amount: amount.toString(),
+    amount,
+    amountInUSD,
     token: { address: token, decimals, symbol },
     tokenAddress: token,
     createdAt: toSeconds(Date.now()),
@@ -99,7 +103,8 @@ async function fetchMetadata(cid: string) {
 }
 
 async function fetchToken(address: Address, client: Context["client"]) {
-  // TODO: Add cache
+  if (address === zeroAddress) return [18, "ETH"] as const;
+
   return pRetry(
     () => {
       const tokenContract = {
@@ -116,6 +121,47 @@ async function fetchToken(address: Address, client: Context["client"]) {
   );
 }
 
+async function fetchTokenPrice(symbol: string) {
+  console.log("Fetching token price for symbol:", symbol);
+  if (!ALCHEMY_API_KEY) {
+    console.log("ALCHEMY_API_KEY not set. Cannot fetch token price.");
+    return "0";
+  }
+  // Our ERC20Mock token used for testing
+  if (symbol === "tUSD") symbol = "USDC";
+  return pRetry(
+    () => {
+      return fetch(
+        `https://api.g.alchemy.com/prices/v1/${ALCHEMY_API_KEY}/tokens/by-symbol?symbols=${symbol.toLowerCase()}`,
+        { headers: { accept: "application/json" } }
+      )
+        .then(async (r) => {
+          if (!r.ok) throw new Error(r.statusText);
+
+          return (await r.json()) as {
+            data: { prices: { value: string }[] }[];
+          };
+        })
+        .then((r) => String(r.data?.[0]?.prices[0]?.value ?? 0));
+    },
+    { retries: MAX_RETRY_COUNT }
+  ).catch((err) => {
+    console.log("fetchTokenPrice error:", err);
+    return String(0);
+  });
+}
+
 function toSeconds(ms: number) {
   return Math.floor(ms / 1000);
+}
+
+const PRECISION = 18n; // Number of decimal places for fixed-point arithmetic
+const SCALE = 10n ** PRECISION; // Scaling factor for fixed-point numbers
+
+function toAmountInUSD(amount: string, tokenPrice: string) {
+  // Convert token price to integer by removing decimal places
+  const tokenPriceFloat = parseFloat(tokenPrice);
+  const tokenPriceScaled = BigInt(Math.floor(tokenPriceFloat * Number(SCALE)));
+
+  return (BigInt(amount) * tokenPriceScaled) / SCALE;
 }
