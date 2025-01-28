@@ -38,6 +38,7 @@ export function useIndexer<T>({
   query,
   variables,
   enabled = true,
+  ...rest
 }: {
   queryKey: unknown[];
   queryFn: (r: OperationResult["data"]) => Promise<{
@@ -53,6 +54,7 @@ export function useIndexer<T>({
   query: TypedDocumentNode;
   variables: IndexerQuery;
   enabled?: boolean;
+  refetchInterval?: number;
 }) {
   const network = useCurrentChainName();
   const chainId = chains[network as keyof typeof chains]?.id;
@@ -74,6 +76,7 @@ export function useIndexer<T>({
       {
         return state.data?.items.length ? 0 : 1000;
       },
+    ...rest,
   });
 
   return { ...res, queryKey };
