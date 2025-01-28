@@ -1,0 +1,110 @@
+import { Cards } from "nextra/components";
+
+import {
+  BookText,
+  Rows3,
+  LayoutGrid,
+  TableProperties,
+  ShoppingBasket,
+  CircleCheck,
+  ShieldCheck,
+  Check,
+  CircleDollarSign,
+} from "lucide-react";
+
+# Components
+
+## Large building blocks
+
+### Registration
+
+Registration components are used for anything that are related to projects and applications.
+
+- **Project** - A profile for a Project
+- **Application** - An application a Project sends for something
+
+<Cards>
+  <Cards.Card
+    icon={<BookText />}
+    title="RegistrationForm"
+    href="/allo-app/components/registration-form"
+  />
+  <Cards.Card
+    icon={<Rows3 />}
+    title="ApplicationsList"
+    href="/allo-app/components/registration-list"
+  />
+  <Cards.Card
+    icon={<LayoutGrid />}
+    title="ProjectsGrid"
+    href="/allo-app/components/project-list"
+  />
+  <Cards.Card
+    icon={<Check />}
+    title="ApproveButton"
+    href="/allo-app/components/project-list"
+  />
+</Cards>
+
+### Allocation
+
+Allocation components are used for anything related to transferring tokens to or from the connected account, projects, and the Strategy contract.
+
+- **Allocation** - Transfers from sender to an address.
+- **Distribution** - Transfers from Strategy to an address.
+
+<Cards>
+  <Cards.Card
+    icon={<BookText />}
+    title="AllocationForm"
+    href="/allo-app/components/project-list"
+  />
+  <Cards.Card
+    icon={<TableProperties />}
+    title="AllocationsTable"
+    href="/allo-app/components/project-list"
+  />
+  <Cards.Card
+    icon={<ShoppingBasket />}
+    title="Checkout"
+    href="/allo-app/components/project-list"
+  />
+</Cards>
+
+### Token
+
+These components are utility for working with ERC20 tokens.
+
+- **AllowanceCheck** and **BalanceCheck** are components to wrap other components like buttons where you want to perform on-chain transactions and need to check if the account has enough balance.
+
+- **TokenAmount** simply parses and renders an amount with correct decimals and the token symbol.
+
+<Cards>
+  <Cards.Card
+    icon={<ShieldCheck />}
+    title="AllowanceCheck"
+    href="/allo-app/components/project-list"
+  />
+  <Cards.Card
+    icon={<CircleCheck />}
+    title="BalanceCheck"
+    href="/allo-app/components/project-list"
+  />
+  <Cards.Card
+    icon={<CircleDollarSign />}
+    title="TokenAmount"
+    href="/allo-app/components/project-list"
+  />
+</Cards>
+
+## Smaller building blocks
+
+- BackgrundImage
+- ConnectButton
+- EmptyState
+- EnsName
+- ErrorMessage
+- Grid
+- ImageUpload
+- Page
+- NetworkSelector
