@@ -4,6 +4,7 @@ Allo Kit gets you up and running building Allocation Strategies in no time!
 
 ## Documentation (in progress)
 
+[AlloKit Builders Telegram Group](https://t.me/+JUT-LKVo13dlN2Rh)  
 [Documentation](./docs/index.md)
 
 ## Features
