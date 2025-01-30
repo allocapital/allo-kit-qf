@@ -1,0 +1,66 @@
+# Registry
+
+A simple registry to handle eligibility for funding (or keeping track of project addresses for other purposes).
+
+Metadata can be sent for both registration (Application) and approving (Review).
+
+The first registration for an address becomes the registration for the project and the following registrations are applications.
+
+This allows us to handle project details, applications, and reviews in one primitive.
+
+```solidity
+event Register(address indexed project, uint256 indexed index, string metadataURI, bytes data);
+event Approve(address indexed project, uint256 indexed index, string metadataURI, bytes data);
+
+enum Status {
+    pending,
+    approved
+}
+
+struct Registration {
+    Status status;
+    bytes data; // Data can contain information that can be accessed later
+}
+
+ mapping(address => mapping(uint256 => Registration)) public projects;
+
+function _register(address recipient, string calldata metadataURI, bytes calldata data) internal virtual {}
+function _approve(address recipient, string calldata metadataURI, bytes calldata data) internal virtual {}
+```
+
+##### Examples
+
+```solidity
+// Only Strategy owner can approve projects
+contract ExampleStrategy is Registry, Ownable {
+    function approve(address recipient, string calldata metadataURI, bytes calldata data)
+        public override onlyOwner {
+            _approve(recipient, metadataURI, data);
+        }
+}
+
+// Auto-approve projects on registration
+contract SimpleGrants is Strategy, Allocator, Registry, Ownable {
+    function register(address project, string memory metadataURI, bytes memory data) public override {
+        _register(project, metadataURI, data);
+        _approve(project, 0, "", ""); // Auto-approve projects
+    }
+}
+
+```
+
+**Indexer GraphQL Query**
+
+```graphql
+{
+    registrations({ where: { strategyAddress: 0xYourContract }}) {
+        items {
+            project
+            index       # 0 for initial project registration, >= 1 for applications
+            isApproved  # Status is updated on Approve event
+            metadata    # Contains the fetched metadataURI
+            review      # Contains the fetched metadataURI for the Approve event
+        }
+    }
+}
+```
