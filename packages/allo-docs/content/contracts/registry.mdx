@@ -64,3 +64,94 @@ contract SimpleGrants is Strategy, Allocator, Registry, Ownable {
     }
 }
 ```
+
+### Hooks
+
+```jsx
+
+export function YourComponent() {
+    const { YourStrategy } = useContracts();
+    const strategyAddress = YourContract?.address
+
+    // Register new Project or Application
+    const register = useRegister({ strategyAddress });
+
+    // List Projects
+    const projects = useRegistrations({
+        where: {
+            strategyAddress,
+            index: 0
+        }
+    })
+
+    // List Applications to approve
+    const applications = useRegistrations({
+        where: {
+            strategyAddress,
+            index_not: 0,
+            isApproved: false
+        }
+    })
+
+    // Approve Project or Application
+    const approve = useRegistryApprove({ strategyAddress });
+
+    ...
+}
+```
+
+### Components
+#### RegistrationForm
+
+The RegistrationForm component can be used to register projects or applications.
+
+```jsx
+import { RegistrationForm } from "~/components/registration/registration-form";
+
+export default function CreateProjectPage() {
+  const router = useRouter();
+  const { YourStrategy } = useContracts();
+  
+  return (
+    <RegistrationForm
+      defaultValues={{}}
+      strategyAddress={YourStrategy?.address}
+      onSuccess={({ project }) => router.push(`/projects/${project}`)}
+    />
+  );
+}
+
+
+```
+#### ApplicationsList
+
+
+```jsx
+import { ApplicationsList } from "~/components/registration/applications-list";
+
+export default function ApproveApplicationsPage() {
+  return (
+    <ApplicationsList query={{
+        // Same as for hooks
+    }} />
+  );
+}
+
+
+```
+#### ProjectsList
+
+
+```jsx
+import { ProjectsList } from "~/components/registration/projects-list";
+
+export default function ApproveApplicationsPage() {
+  return (
+    <ProjectsList query={{
+        // Same as for hooks
+    }} />
+  );
+}
+
+
+```
