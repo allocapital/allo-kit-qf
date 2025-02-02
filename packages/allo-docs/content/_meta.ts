@@ -1,7 +1,17 @@
 export default {
   index: "",
   "get-started": "",
-  "allo-app": "",
+  "allo-app": {
+    title: "Allo App",
+    theme: {
+      collapsed: false,
+    },
+  },
   indexer: "",
-  contracts: "Strategy Contracts",
+  contracts: {
+    title: "Strategy Contracts",
+    theme: {
+      collapsed: false,
+    },
+  },
 };

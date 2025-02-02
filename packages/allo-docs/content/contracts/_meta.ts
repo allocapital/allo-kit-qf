@@ -1,5 +1,8 @@
 export default {
-  index: "Overview",
+  index: {
+    type: "doc",
+    title: "Overview",
+  },
   registry: "Registry",
   allocator: "Allocator",
   merkle: "Merkle Claim",
