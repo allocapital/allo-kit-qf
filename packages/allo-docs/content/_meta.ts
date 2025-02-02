@@ -3,5 +3,5 @@ export default {
   "get-started": "",
   "allo-app": "",
   indexer: "",
-  contracts: "",
+  contracts: "Strategy Contracts",
 };
