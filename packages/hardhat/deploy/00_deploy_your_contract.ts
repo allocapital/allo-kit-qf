@@ -41,6 +41,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
+  await deploy("SimpleGrants", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [owner],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
   // Deploy these so we can index them from packages/allo-indexer
   await deploy("Strategy", {
     from: deployer,

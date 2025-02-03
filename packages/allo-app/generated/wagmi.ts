@@ -343,6 +343,240 @@ export const registryAbi = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// SimpleGrants
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const simpleGrantsAbi = [
+  {
+    type: 'constructor',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'target', internalType: 'address', type: 'address' }],
+    name: 'AddressEmptyCode',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'AddressInsufficientBalance',
+  },
+  { type: 'error', inputs: [], name: 'FailedInnerCall' },
+  {
+    type: 'error',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'OwnableInvalidOwner',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'account', internalType: 'address', type: 'address' }],
+    name: 'OwnableUnauthorizedAccount',
+  },
+  { type: 'error', inputs: [], name: 'ReentrancyGuardReentrantCall' },
+  {
+    type: 'error',
+    inputs: [{ name: 'token', internalType: 'address', type: 'address' }],
+    name: 'SafeERC20FailedOperation',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'token',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'Allocate',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'project',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'index',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'metadataURI',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'Approve',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'strategyName',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+    ],
+    name: 'Initialize',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'previousOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnershipTransferred',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'project',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'index',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+      {
+        name: 'metadataURI',
+        internalType: 'string',
+        type: 'string',
+        indexed: false,
+      },
+      { name: 'data', internalType: 'bytes', type: 'bytes', indexed: false },
+    ],
+    name: 'Register',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipients', internalType: 'address[]', type: 'address[]' },
+      { name: 'amounts', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'token', internalType: 'address', type: 'address' },
+      { name: 'data', internalType: 'bytes[]', type: 'bytes[]' },
+    ],
+    name: 'allocate',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'project', internalType: 'address', type: 'address' },
+      { name: 'index', internalType: 'uint256', type: 'uint256' },
+      { name: 'metadataURI', internalType: 'string', type: 'string' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'approve',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'recipients', internalType: 'address[]', type: 'address[]' },
+      { name: 'amounts', internalType: 'uint256[]', type: 'uint256[]' },
+      { name: 'token', internalType: 'address', type: 'address' },
+      { name: 'data', internalType: 'bytes[]', type: 'bytes[]' },
+    ],
+    name: 'distribute',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'projects',
+    outputs: [
+      { name: 'status', internalType: 'enum IRegistry.Status', type: 'uint8' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [
+      { name: 'project', internalType: 'address', type: 'address' },
+      { name: 'metadataURI', internalType: 'string', type: 'string' },
+      { name: 'data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'register',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  {
+    type: 'function',
+    inputs: [],
+    name: 'strategyName',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+  },
+  { type: 'receive', stateMutability: 'payable' },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Strategy
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -922,6 +1156,209 @@ export const useWatchRegistryApproveEvent =
 export const useWatchRegistryRegisterEvent =
   /*#__PURE__*/ createUseWatchContractEvent({
     abi: registryAbi,
+    eventName: 'Register',
+  })
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleGrantsAbi}__
+ */
+export const useReadSimpleGrants = /*#__PURE__*/ createUseReadContract({
+  abi: simpleGrantsAbi,
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"owner"`
+ */
+export const useReadSimpleGrantsOwner = /*#__PURE__*/ createUseReadContract({
+  abi: simpleGrantsAbi,
+  functionName: 'owner',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"projects"`
+ */
+export const useReadSimpleGrantsProjects = /*#__PURE__*/ createUseReadContract({
+  abi: simpleGrantsAbi,
+  functionName: 'projects',
+})
+
+/**
+ * Wraps __{@link useReadContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"strategyName"`
+ */
+export const useReadSimpleGrantsStrategyName =
+  /*#__PURE__*/ createUseReadContract({
+    abi: simpleGrantsAbi,
+    functionName: 'strategyName',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__
+ */
+export const useWriteSimpleGrants = /*#__PURE__*/ createUseWriteContract({
+  abi: simpleGrantsAbi,
+})
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"allocate"`
+ */
+export const useWriteSimpleGrantsAllocate =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: simpleGrantsAbi,
+    functionName: 'allocate',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"approve"`
+ */
+export const useWriteSimpleGrantsApprove = /*#__PURE__*/ createUseWriteContract(
+  { abi: simpleGrantsAbi, functionName: 'approve' },
+)
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"distribute"`
+ */
+export const useWriteSimpleGrantsDistribute =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: simpleGrantsAbi,
+    functionName: 'distribute',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"register"`
+ */
+export const useWriteSimpleGrantsRegister =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: simpleGrantsAbi,
+    functionName: 'register',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useWriteSimpleGrantsRenounceOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: simpleGrantsAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useWriteContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useWriteSimpleGrantsTransferOwnership =
+  /*#__PURE__*/ createUseWriteContract({
+    abi: simpleGrantsAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__
+ */
+export const useSimulateSimpleGrants = /*#__PURE__*/ createUseSimulateContract({
+  abi: simpleGrantsAbi,
+})
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"allocate"`
+ */
+export const useSimulateSimpleGrantsAllocate =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleGrantsAbi,
+    functionName: 'allocate',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"approve"`
+ */
+export const useSimulateSimpleGrantsApprove =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleGrantsAbi,
+    functionName: 'approve',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"distribute"`
+ */
+export const useSimulateSimpleGrantsDistribute =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleGrantsAbi,
+    functionName: 'distribute',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"register"`
+ */
+export const useSimulateSimpleGrantsRegister =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleGrantsAbi,
+    functionName: 'register',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"renounceOwnership"`
+ */
+export const useSimulateSimpleGrantsRenounceOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleGrantsAbi,
+    functionName: 'renounceOwnership',
+  })
+
+/**
+ * Wraps __{@link useSimulateContract}__ with `abi` set to __{@link simpleGrantsAbi}__ and `functionName` set to `"transferOwnership"`
+ */
+export const useSimulateSimpleGrantsTransferOwnership =
+  /*#__PURE__*/ createUseSimulateContract({
+    abi: simpleGrantsAbi,
+    functionName: 'transferOwnership',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link simpleGrantsAbi}__
+ */
+export const useWatchSimpleGrantsEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({ abi: simpleGrantsAbi })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link simpleGrantsAbi}__ and `eventName` set to `"Allocate"`
+ */
+export const useWatchSimpleGrantsAllocateEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: simpleGrantsAbi,
+    eventName: 'Allocate',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link simpleGrantsAbi}__ and `eventName` set to `"Approve"`
+ */
+export const useWatchSimpleGrantsApproveEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: simpleGrantsAbi,
+    eventName: 'Approve',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link simpleGrantsAbi}__ and `eventName` set to `"Initialize"`
+ */
+export const useWatchSimpleGrantsInitializeEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: simpleGrantsAbi,
+    eventName: 'Initialize',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link simpleGrantsAbi}__ and `eventName` set to `"OwnershipTransferred"`
+ */
+export const useWatchSimpleGrantsOwnershipTransferredEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: simpleGrantsAbi,
+    eventName: 'OwnershipTransferred',
+  })
+
+/**
+ * Wraps __{@link useWatchContractEvent}__ with `abi` set to __{@link simpleGrantsAbi}__ and `eventName` set to `"Register"`
+ */
+export const useWatchSimpleGrantsRegisterEvent =
+  /*#__PURE__*/ createUseWatchContractEvent({
+    abi: simpleGrantsAbi,
     eventName: 'Register',
   })
 
