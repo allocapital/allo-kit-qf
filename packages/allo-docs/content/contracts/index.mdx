@@ -2,6 +2,7 @@
 
 A Strategy contract can easily be created by composing extensions and gates. They are inspired by OpenZeppelin's ERC20, ERC721, and the AccessControl contracts.
 
+- **Strategy** - base strategy contract
 - **Registry** - handles _registration_ and _approvals_ of projects and applications
 - **Allocator** - handles token transfers _to_ and _from_ strategy contract
 - **Gates** - modifiers to restrict function calls (eg. via checking token balance, or attestations)
@@ -13,6 +14,7 @@ There are some benefits in using the same functions and events for our strategie
 
 This means when we're building apps we can simply re-use a handful of hooks and the indexer will index these events:
 
+- **`useStrategies()`** - list created strategies
 - **`useRegister(strategyAddress)`** - register projects and applications
 - **`useApprove(strategyAddress)`** - review and approve projects and applications
 - **`useAllocate(strategyAddress)`** - transfer tokens to an address (donations, funding, voting)
