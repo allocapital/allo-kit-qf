@@ -12,10 +12,11 @@ const MAX_RETRY_COUNT = 5;
 
 ponder.on("Strategy:Initialize", async ({ event, context }) => {
   const { strategyName } = event.args;
-
+  const { chainId } = context.network;
   await context.db
     .insert(schemas.strategy)
     .values({
+      chainId,
       address: event.log.address,
       name: strategyName,
       createdAt: Number(event.block.timestamp),
@@ -24,6 +25,7 @@ ponder.on("Strategy:Initialize", async ({ event, context }) => {
 });
 
 ponder.on("Registry:Register", async ({ event, context }) => {
+  const { chainId } = context.network;
   const { index, project, metadataURI, data } = event.args;
   const metadata = await fetchMetadata(metadataURI);
 
@@ -31,6 +33,7 @@ ponder.on("Registry:Register", async ({ event, context }) => {
     .insert(schemas.registration)
     .values({
       id: registrationId(event),
+      chainId,
       index,
       address: project,
       strategy: event.log.address,
@@ -57,6 +60,7 @@ ponder.on("Registry:Approve", async ({ event, context }) => {
 });
 
 ponder.on("Allocator:Allocate", async ({ event, context }) => {
+  const { chainId } = context.network;
   const { to, from, token, amount } = event.args;
 
   const [decimals, symbol] = await fetchToken(token, context.client);
@@ -66,6 +70,7 @@ ponder.on("Allocator:Allocate", async ({ event, context }) => {
 
   await context.db.insert(schemas.allocation).values({
     id: `${event.log.id}`,
+    chainId,
     strategy: event.log.address,
     to,
     from,

@@ -1,6 +1,7 @@
 import { onchainTable, relations } from "ponder";
 
 export const strategy = onchainTable("strategy", (t) => ({
+  chainId: t.integer().notNull(),
   address: t.hex().primaryKey(),
   name: t.text().notNull(),
   createdAt: t.integer().notNull(),
@@ -8,6 +9,7 @@ export const strategy = onchainTable("strategy", (t) => ({
 
 export const registration = onchainTable("registration", (t) => ({
   id: t.hex().primaryKey(),
+  chainId: t.integer().notNull(),
   address: t.hex().notNull(),
   index: t.integer().notNull(),
   strategy: t.hex().notNull(),
@@ -22,6 +24,7 @@ export const registration = onchainTable("registration", (t) => ({
 
 export const allocation = onchainTable("allocation", (t) => ({
   id: t.text().primaryKey(),
+  chainId: t.integer().notNull(),
   strategy: t.hex().notNull(),
   to: t.hex().notNull(),
   from: t.hex().notNull(),
