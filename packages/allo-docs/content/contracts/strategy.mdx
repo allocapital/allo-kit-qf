@@ -1,0 +1,84 @@
+# Strategy
+
+
+The base contract to extend when creating strategies. At this point it only does two things:
+- Emits an `Initialized` event when deployed. This is picked up by the indexer.
+- Contains a `strategyName` property.
+
+
+```solidity
+interface IStrategy {}
+contract Strategy is IStrategy {
+    string public strategyName;
+    event Initialize(string strategyName);
+
+    constructor(string memory _name) {
+        strategyName = _name;
+        emit Initialize(strategyName);
+    }
+}
+
+```
+
+
+**Indexer GraphQL Query**
+
+```graphql
+{
+    # Note the spelling of "strategys" here (Ponder pluralizes by just adding an "s")
+    strategys(where: {}) {
+        items {
+            address
+            name
+            createdAt
+
+            # Projects and Applications
+            registrations(where: {}) {
+                items {
+                    address
+                    index
+                    metadata
+                    review
+                    isApproved
+                    createdAt
+                    updatedAt
+
+                    # Token transfers to this project
+                    allocations { 
+                        items {
+                            # See Allocations query
+                        }
+                    }
+                }
+            }
+
+            # Token transfers in Strategy
+            allocations(where: {}) {
+                items {
+                    from
+                    to
+                    token
+                    amount
+                    amountInUSD
+
+                    registration {
+                        # See Registrations query
+                    }
+                }
+            }
+            
+        }
+    }
+}
+```
+
+### Hooks
+
+```jsx
+
+export function YourComponent() {
+    const strategies = useStrategies();
+
+    ...
+}
+```
