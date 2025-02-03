@@ -13,6 +13,10 @@ export function useWaitForEvent(abi: Abi) {
       () =>
         getTransactionReceipt(client, { hash })
           .then(({ logs }) => parseEventLogs({ abi, logs, eventName }))
+          .then((logs) => {
+            console.log(logs);
+            return logs;
+          })
           .then((events) => events?.[0]?.args as T),
       { retries: 5 }
     );

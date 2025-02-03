@@ -7,6 +7,7 @@ import { RegistrationForm } from "~/components/registration/registration-form";
 export default function ProjectRegisterPage() {
   const { SimpleGrants } = useContracts();
   const { address } = useAccount();
+
   return (
     <Page title="Register Project">
       <RegistrationForm
