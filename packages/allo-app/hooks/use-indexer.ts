@@ -67,6 +67,7 @@ export function useIndexer<T>({
         ?.query(query, variables)
         .toPromise()
         .then((r) => {
+          console.log(r);
           if (r.error) throw new Error(r.error.message);
           return queryFn(r.data);
         });

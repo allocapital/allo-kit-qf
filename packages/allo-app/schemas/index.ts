@@ -23,3 +23,7 @@ export type Allocation = {
   registration: { address: Address };
   createdAt: number;
 };
+export type Strategy = {
+  name: string;
+  createdAt: number;
+};
