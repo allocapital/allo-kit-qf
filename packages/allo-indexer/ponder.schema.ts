@@ -52,7 +52,7 @@ export const allocationRelations = relations(allocation, ({ one }) => ({
     references: [registration.address],
   }),
   strategy: one(strategy, {
-    fields: [allocation.to],
+    fields: [allocation.strategy],
     references: [strategy.address],
   }),
 }));
