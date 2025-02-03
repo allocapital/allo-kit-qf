@@ -1,0 +1,12 @@
+# MerkleClaim
+
+MerkleVerify provides two internal functions that can be called from parent contract and a public claim function to transfer tokens.
+
+```solidity
+event MerkleSet(bytes32 root);
+event Claim(address recipient, uint256 amount, address token);
+
+function _setMerkle(bytes32 root) internal virtual
+function _verify(bytes32 memory proof, address token, address recipient, uint256 amount) internal virtual
+function claim(bytes32 memory proof, address token, address recipient, uint256 amount) public virtual
+```

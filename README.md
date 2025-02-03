@@ -2,7 +2,10 @@
 
 Allo Kit gets you up and running building Allocation Strategies in no time!
 
-https://github.com/allocapital/allo-kit
+## Documentation (in progress)
+
+[AlloKit Builders Telegram Group](https://t.me/+JUT-LKVo13dlN2Rh)  
+[AlloKit Documentation](https://allo-kit-docs.vercel.app)
 
 ## Features
 

@@ -29,6 +29,7 @@ contract AlloIRL is Strategy, Allocator, Registry, Ownable {
     function distribute(address[] memory recipients, uint256[] memory amounts, address token, bytes[] memory data)
         public
         override
+        onlyOwner
     {
         require(token == matchingToken, "Must be matching token");
         super.distribute(recipients, amounts, token, data);

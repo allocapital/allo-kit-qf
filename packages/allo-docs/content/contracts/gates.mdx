@@ -1,0 +1,78 @@
+# Gates
+
+Gates are small contracts with simple checks that can be used on contracts. Similar to OpenZeppelin's `Ownable` with the modifier `onlyOwner`.
+
+#### TokenGate
+
+TokenGate lets us check the balance of ERC20 or ERC721 tokens.
+
+```solidity
+modifier onlyToken(account, token, amount)
+```
+
+##### Example
+
+```solidity
+contract GatedRegistryWithMerkleClaim is Allocator, Registry, TokenGate, MerkleClaim {
+    address private alloToken;
+    address private guildNFT;
+
+    constructor(address _alloToken, address _guildNFT) {
+        alloToken = _alloToken;
+        guildNFT = _guildNFT;
+    }
+
+    // Only holders of 1 Guild NFT can register projects
+    function register(
+        address project,
+        string memory metadataURI, // Metadata contain Application Details
+        bytes memory data
+    ) public override onlyToken(msg.sender, guildNFT, 1) {
+        _register(project, metadataURI, data);
+    }
+
+    // Only holders of 10 ALLO tokens can approve projects
+    function approve(
+        address project,
+        string memory metadataURI, // Metadata contains Application Review
+        bytes memory data
+    ) public override onlyToken(msg.sender, alloToken, 10 ** 18) {
+        _approve(project, metadataURI, data);
+    }
+
+    // Only Owner can update Merkle
+    function setMerkle(bytes32 _root) public override onlyOwner {
+      _setMerkle(_root);
+    }
+
+    // This is the same function as in MerkleClaim added here for clarity
+    function claim(bytes32[] memory proof, address token, address recipient, uint256 amount) public override {
+      if (_verify(proof, token, recipient, amount)) {
+        IERC20(token).transfer(recipient, amount);
+        emit Claim(recipient, amount, token);
+      }
+    }
+}
+```
+
+#### EASGate
+
+Check if an account has an attestation for a specific schemaUID and attester.
+Can be used for example for OP Badgeholders or only approved projects can register projects.
+
+```solidity
+modifier onlyEAS(account, schemaUID, attester)
+```
+
+```solidity
+contract OptimismRetroFunding is Allocator, EASGate, Registry {
+  // Only OP Badgeholders can call
+  function allocate() public overide onlyEAS(msg.sender, badgeholderSchemaUID, approvedAttester) {
+    _allocate(recipient, token, amount);
+  }
+
+  function register(address project) onlyEAS(project, approvedSchemaUID, approvedAttester) {
+    _register(recipient, metadataURI);
+  }
+}
+```
