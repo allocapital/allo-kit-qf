@@ -31,7 +31,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const owner = deployer; // Add your owner address here
 
-  await deploy("SimpleGrants", {
+  await deploy("YourStrategy", {
     from: deployer,
     // Contract constructor arguments
     args: [owner],
