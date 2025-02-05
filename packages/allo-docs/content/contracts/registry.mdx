@@ -101,6 +101,7 @@ export function YourComponent() {
 ```
 
 ### Components
+
 #### RegistrationForm
 
 The RegistrationForm component can be used to register projects or applications.
@@ -111,7 +112,7 @@ import { RegistrationForm } from "~/components/registration/registration-form";
 export default function CreateProjectPage() {
   const router = useRouter();
   const { YourStrategy } = useContracts();
-  
+
   return (
     <RegistrationForm
       defaultValues={{}}
@@ -120,38 +121,59 @@ export default function CreateProjectPage() {
     />
   );
 }
-
-
 ```
+
 #### ApplicationsList
 
+ApplicationsList show incoming applications and a button to approve.
 
 ```jsx
 import { ApplicationsList } from "~/components/registration/applications-list";
 
 export default function ApproveApplicationsPage() {
+  const { YourStrategy } = useContracts();
   return (
-    <ApplicationsList query={{
-        // Same as for hooks
-    }} />
+    <ApplicationsList
+      query={{
+        where: {
+          strategyAddress: YourStrategy?.address,
+          index_not: 0,
+          isApproved: false,
+        },
+      }}
+    />
   );
 }
-
-
 ```
+
 #### ProjectsList
 
+ProjectsList show projects in a Grid view.
 
 ```jsx
 import { ProjectsList } from "~/components/registration/projects-list";
 
-export default function ApproveApplicationsPage() {
+export default function ProjectsDiscoverPage() {
   return (
-    <ProjectsList query={{
-        // Same as for hooks
-    }} />
+    <ProjectsList
+      query={{
+        where: {
+          strategyAddress,
+          index: 0, // Only Projects - not applications
+        },
+      }}
+    />
   );
 }
+```
 
+#### ApproveButton
 
+```jsx
+import { RegistrationApproveButton } from "~/components/registration/registration-button";
+
+export default function ApproveApplicationsPage() {
+  const { registrationId } = useParams({ registrationId: string });
+  return <RegistrationApproveButton id={registrationId} />;
+}
 ```

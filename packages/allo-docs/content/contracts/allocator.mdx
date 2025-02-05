@@ -79,3 +79,49 @@ const matchingDistributions = useAllocations({
   },
 });
 ```
+
+### Components
+
+#### AllocationForm
+
+The AllocationForm component can be used to transfer tokens to projects added to a Cart
+
+```jsx
+import { AllocationForm } from "~/components/allocation/allocation-form";
+
+export default function CheckoutPage() {
+  const { YourStrategy } = useContracts();
+
+  const erc20address = "0xTokenAddress";
+
+  return (
+    <AllocationForm
+      defaultValues={{}}
+      strategyAddress={YourStrategy?.address}
+      tokenAddress={erc20address}
+    />
+  );
+}
+```
+
+#### AllocationsTable
+
+The AllocationsTable component renders a table of token tranfers.
+
+```jsx
+import { AllocationForm } from "~/components/allocation/allocation-form";
+
+export default function ProjectDetailsPage() {
+  const { YourStrategy } = useContracts();
+  return (
+    <AllocationsTable
+      query={{
+        where: {
+          strategyAddress: YourContract?.address,
+          to: "0xProjectAddress",
+        },
+      }}
+    />
+  );
+}
+```
