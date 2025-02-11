@@ -51,7 +51,7 @@ contract MatchingFundsStrategy is Allocator, Ownable {
 
 ```graphql
 {
-    allocations({ where: { strategyAddress: 0xYourContract }}) {
+    allocations(where: { strategy_in_: ["0xYourContract"] }) {
         items {
             to
             from
@@ -68,13 +68,13 @@ contract MatchingFundsStrategy is Allocator, Ownable {
 ```tsx
 const donations = useAllocations({
   where: {
-    strategyAddress: "0xYourContract",
+    strategy_in: ["0xYourContract"],
     from_not_in: ["0xYourContract"], // Exclude matching distributions
   },
 });
 const matchingDistributions = useAllocations({
   where: {
-    strategyAddress: "0xYourContract",
+    strategy_in: ["0xYourContract"],
     from_in: ["0xYourContract"],
   },
 });
@@ -117,7 +117,7 @@ export default function ProjectDetailsPage() {
     <AllocationsTable
       query={{
         where: {
-          strategyAddress: YourContract?.address,
+          strategy_in: [YourContract?.address],
           to: "0xProjectAddress",
         },
       }}

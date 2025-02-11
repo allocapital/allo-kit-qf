@@ -13,13 +13,14 @@ event Register(address indexed project, uint256 indexed index, string metadataUR
 event Approve(address indexed project, uint256 indexed index, string metadataURI, bytes data);
 
 enum Status {
-    pending,
-    approved
+  pending,
+  approved
 }
 
 struct Registration {
-    Status status;
-    bytes data; // Data can contain information that can be accessed later
+  Status status;
+  address owner;
+  bytes data; // Data can contain information that can be accessed later
 }
 
  mapping(address => mapping(uint256 => Registration)) public projects;
@@ -33,70 +34,71 @@ function _approve(address recipient, string calldata metadataURI, bytes calldata
 ```solidity
 // Only Strategy owner can approve projects
 contract ExampleStrategy is Registry, Ownable {
-    function approve(address recipient, string calldata metadataURI, bytes calldata data)
-        public override onlyOwner {
-            _approve(recipient, metadataURI, data);
-        }
+  function approve(address recipient, string calldata metadataURI, bytes calldata data)
+    public override onlyOwner {
+      _approve(recipient, metadataURI, data);
+    }
 }
 
 // Auto-approve projects on registration
 contract SimpleGrants is Strategy, Allocator, Registry, Ownable {
-    function register(address project, string memory metadataURI, bytes memory data) public override {
-        _register(project, metadataURI, data);
-        _approve(project, 0, "", ""); // Auto-approve projects
-    }
+  function register(address project, string memory metadataURI, bytes memory data) public override {
+    _register(project, metadataURI, data);
+    _approve(project, 0, "", ""); // Auto-approve projects
+  }
 }
-
 ```
 
 **Indexer GraphQL Query**
 
 ```graphql
 {
-    registrations({ where: { strategyAddress: 0xYourContract }}) {
-        items {
-            project
-            index       # 0 for initial project registration, >= 1 for applications
-            isApproved  # Status is updated on Approve event
-            metadata    # Contains the fetched metadataURI
-            review      # Contains the fetched metadataURI for the Approve event
-        }
+  registrations(where: { strategy_in: ["0xYourContract"] }) {
+    items {
+      id
+      index # 0 for initial project registration, >= 1 for applications
+      isApproved # Status is updated on Approve event
+      metadata # Contains the fetched metadataURI
+      review # Contains the fetched metadataURI for the Approve event
+      strategy {
+        address
+        name
+      }
     }
+  }
 }
 ```
 
 ### Hooks
 
 ```jsx
-
 export function YourComponent() {
-    const { YourStrategy } = useContracts();
-    const strategyAddress = YourContract?.address
+  const { YourStrategy } = useContracts();
+  const strategyAddress = YourContract?.address;
 
-    // Register new Project or Application
-    const register = useRegister({ strategyAddress });
+  // Register new Project or Application
+  const register = useRegister({ strategyAddress });
 
-    // List Projects
-    const projects = useRegistrations({
-        where: {
-            strategyAddress,
-            index: 0
-        }
-    })
+  // List Projects
+  const projects = useRegistrations({
+    where: {
+      strategy_in: [strategyAddress],
+      index: 0,
+    },
+  });
 
-    // List Applications to approve
-    const applications = useRegistrations({
-        where: {
-            strategyAddress,
-            index_not: 0,
-            isApproved: false
-        }
-    })
+  // List Applications to approve
+  const applications = useRegistrations({
+    where: {
+      strategy_in: [strategyAddress],
+      index_not: 0,
+      isApproved: false,
+    },
+  });
 
-    // Approve Project or Application
-    const approve = useRegistryApprove({ strategyAddress });
-
-    ...
+  // Approve Project or Application
+  const approve = useRegistryApprove({ strategyAddress });
+  ...
 }
 ```
 
@@ -136,7 +138,7 @@ export default function ApproveApplicationsPage() {
     <ApplicationsList
       query={{
         where: {
-          strategyAddress: YourStrategy?.address,
+          strategy_in: [YourStrategy?.address],
           index_not: 0,
           isApproved: false,
         },
@@ -158,7 +160,7 @@ export default function ProjectsDiscoverPage() {
     <ProjectsList
       query={{
         where: {
-          strategyAddress,
+          strategy_in: [YourStrategy?.address],
           index: 0, // Only Projects - not applications
         },
       }}

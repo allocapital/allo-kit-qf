@@ -14,4 +14,10 @@ export default {
     },
   },
   indexer: "",
+  tutorials: {
+    title: "Tutorials",
+    theme: {
+      collapsed: false,
+    },
+  },
 };
