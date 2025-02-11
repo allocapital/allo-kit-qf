@@ -5,6 +5,7 @@ interface IStrategy {}
 
 contract Strategy is IStrategy {
     string public strategyName;
+
     event Initialize(string strategyName);
 
     constructor(string memory _name) {

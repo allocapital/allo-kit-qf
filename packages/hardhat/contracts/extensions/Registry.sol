@@ -1,5 +1,4 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.20;
 
 interface IRegistry {
@@ -10,11 +9,13 @@ interface IRegistry {
 
     struct Registration {
         Status status;
+        address owner;
         bytes data; // Data can contain information that can be accessed later
     }
 
     event Register(address indexed project, uint256 indexed index, string metadataURI, bytes data);
     event Approve(address indexed project, uint256 indexed index, string metadataURI, bytes data);
+    event Update(address indexed project, uint256 indexed index, string metadataURI, bytes data);
 
     function register(address project, string memory metadataURI, bytes memory data) external;
 }
@@ -29,6 +30,10 @@ contract Registry is IRegistry {
     }
 
     // MetadataURI can contain review details
+    function update(address project, uint256 index, string memory metadataURI, bytes memory data) public virtual {
+        _update(project, index, metadataURI, data);
+    }
+
     function approve(address project, uint256 index, string memory metadataURI, bytes memory data) public virtual {
         _approve(project, index, metadataURI, data);
     }
@@ -41,14 +46,19 @@ contract Registry is IRegistry {
         // When index is 0 we interpret it as the project registration.
         // This way we have a simple and flexible way to handle
         // project registration, applications, creation of campaigns etc.
-        projects[project][index] = Registration(Status.pending, data);
+        projects[project][index] = Registration(Status.pending, msg.sender, data);
         emit Register(project, index, metadataURI, data);
     }
 
     // MetadataURI can contain Review information
     function _approve(address project, uint256 index, string memory metadataURI, bytes memory data) internal virtual {
         require(projects[project][index].status == Status.pending, "Project already approved or not registered yet");
-        projects[project][index] = Registration(Status.approved, data);
+        projects[project][index] = Registration(Status.approved, msg.sender, data);
         emit Approve(project, index, metadataURI, data);
+    }
+
+    function _update(address project, uint256 index, string memory metadataURI, bytes memory data) internal virtual {
+        require(projects[project][index].owner == msg.sender, "Must be owner to update");
+        emit Update(project, index, metadataURI, data);
     }
 }
