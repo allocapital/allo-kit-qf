@@ -561,6 +561,37 @@ const deployedContracts = {
           type: "event",
         },
         {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Update",
+          type: "event",
+        },
+        {
           inputs: [
             {
               internalType: "address",
@@ -609,6 +640,11 @@ const deployedContracts = {
               type: "uint8",
             },
             {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
               internalType: "bytes",
               name: "data",
               type: "bytes",
@@ -636,6 +672,34 @@ const deployedContracts = {
             },
           ],
           name: "register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "update",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -854,6 +918,37 @@ const deployedContracts = {
           type: "event",
         },
         {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Update",
+          type: "event",
+        },
+        {
           inputs: [
             {
               internalType: "address[]",
@@ -971,6 +1066,11 @@ const deployedContracts = {
               type: "uint8",
             },
             {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
               internalType: "bytes",
               name: "data",
               type: "bytes",
@@ -1036,6 +1136,34 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "update",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
           stateMutability: "payable",
           type: "receive",
         },
@@ -1047,6 +1175,7 @@ const deployedContracts = {
         approve: "contracts/extensions/Registry.sol",
         projects: "contracts/extensions/Registry.sol",
         register: "contracts/extensions/Registry.sol",
+        update: "contracts/extensions/Registry.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -1310,6 +1439,37 @@ const deployedContracts = {
           type: "event",
         },
         {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Update",
+          type: "event",
+        },
+        {
           inputs: [
             {
               internalType: "address[]",
@@ -1427,6 +1587,11 @@ const deployedContracts = {
               type: "uint8",
             },
             {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
               internalType: "bytes",
               name: "data",
               type: "bytes",
@@ -1487,6 +1652,34 @@ const deployedContracts = {
             },
           ],
           name: "transferOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "update",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",

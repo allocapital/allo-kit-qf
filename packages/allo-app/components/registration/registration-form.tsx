@@ -26,9 +26,11 @@ import { useRegister } from "./use-register";
 export function RegistrationForm({
   strategyAddress,
   defaultValues,
+  onSuccess,
 }: {
   strategyAddress: Address;
   defaultValues?: Partial<z.infer<typeof RegistrationSchema>>;
+  onSuccess?(value: { project: string }): void;
 }) {
   const router = useRouter();
   const form = useForm<z.infer<typeof RegistrationSchema>>({
@@ -48,7 +50,7 @@ export function RegistrationForm({
           const { cid: metadata } = await upload.mutateAsync(values.metadata);
           register
             .mutateAsync([values.address, metadata, "0x"])
-            .then((r) => router.push(`/project/${r.project}`));
+            .then(onSuccess);
         })}
       >
         <FormField

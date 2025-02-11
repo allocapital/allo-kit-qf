@@ -3,8 +3,10 @@ import { useAccount } from "wagmi";
 import { Page } from "~/components/page";
 import { useContracts } from "~/hooks/use-contracts";
 import { RegistrationForm } from "~/components/registration/registration-form";
+import { useRouter } from "next/navigation";
 
 export default function ProjectRegisterPage() {
+  const router = useRouter();
   const { SimpleGrants } = useContracts();
   const { address } = useAccount();
 
@@ -20,8 +22,8 @@ export default function ProjectRegisterPage() {
             description: `This is a project...`,
           },
         }}
+        onSuccess={({ project }) => router.push(`/projects/${project}`)}
       />
-      ;
     </Page>
   );
 }
