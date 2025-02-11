@@ -11,11 +11,11 @@ In this tutorial, we’ll create a Direct Grants strategy that allows an admin t
 
 AlloKit makes it easy to build such strategies by providing smart contract extensions and pre-built React components.
 
-<Callout>
+<Callout type="info">
   AlloKit standardizes functions like `allocate` across strategies, which means
   the same interface is used everywhere—making it straightforward for indexing.
 </Callout>
-<Callout>
+<Callout type="info">
   Notice that many functions (like `allocate` and `register`) include a `data`
   parameter that allows you to pass custom information. This parameter can be
   used to add custom functionality that may be useful for your allocation logic
@@ -23,6 +23,10 @@ AlloKit makes it easy to build such strategies by providing smart contract exten
 </Callout>
 
 Read more about the rationale behind this in the [Strategy Contracts](/contracts) overview page.
+
+<Callout>
+  You can copy and paste this tutorial in Cursor Composer to get started.
+</Callout>
 
 ## Smart contract
 
@@ -172,9 +176,11 @@ export default function ApplicationsPage() {
   return (
     <ApplicationsList
       query={{
-        // Include applications for DirectGrants strategy
-        strategy_in: [DirectGrants?.address],
-        isApproved: false, // Only show unapproved applications
+        where: {
+          // Include applications for DirectGrants strategy
+          strategy_in: [DirectGrants?.address],
+          isApproved: false, // Only show unapproved applications
+        },
       }}
     />
   );
@@ -204,8 +210,10 @@ export default function BrowseProjectsPage() {
   return (
     <ProjectsList
       query={{
-        strategy_in: [DirectGrants?.address],
-        isApproved: true, // Only show projects that are approved
+        where: {
+          strategy_in: [DirectGrants?.address],
+          isApproved: true, // Only show projects that are approved
+        },
       }}
     />
   );
