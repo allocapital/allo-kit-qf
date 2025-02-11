@@ -1,28 +1,40 @@
+import { Callout } from "nextra/components";
+
 # Direct Grants
 
-This tutorial will guide you through the process of creating a Direct Grants strategy.
+In this tutorial, we’ll create a Direct Grants strategy that allows an admin to grant funds to a list of recipients. The main features are:
 
-First let's define what a Direct Grants strategy is.
+- **Project Registration**: Grantees register their projects.
+- **Application Listing**: Admins list the submitted project applications.
+- **Application Approval**: Admins review and approve each application.
+- **Token Allocation**: Approved projects are displayed with an input field to enter the grant amount.
 
-A Direct Grants strategy is a simple strategy that allows an admin to grant funds to a list of recipients.
+AlloKit makes it easy to build such strategies by providing smart contract extensions and pre-built React components.
 
-- Grantees can register their Project
-- Admins can list Project Applications
-- Admins can review each Application and Approve them
-- List Approved Projects and an Input for each to enter grant amount
+<Callout>
+  AlloKit standardizes functions like `allocate` across strategies, which means
+  the same interface is used everywhere—making it straightforward for indexing.
+</Callout>
+<Callout>
+  Notice that many functions (like `allocate` and `register`) include a `data`
+  parameter that allows you to pass custom information. This parameter can be
+  used to add custom functionality that may be useful for your allocation logic
+  or for off-chain indexing.
+</Callout>
+
+Read more about the rationale behind this in the [Strategy Contracts](/contracts) overview page.
 
 ## Smart contract
 
-The contract for Direct Grants is simple. We just need to let the admin be able to transfer tokens to a list of recipients.
-Let's create a new contract at `packages/hardhat/contracts/DirectGrants.sol`.
+### Create the Contract File
 
-### Allocate tokens
+Create a new file at `packages/hardhat/contracts/DirectGrants.sol`.
 
-AlloKit comes with an [Allocator](/contracts/allocator) extension contract to help us implement this.
-The allocate function handles both transferring of tokens and emitting events that will be picked up by the AlloKit Indexer.
-There is also a data attribute that can be used to send custom data depending on the needs of your strategy.
+### Allocate Tokens
 
-By using the same function and interface to handle token transfers, we can index this data the same way for all different types of strategies.
+AlloKit includes an [Allocator](/contracts/allocator) extension contract that handles transferring tokens and emitting events for indexing.
+
+By using the same interface for `allocate` across all strategies, AlloKit ensures that this custom data is indexed in a consistent manner—no matter what strategy you’re using.
 
 ```solidity
 //SPDX-License-Identifier: MIT
@@ -42,7 +54,7 @@ contract DirectGrants is Strategy, Allocator, Ownable {
     bytes[] memory data
     // Only the owner can give out grants (optional - we can also allow anyone to donate)
   ) public override onlyOwner {
-    // No need to make any changes from the default implementation
+    // Use the default implementation from Allocator
     super.allocate(recipients, amounts, token, data);
   }
 }
@@ -50,18 +62,20 @@ contract DirectGrants is Strategy, Allocator, Ownable {
 
 ### Register projects
 
-Ww also need a way to list projects we want to give out grants to. There are many ways to do this, we could use EAS Attestations similar to what Optimism does for RetroFunding.
-However, to do that we would need to set up EAS, create schemas, and create attestations.
+We also need a way to list projects we want to give out grants to. There are many ways to do this, we could use [EAS](https://docs.attest.sh) Attestations similar to what Optimism is doing with RetroFunding.
+However, to do that we would need to set up the EAS SDK, create schemas, and write functions to create attestations.
 
 For now, we will just use the AlloKit [Registry](/contracts/registry) to register projects.
 The Registry extension provides functions to register and approve projects. When we extend this contract we get access to calling `register` and `approve` functions. If we wish to make any changes we can simply override them.
+
+We explore using EAS as a Registry in the [RetroFunding](/tutorials/retro-funding) tutorial.
 
 ```solidity
 import { Registry } from "./extensions/Registry.sol";
 
 // Add the Registry extension to the contract
 contract DirectGrants is Strategy, Allocator, Registry, Ownable {
-  // This is actually not needed since we're not making any changes to the logic. Just for clarity.
+  // This override is optional since we're not changing any logic.
   function register(
     address project,
     string memory metadataURI,
@@ -83,7 +97,9 @@ contract DirectGrants is Strategy, Allocator, Registry, Ownable {
 }
 ```
 
-We can also add a check to make sure only approved projects can receive grants. The easiest way to do this is to override the internal allocate function.
+**Enforcing Approved Projects Only**
+
+We can also add a check to make sure only approved projects can receive grants. The easiest way to do this is to override the internal `_allocate` function.
 
 ```solidity
 import { Registry, IRegistry } from "./extensions/Registry.sol";
@@ -105,12 +121,12 @@ contract DirectGrants is Strategy, Allocator, Registry, Ownable {
 
 ### Deploying the contract
 
-Now, open `packages/hardhat/deploy/00_deploy_your_contract.ts` and add the contract to the deploy script.
+Open the deploy script at `packages/hardhat/deploy/00_deploy_your_contract.ts` and add the new contract:
 
 ```ts
 await deploy("DirectGrants", {
   from: deployer,
-  args: ["0xYourAdminAddress"], // Set this to the wallet address you're connecting with
+  args: ["0xYourAdminAddress"], // Replace with your wallet address
   log: true,
   autoMine: true,
 });
@@ -118,16 +134,18 @@ await deploy("DirectGrants", {
 
 ## Frontend
 
+AlloKit provides React components and hooks to interact with your contract. We will create pages for project registration, listing applications, browsing approved projects, and allocating tokens.
+
 ### Register Project
 
-First, create a new page: `app/project/register/page.tsx`.
-Next, let's import the `RegisterProject` component into the newly created file as well as the `useContracts` hook to get the `DirectGrants` contract.
+Create a new page at `app/project/register/page.tsx`. This page uses the `RegistrationForm` component along with the `useContracts` hook to access the deployed `DirectGrants` contract.
 
 ```tsx
+import { useRouter } from "next/navigation";
 import { useContracts } from "~/hooks/use-contracts";
 import { RegistrationForm } from "~/components/registration/registration-form";
 
-export default function RegisterProject() {
+export default function RegisterProjectPage() {
   const router = useRouter();
   const { DirectGrants } = useContracts();
   return (
@@ -139,13 +157,11 @@ export default function RegisterProject() {
 }
 ```
 
-Now, if we visit http://localhost:3000/projects/register, we should see the registration form.
-
-If we want to add or remove inputs of the form we can open the component located at `packages/allo-app/components/registration/registration-form.tsx` and change it.
+Visiting http://localhost:3000/projects/register should display the registration form. You can modify the form inputs by editing `packages/allo-app/components/registration/registration-form.tsx`.
 
 ### List Applications
 
-Create a new page: `app/application/page.tsx`.
+Create a page at `app/application/page.tsx` to list project applications that have not yet been approved.
 
 ```tsx
 import { useContracts } from "~/hooks/use-contracts";
@@ -156,22 +172,28 @@ export default function ApplicationsPage() {
   return (
     <ApplicationsList
       query={{
-        // Include applications for DirectGrants strategy (we could include other strategies as well)
+        // Include applications for DirectGrants strategy
         strategy_in: [DirectGrants?.address],
-        isApproved: false, // Only show applications that are not approved yet
+        isApproved: false, // Only show unapproved applications
       }}
     />
   );
 }
 ```
 
+Opening http://localhost:3000/applications should display a list of unapproved applications with a button to approve them.
+
 ### Browse Projects
 
-Create a new page: `app/project/page.tsx`.
+Create a page at `app/project/page.tsx` to display a grid of approved projects. Projects can be added to a cart that will persist across page navigation and reloads.
 
-The ProjectsGrid component displays a grid of projects and allows you to add projects to a cart for later allocation.
+<Callout>
+  Note that both the `ProjectsList` and `ApplicationsList` components use the
+  same `Grid` component with the `useRegistrations` hook. This
+  shared functionality helps maintain consistency in how project data is fetched
+  and displayed. You can open these components to see how they are implemented.
 
-Both ProjectsList and ApplicationsList components are using the same `useRegistrations` hook to fetch the data. The difference being the rendered item component. You can open both components to see how they are implemented.
+</Callout>
 
 ```tsx
 import { useContracts } from "~/hooks/use-contracts";
@@ -190,13 +212,15 @@ export default function BrowseProjectsPage() {
 }
 ```
 
+Navigating to http://localhost:3000/project should display a grid of approved projects.
+
 ### Allocation Page
 
 Next we want to allocate tokens to the projects we have added to our cart. Create a new page: `app/checkout/page.tsx`.
 
 The `AllocationForm` component renders the Projects we have added to our cart and allows us to allocate tokens to them.
 
-By default, we deploy an ERC20Mock token on local development to make it easy to test Allo Apps. We can use the `MintTokens` component to mint tokens to the address of the wallet we're connected with.
+On local development, we deploy an ERC20Mock token to make it easy to test Allo Apps. We can use the `MintTokens` component to mint tokens to the address of the wallet we're connected with.
 
 ```tsx
 import { useContracts } from "~/hooks/use-contracts";
@@ -221,6 +245,8 @@ export default function CheckoutPage() {
 
 ## Next Steps
 
-- Implement [AccessControl](https://docs.openzeppelin.com/contracts/5.x/api/access#AccessControl) instead of Ownable for more granularity in who can approve projects and give your grants.
-- Limit ApplicationsPage to only admins.
-- Use EAS Attestations instead of the Registry.
+After completing the basics, consider the following improvements:
+
+- **Access Control**: Replace the Ownable pattern with [AccessControl](https://docs.openzeppelin.com/contracts/5.x/api/access#AccessControl) to allow more granular permissions on who can approve projects and allocate funds.
+- **Admin-Only Views**: Limit the `ApplicationsPage` so that only admins can view the applications.
+- **EAS Registry**: While this tutorial uses the simple AlloKit Registry for project registration, you might explore using EAS Attestations _(or check out the [RetroFunding](/tutorials/retro-funding) tutorial)_.
