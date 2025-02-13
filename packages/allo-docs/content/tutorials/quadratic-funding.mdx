@@ -1,0 +1,150 @@
+import { Callout } from "nextra/components";
+
+# Quadratic Funding
+
+This tutorial builds on the [Direct Grants](/tutorials/direct-grants) tutorial.
+
+- **Distribute Page**: Add a page to distribute matching funds to projects.
+- **Add Matching Funds**: Add a way to add and withdraw matching funds from the strategy.
+- **Calculate Matching Funds**: Calculate the matching funds for each project based on the donation amount.
+- **List Project Allocations**: List the allocations for each project.
+- **Distribute Matching Funds**: Add a way to distribute matching funds to projects.
+
+## Smart contract
+
+### Create the Contract File
+
+Create a new file at `packages/hardhat/contracts/QuandraticFunding.sol`.
+
+### Donation and Matching Tokens
+
+We want to allow donations of a specific token to be allocated to projects.
+We will then use these donations to calculate a quadratic funding amount for each project to be awarded from the matching pool.
+
+```solidity
+//SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0 <0.9.0;
+
+import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+
+import { Allocator } from "../extensions/Allocator.sol";
+import { Registry, IRegistry } from "../extensions/Registry.sol";
+import { Strategy } from "../base/Strategy.sol";
+
+contract QuadraticFunding is Strategy, Allocator, Registry, Ownable {
+    address public immutable donationToken;
+    address public immutable matchingToken;
+
+    constructor(
+        address owner,
+        address _donationToken,
+        address _matchingToken
+    ) Ownable(owner) Strategy("QuadraticFunding") {
+        donationToken = _donationToken;
+        matchingToken = _matchingToken;
+    }
+
+    // Register is inherited from the Registry contract so we don't need to override it
+
+    // Owner can approve projects
+    function approve(
+        address project,
+        uint256 index,
+        string memory metadataURI,
+        bytes memory data
+    ) public override onlyOwner {
+        super.approve(project, index, metadataURI, data);
+    }
+
+    // Override allocate function to check if tokens are either donation or matching
+    function _allocate(address to, uint256 amount, address token, bytes memory data) internal override nonReentrant {
+        if (to == address(this)) require(token == matchingToken, "Matching funds to strategy must be matching token");
+        if (to != address(this)) require(token == donationToken, "Allocations to projects must be donation token");
+
+        super._allocate(to, amount, token, data);
+    }
+}
+```
+
+### Deploying the contract
+
+Open the deploy script at `packages/hardhat/deploy/00_deploy_your_contract.ts` and add the new contract:
+
+For the sake of simplicity, we will use the `ERC20Mock` token for both the donation and matching tokens. We can easily mint these tokens from the UI.
+
+```ts
+const mockToken = await hre.ethers.getContract<Contract>("ERC20Mock", deployer);
+const tokenAddress = await mockToken.getAddress();
+await deploy("QuandraticFunding", {
+  from: deployer,
+  args: [
+    "0xYourAdminAddress", // Replace with your wallet address
+    tokenAddress, // Donation token
+    tokenAddress, // Matching token
+  ],
+  log: true,
+  autoMine: true,
+});
+```
+
+## Frontend
+
+AlloKit provides React components and hooks to interact with your contract. We will create pages for project registration, listing applications, browsing approved projects, and allocating tokens.
+
+### Distribute Page
+
+Create a new page at `app/distribute/page.tsx`.
+
+```tsx
+import { calculateQuadraticMatching, getContributions } from "~/lib/quadratic";
+
+export default function DistributePage() {
+  const invalidate = useInvalidate();
+  const { QuandraticFunding, ERC20Mock } = useContracts();
+  const strategyAddress = QuandraticFunding?.address;
+  const donationToken = ERC20Mock?.address;
+  const matchingTokenAddress = ERC20Mock?.address;
+
+  // Get all donations to projects
+  const allocations = useAllocations({
+    where: {
+      // Only fetch allocations for this strategy
+      strategy_in: [strategyAddress],
+      // Not any transfers to or from Strategy contract (fund / withdraw of matching)
+      to_not_in: [strategyAddress],
+      from_not_in: [strategyAddress],
+    },
+  });
+  const donations = allocations.data?.items ?? [];
+
+  const matchingToken = useToken(matchingTokenAddress, strategyAddress);
+  const matchingFunds = matchingToken.data?.balance ?? BigInt(0);
+
+  const matching = calculateQuadraticMatching(donations, matchingFunds);
+
+  const distribute = useDistribute({ strategyAddress });
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-end">
+        <DistributeMatchingButton />
+      </div>
+      <MatchingFunds
+        strategyAddress={strategyAddress}
+        tokenAddress={tokenAddress}
+      />
+    </div>
+  );
+}
+```
+
+### Matching Funds
+
+Add matching funds that will be used to distribute to projects.
+
+## Next Steps
+
+After completing the basics, consider the following improvements:
+
+- **Access Control**: Replace the Ownable pattern with [AccessControl](https://docs.openzeppelin.com/contracts/5.x/api/access#AccessControl) to allow more granular permissions on who can approve projects and allocate funds.
+- **Token Support**: Handle different ERC20 tokens for donation and matching. Perhaps add a way to add approved tokens.
