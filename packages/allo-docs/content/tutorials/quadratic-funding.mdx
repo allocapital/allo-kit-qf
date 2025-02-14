@@ -2,7 +2,15 @@ import { Callout } from "nextra/components";
 
 # Quadratic Funding
 
-This tutorial builds on the [Direct Grants](/tutorials/direct-grants) tutorial.
+This tutorial builds on the [Direct Grants](/tutorials/direct-grants) tutorial. These are the changes and additions we will make:
+
+- Contract is deployed with a specified donation and matching token
+- Matching funds can be added that will be distributed to projects based on quadratic funding calculation
+- Donations can be made by anyone to projects with the donation token
+- Distribution of matching funds to projects (only by owner)
+- Add a Distribute page to add matching funds and distribute them to projects
+
+It will have the following features:
 
 - **Distribute Page**: Add a page to distribute matching funds to projects.
 - **Add Matching Funds**: Add a way to add and withdraw matching funds from the strategy.
@@ -20,6 +28,11 @@ Create a new file at `packages/hardhat/contracts/QuandraticFunding.sol`.
 
 We want to allow donations of a specific token to be allocated to projects.
 We will then use these donations to calculate a quadratic funding amount for each project to be awarded from the matching pool.
+
+As described in the [Allocator](/contracts/allocator) documentation:
+
+- **Allocate** - tokens going from sender to a recipient. We will use this for donations and funding the matching pool.
+- **Distribute** - tokens going from strategy contract to a recipient. This is for distributing the matching funds to projects.
 
 ```solidity
 //SPDX-License-Identifier: MIT
@@ -62,6 +75,17 @@ contract QuadraticFunding is Strategy, Allocator, Registry, Ownable {
         if (to != address(this)) require(token == donationToken, "Allocations to projects must be donation token");
 
         super._allocate(to, amount, token, data);
+    }
+
+    // Distribution of matching funds to projects (must be by owner)
+    function distribute(
+        address[] memory recipients,
+        uint256[] memory amounts,
+        address token,
+        bytes[] memory data
+    ) public override onlyOwner {
+        require(token == matchingToken, "Must be matching token");
+        super.distribute(recipients, amounts, token, data);
     }
 }
 ```
@@ -127,8 +151,18 @@ export default function DistributePage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <DistributeMatchingButton />
+        <DistributeButton
+          strategyAddress={strategyAddress}
+          tokenAddress={matchingTokenAddress}
+          onSuccess={() =>
+            invalidate([matchingToken.queryKey, allocations.queryKey])
+          }
+        />
       </div>
+      <AllocationsDistributions
+        strategyAddress={strategyAddress}
+        tokenAddress={tokenAddress}
+      />
       <MatchingFunds
         strategyAddress={strategyAddress}
         tokenAddress={tokenAddress}
