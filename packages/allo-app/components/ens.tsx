@@ -1,3 +1,4 @@
+"use client";
 import { Address } from "viem";
 import { useEnsName } from "wagmi";
 import { truncate } from "~/lib/truncate";
