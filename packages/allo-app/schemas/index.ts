@@ -1,7 +1,7 @@
 import { Address, Hex } from "viem";
 
 export type Registration = {
-  id: Hex;
+  id: string;
   index: number;
   address: Address;
   metadata: {

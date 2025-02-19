@@ -1,8 +1,8 @@
 import { Address } from "viem";
 import { Allocation } from "~/schemas";
 
-type MatchingResult = Record<string, bigint>;
-type ContributionMap = Record<Address, Record<Address, number>>;
+export type MatchingResult = Record<string, bigint>;
+type ContributionMap = Record<Address, Record<Address, bigint>>;
 
 // Constants for precision handling
 const PRECISION = 18n; // Number of decimal places for fixed-point arithmetic
@@ -10,7 +10,7 @@ const SCALE = 18n ** PRECISION; // Scaling factor for fixed-point numbers
 
 export function getContributions(allocations: Allocation[]): ContributionMap {
   return allocations.reduce((acc, { to, from, amount }) => {
-    (acc[to] ??= {})[from] = (acc[to][from] ?? 0) + amount;
+    (acc[to] ??= {})[from] = BigInt(acc[to][from] ?? 0) + BigInt(amount);
     return acc;
   }, {} as ContributionMap);
 }
@@ -21,12 +21,12 @@ export function calculateQuadraticMatching(
 ): MatchingResult {
   // Get contributions grouped by recipient and contributor
   const contributions = getContributions(allocations);
+
   const sqrtSums = Object.fromEntries(
     Object.entries(contributions).map(([recipient, contribs]) => [
       recipient,
       Object.values(contribs).reduce(
-        (sum, amount) =>
-          sum + sqrtBigInt(BigInt(Math.floor(amount * Number(SCALE)))),
+        (sum, amount) => sum + sqrtBigInt(BigInt(amount * SCALE)),
         0n
       ),
     ])

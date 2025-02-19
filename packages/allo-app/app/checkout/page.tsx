@@ -8,11 +8,12 @@ export default function CheckoutPage() {
   const { SimpleGrants, ERC20Mock } = useContracts();
   return (
     <Page title="Checkout">
+      <p className="pb-4 text-lg">Add amounts to fund projects with.</p>
       <AllocationForm
         strategyAddress={SimpleGrants?.address}
         tokenAddress={ERC20Mock?.address}
       />
-      <div className="mt-4">
+      <div className="mt-32">
         <MintTokens tokenAddress={ERC20Mock?.address} />
       </div>
     </Page>

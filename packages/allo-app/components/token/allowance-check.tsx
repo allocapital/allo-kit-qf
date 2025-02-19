@@ -33,7 +33,7 @@ export function AllowanceCheck({
   if (parsedAmount > allowance) {
     return (
       <Button
-        type="submit"
+        type="button"
         isLoading={approve.isPending}
         onClick={() => approve.writeContractAsync(parsedAmount)}
       >

@@ -31,7 +31,7 @@ export default function ProjectDetailsPage() {
         <div className="flex gap-1">
           <Button
             onClick={() => {
-              cart.set(address, 1);
+              cart.set(address, cart.items[address] || 1);
               router.push("/checkout");
             }}
           >

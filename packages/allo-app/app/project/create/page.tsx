@@ -22,7 +22,9 @@ export default function ProjectRegisterPage() {
             description: `This is a project...`,
           },
         }}
-        onSuccess={({ project }) => router.push(`/project/${project}`)}
+        onSuccess={({ project }) =>
+          router.push(`/project/${project.toLowerCase()}`)
+        }
       />
     </Page>
   );

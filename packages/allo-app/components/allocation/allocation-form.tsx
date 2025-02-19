@@ -12,8 +12,8 @@ import { formatNumber } from "~/lib/format";
 import { useToken } from "~/components/token/use-token";
 import { useProjects } from "../registration/use-register";
 import { Grid } from "../grid";
-import { Registration } from "~/schemas";
-import { EnsName } from "../ens";
+import { AllocationItem } from "./allocation-item";
+import { TokenAmount } from "../token/token-amount";
 
 export function AllocationForm({
   strategyAddress,
@@ -27,9 +27,12 @@ export function AllocationForm({
   const cart = useCart();
   const allocate = useAllocate({ strategyAddress });
   const projects = useProjects({
-    where: { address_in: Object.keys(cart.items) as Address[] },
+    where: {
+      address_in: Object.keys(cart.items) as Address[],
+    },
   });
   const error = projects.error || allocate.error;
+
   return (
     <form
       className="space-y-2"
@@ -65,82 +68,64 @@ export function AllocationForm({
           <AllocationItem
             {...project}
             key={project?.id}
-            value={cart.items[project?.address as Address]}
-            onUpdate={(value) => cart.set(project?.address, value)}
-            onRemove={() => () => cart.set(project.address)}
+            actions={
+              <>
+                <Input
+                  name={address}
+                  className="sm:w-48 sm:mr-10"
+                  placeholder="0"
+                  type="number"
+                  min={0}
+                  step={0.0000000001}
+                  value={cart.items[project?.address as Address]}
+                  onChange={(e) =>
+                    cart.set(
+                      project.address,
+                      e.target.value ? Number(e.target.value) : undefined
+                    )
+                  }
+                />
+                <Button
+                  className="absolute top-2 right-2"
+                  tabIndex={-1}
+                  size={"icon"}
+                  icon={XIcon}
+                  variant={"ghost"}
+                  type="button"
+                  onClick={() => cart.remove(project.address)}
+                />
+              </>
+            }
           />
         )}
       />
-
-      <div className="flex justify-end items-center gap-4">
-        <div className="">
-          <span className="text-gray-600 text-sm uppercase tracking-wider">
-            Total:{" "}
-          </span>
-          {formatNumber(Number(cart.sum))} / {token.data?.formatted}
+      <div className="py-4 mt-2 mb-4 border-y sm:flex items-center justify-between">
+        <div className="flex justify-end flex-1 mr-4 gap-1">
+          Total: {formatNumber(Number(cart.sum))} /
+          <strong>
+            <TokenAmount amount={token.data?.balance!} token={tokenAddress} />
+          </strong>
         </div>
-        <Button type="button" variant="outline" onClick={() => cart.reset()}>
-          Reset Cart
-        </Button>
-        <AllowanceCheck
-          amount={cart.sum}
-          tokenAddress={tokenAddress}
-          spenderAddress={strategyAddress}
-        >
-          <Button
-            className="w-48"
-            type="submit"
-            disabled={!cart.list.length}
-            isLoading={allocate.isPending}
-          >
-            Transfer tokens
+        <div className="flex gap-1">
+          <Button type="button" variant="outline" onClick={() => cart.reset()}>
+            Reset Cart
           </Button>
-        </AllowanceCheck>
+          <AllowanceCheck
+            amount={cart.sum}
+            tokenAddress={tokenAddress}
+            spenderAddress={strategyAddress}
+          >
+            <Button
+              className="w-48"
+              type="submit"
+              disabled={!cart.list.length}
+              isLoading={allocate.isPending}
+            >
+              Transfer tokens
+            </Button>
+          </AllowanceCheck>
+        </div>
       </div>
     </form>
-  );
-}
-
-function AllocationItem({
-  address,
-  metadata,
-  value = "",
-  onUpdate,
-  onRemove,
-}: Registration & {
-  value?: number | string;
-  onUpdate: (value?: number) => void;
-  onRemove: () => void;
-}) {
-  return (
-    <div className="relative sm:flex border p-2 rounded">
-      <div className="flex-1">
-        <h3 className="text-lg font-semibold">{metadata?.title}</h3>
-        <code className="text-sm">
-          <EnsName address={address} />
-        </code>
-      </div>
-      <Input
-        name={address}
-        className="sm:w-48 sm:mr-10"
-        placeholder="0"
-        type="number"
-        min={0}
-        step={0.0000000001}
-        value={value}
-        onChange={(e) =>
-          onUpdate(e.target.value ? Number(e.target.value) : undefined)
-        }
-      />
-      <Button
-        className="absolute top-2 right-2"
-        tabIndex={-1}
-        size={"icon"}
-        icon={XIcon}
-        variant={"ghost"}
-        type="button"
-        onClick={onRemove}
-      />
-    </div>
   );
 }

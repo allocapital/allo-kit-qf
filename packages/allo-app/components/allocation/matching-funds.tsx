@@ -26,7 +26,7 @@ export function MatchingFunds({
 
   return (
     <form
-      className="flex gap-1"
+      className="flex flex-col sm:flex-row gap-1"
       onSubmit={(e) => {
         e.preventDefault();
         setValue("");

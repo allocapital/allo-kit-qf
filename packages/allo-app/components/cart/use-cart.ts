@@ -19,6 +19,8 @@ export function useCart() {
     const { [id]: exists, ...rest } = items ?? {};
     setCart(rest);
   };
+
+  console.log(items);
   // Check if the cart contains a valid allocation for a specific item
   const contains = (id: string) => id in items && typeof items[id] === "number";
 
