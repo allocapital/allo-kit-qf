@@ -15,6 +15,10 @@ export function useCart() {
   const set = (id: string, allocation?: number) =>
     setCart((state) => ({ ...state, [id]: allocation }));
 
+  const remove = (id: string) => {
+    const { [id]: exists, ...rest } = items ?? {};
+    setCart(rest);
+  };
   // Check if the cart contains a valid allocation for a specific item
   const contains = (id: string) => id in items && typeof items[id] === "number";
 
@@ -36,7 +40,7 @@ export function useCart() {
     localStorage.setItem("cart", JSON.stringify(items));
   }, [items]);
 
-  return { items, contains, set, reset, sum, list };
+  return { items, contains, set, reset, sum, list, remove };
 }
 
 // Build arrays of recipients and parsed token amounts
