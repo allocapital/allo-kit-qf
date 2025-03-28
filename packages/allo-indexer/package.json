@@ -8,7 +8,7 @@
     "dev": "ponder dev",
     "lint": "eslint .",
     "serve": "ponder serve",
-    "start": "ponder start --schema ponder.schema.ts",
+    "start": "NODE_ENV=production ponder start --schema ponder.schema.ts",
     "typecheck": "tsc"
   },
   "dependencies": {
