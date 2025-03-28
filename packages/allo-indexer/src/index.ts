@@ -28,7 +28,6 @@ ponder.on("Registry:Register", async ({ event, context }) => {
   const { chainId } = context.network;
   const { index, project, metadataURI, data } = event.args;
   const metadata = await fetchMetadata(metadataURI);
-
   await context.db
     .insert(schemas.registration)
     .values({
@@ -67,9 +66,8 @@ ponder.on("Allocator:Allocate", async ({ event, context }) => {
 
   const tokenPrice = await fetchTokenPrice(symbol);
   const amountInUSD = toAmountInUSD(amount, tokenPrice);
-
   await context.db.insert(schemas.allocation).values({
-    id: `${event.log.id}`,
+    id: `${event.id}`,
     chainId,
     strategy: event.log.address,
     to,

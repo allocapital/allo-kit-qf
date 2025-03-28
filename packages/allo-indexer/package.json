@@ -16,7 +16,7 @@
     "hono": "^4.5.0",
     "node-fetch-cache": "^5.0.2",
     "p-retry": "^6.2.1",
-    "ponder": "^0.8.21",
+    "ponder": "^0.10.6",
     "viem": "^2.21.3"
   },
   "devDependencies": {
