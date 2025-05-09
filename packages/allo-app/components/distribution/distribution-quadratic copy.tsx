@@ -75,7 +75,7 @@ export function QuadraticDistribution({
           strategyAddress={strategyAddress}
           tokenAddress={tokenAddress}
           matching={matching}
-          onSuccess={() => invalidate(queryKeys)}
+          onSuccess={() => invalidate(Object.values(queryKeys))}
         />
       </div>
       <Grid

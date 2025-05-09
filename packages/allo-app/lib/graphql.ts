@@ -1,12 +1,7 @@
 import { Client, cacheExchange, fetchExchange } from "urql";
 
-const urls = {
-  [31337]:
-    process.env.NEXT_PUBLIC_INDEXER_URL_31337 || "http://localhost:42069",
-  [84532]: process.env.NEXT_PUBLIC_INDEXER_URL_84532,
-};
-export function createClient(chainId: number) {
-  const url = urls[chainId as keyof typeof urls];
-  if (!url) return;
+export function createClient() {
+  const url = process.env.NEXT_PUBLIC_INDEXER_URL;
+  if (!url) throw new Error("NEXT_PUBLIC_INDEXER_URL is not set");
   return new Client({ url, exchanges: [cacheExchange, fetchExchange] });
 }

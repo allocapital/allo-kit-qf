@@ -1,0 +1,55 @@
+import { Address } from "viem";
+import { useAllocations } from "~/components/allocation/use-allocate";
+import { useToken } from "~/components/token/use-token";
+import { calculateQuadraticMatching } from "~/lib/quadratic";
+import { Allocation } from "~/schemas";
+
+type UseQuadraticMatchingProps = {
+  strategyAddress: Address;
+  tokenAddress: Address;
+};
+
+export function useQuadraticMatching({
+  strategyAddress,
+  tokenAddress,
+}: UseQuadraticMatchingProps) {
+  const allocations = useAllocations({
+    where: {
+      strategy_in: [strategyAddress],
+      to_not_in: [strategyAddress],
+      from_not_in: [strategyAddress],
+    },
+  });
+
+  const matchingToken = useToken(tokenAddress, strategyAddress);
+  const matchingFunds = matchingToken.data?.balance ?? BigInt(0);
+  const donations = allocations.data?.items ?? [];
+
+  const matching = calculateQuadraticMatching(donations, matchingFunds);
+
+  return {
+    donations,
+    matchingFunds,
+    matching,
+    estimateMatching: (additionalAllocations: Allocation[]) => {
+      const estimated = calculateQuadraticMatching(
+        [...donations, ...additionalAllocations],
+        matchingFunds
+      );
+      // console.log(estimated);
+      return Object.fromEntries(
+        Object.entries(estimated).map(([address, amount]) => [
+          address,
+          (estimated[address as Address] ?? 0n) -
+            (matching[address as Address] ?? 0n),
+        ])
+      );
+    },
+    isLoading: allocations.isPending || matchingToken.isPending,
+    error: allocations.error || matchingToken.error,
+    queryKeys: {
+      matchingToken: matchingToken.queryKey,
+      allocations: allocations.queryKey,
+    },
+  };
+}

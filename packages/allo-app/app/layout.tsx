@@ -10,6 +10,9 @@ import { Button } from "~/components/ui/button";
 import { FaucetButton } from "~/components/faucet-button";
 import { NetworkSelector } from "~/components/network-selector";
 
+import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
+import { AppSidebar } from "~/components/sidebar";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,34 +39,46 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <main className="mx-auto max-w-screen-lg border-x min-h-screen">
-            <header className="p-2 items-center flex justify-between border-b">
-              <div className="flex items-center">
-                <div className="text-sm font-bold tracking-wider mr-12">
-                  AlloKit
-                </div>
-                <Link href="/">
-                  <Button variant={"link"}>Discover Projects</Button>
-                </Link>
-                <Link href="/project/create">
-                  <Button variant={"link"}>Register Project</Button>
-                </Link>
+          <SidebarProvider>
+            <AppSidebar />
+            <main className="flex-1">
+              <header className="p-2 items-center flex justify-between border-b">
+                <SidebarTrigger />
 
-                <Link href="/checkout">
-                  <Button variant={"link"}>Checkout</Button>
-                </Link>
-                <Link href="/distribute">
-                  <Button variant={"link"}>Quadratic Funding</Button>
-                </Link>
-              </div>
-              <div className="flex gap-1">
-                <NetworkSelector />
-                <ConnectButton />
-                <FaucetButton />
-              </div>
-            </header>
-            <div className="p-2">{children}</div>
-          </main>
+                <div className="flex gap-1">
+                  <ConnectButton />
+                  <FaucetButton />
+                </div>
+              </header>
+              {/* 
+              <header className="p-2 items-center flex justify-between border-b">
+                <div className="flex items-center">
+                  <div className="text-sm font-bold tracking-wider mr-12">
+                    AlloKit
+                  </div>
+                  <Link href="/">
+                    <Button variant={"link"}>Discover Projects</Button>
+                  </Link>
+                  <Link href="/project/create">
+                    <Button variant={"link"}>Register Project</Button>
+                  </Link>
+
+                  <Link href="/checkout">
+                    <Button variant={"link"}>Checkout</Button>
+                  </Link>
+                  <Link href="/distribute">
+                    <Button variant={"link"}>Quadratic Funding</Button>
+                  </Link>
+                </div>
+                <div className="flex gap-1">
+                  <NetworkSelector />
+                  <ConnectButton />
+                  <FaucetButton />
+                </div>
+              </header> */}
+              <div className="p-2">{children}</div>
+            </main>
+          </SidebarProvider>
           <Toaster />
         </Providers>
       </body>

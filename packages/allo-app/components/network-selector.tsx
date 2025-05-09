@@ -27,24 +27,22 @@ export function NetworkSelector() {
   }, [network, chainId]);
 
   return (
-    <div className="flex flex-col gap-2 sm:flex-row">
-      <div className="space-y-2">
-        <Select
-          value={String(network)}
-          onValueChange={(value) => setNetwork(value)}
-        >
-          <SelectTrigger id="network-select" className="w-full">
-            <SelectValue placeholder="Choose Network" />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(chains).map(([name, network]) => (
-              <SelectItem key={name} value={name}>
-                {network.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+    <div className="space-y-2">
+      <Select
+        value={String(network)}
+        onValueChange={(value) => setNetwork(value)}
+      >
+        <SelectTrigger id="network-select" className="w-full">
+          <SelectValue placeholder="Choose Network" />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.entries(chains).map(([name, network]) => (
+            <SelectItem key={name} value={name}>
+              {network.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

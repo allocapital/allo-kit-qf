@@ -12,8 +12,8 @@ export const chains = Object.entries({
   mainnet,
 }).reduce(
   (acc, [key, chain]) => {
-    if (process.env.NODE_ENV === "production" && chain.id === hardhat.id)
-      return acc;
+    // if (process.env.NODE_ENV === "production" && chain.id === hardhat.id)
+    //   return acc;
     return { ...acc, [key]: chain };
   },
   {} as Record<string, Chain>

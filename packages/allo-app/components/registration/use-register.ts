@@ -82,7 +82,7 @@ export function useRegistrations(variables: IndexerQuery) {
     queryFn: async (r) => r?.registrations,
   });
 }
-export function useRegistrationById(id: Hex) {
+export function useRegistrationById(id: string) {
   const { data, ...rest } = useRegistrations({ where: { id } });
   return { ...rest, data: data?.items?.[0] };
 }

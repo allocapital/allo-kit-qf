@@ -7,6 +7,7 @@ import { Registration } from "~/schemas";
 
 export function ApproveItem({
   id,
+  address,
   metadata,
   isLoading,
 }: Registration & { isLoading?: boolean }) {
@@ -17,8 +18,8 @@ export function ApproveItem({
       })}
     >
       <div className="flex justify-between items-center">
-        <Link href={`/project/${id}`}>
-          <h3 className="underline">{metadata?.title}</h3>
+        <Link href={`/project/${address}`}>
+          <h3 className="hover:underline">{metadata?.title}</h3>
         </Link>
         <RegistrationApproveButton id={id} />
       </div>

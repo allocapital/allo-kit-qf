@@ -1,18 +1,20 @@
 "use client";
 
-import { Hex } from "viem";
 import { Button } from "~/components/ui/button";
 import { useRegistrationById, useRegistryApprove } from "./use-register";
 import { useInvalidate } from "~/hooks/use-invalidate";
+import { Badge } from "../ui/badge";
 
-export function RegistrationApproveButton({ id }: { id: Hex }) {
+export function RegistrationApproveButton({ id }: { id: string }) {
   const { data: registration, isPending, queryKey } = useRegistrationById(id);
   const invalidate = useInvalidate();
 
   const approve = useRegistryApprove({
     strategyAddress: registration?.strategy.address!,
   });
-  if (isPending || registration?.isApproved) return null;
+  if (isPending) return null;
+  if (registration?.isApproved)
+    return <Badge variant="success">Approved</Badge>;
 
   return (
     <Button

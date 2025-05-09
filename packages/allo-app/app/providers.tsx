@@ -33,6 +33,7 @@ const config = getDefaultConfig({
         coinbaseWallet,
         metaMaskWallet,
         walletConnectWallet,
+        rainbowkitBurnerWallet,
         ...(process.env.NODE_ENV === "development"
           ? [rainbowkitBurnerWallet]
           : []),

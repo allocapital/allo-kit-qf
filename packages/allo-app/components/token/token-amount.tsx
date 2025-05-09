@@ -14,9 +14,11 @@ export function TokenAmount({
   const { data } = useToken(token);
 
   if (!data) return null;
-  const formattedAmount = formatNumber(
-    Number(formatUnits(BigInt(amount), data?.decimals ?? 18))
-  );
+  const formattedAmount = formatTokenAmount(amount, data.decimals);
 
   return <>{`${formattedAmount} ${hideSymbol ? "" : data?.symbol}`}</>;
+}
+
+export function formatTokenAmount(amount: number | bigint, decimals: number) {
+  return formatNumber(Number(formatUnits(BigInt(amount ?? 0), decimals)));
 }

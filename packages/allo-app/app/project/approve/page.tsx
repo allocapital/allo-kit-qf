@@ -4,7 +4,7 @@ import { ApplicationsList } from "~/components/registration/applications-list";
 import { useContracts } from "~/hooks/use-contracts";
 
 export default function RegistrationApprovePage() {
-  const { AlloIRL } = useContracts();
+  const { SimpleGrants } = useContracts();
 
   return (
     <Page title="Approve Projects">
@@ -12,8 +12,8 @@ export default function RegistrationApprovePage() {
         query={{
           limit: 100,
           where: {
-            strategy_in: [AlloIRL?.address],
-            isApproved: false,
+            strategy_in: [SimpleGrants?.address],
+            // isApproved: false,
           },
         }}
       />

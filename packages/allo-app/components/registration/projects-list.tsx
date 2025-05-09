@@ -12,7 +12,7 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
 
   return (
     <Grid
-      columns={[1, 2]}
+      columns={[1, 1, 2]}
       data={data?.items}
       error={error}
       isPending={isPending}

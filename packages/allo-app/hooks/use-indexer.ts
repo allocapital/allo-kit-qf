@@ -7,6 +7,7 @@ import { useChainId } from "wagmi";
 import { createClient } from "~/lib/graphql";
 import { useCurrentChainName } from "./use-current-chain";
 import { chains } from "~/config";
+import { baseSepolia } from "viem/chains";
 
 export type RegistrationWhere = {
   id?: Hex;
@@ -38,6 +39,8 @@ export function useIndexer<T>({
   query,
   variables,
   enabled = true,
+  maxRetries = 5,
+  retryTimeout = 10000,
   ...rest
 }: {
   queryKey: unknown[];
@@ -55,16 +58,24 @@ export function useIndexer<T>({
   variables: IndexerQuery;
   enabled?: boolean;
   refetchInterval?: number;
+  maxRetries?: number;
+  retryTimeout?: number;
 }) {
   const network = useCurrentChainName();
   const chainId = chains[network as keyof typeof chains]?.id;
-  const client = createClient(chainId!);
+  const client = createClient();
   const res = useQuery({
     enabled: !!client && enabled,
     queryKey: [...queryKey, network],
     queryFn: async () => {
       return client
-        ?.query(query, variables)
+        ?.query(query, {
+          ...variables,
+          where: {
+            chainId,
+            ...variables.where,
+          },
+        })
         .toPromise()
         .then((r) => {
           console.log(r);
@@ -72,11 +83,18 @@ export function useIndexer<T>({
           return queryFn(r.data);
         });
     },
-    refetchInterval: ({ state, ...rest }) =>
-      // Try refetching if items are empty. Sometimes the indexer takes time to pick up the new data.
-      {
-        return state.data?.items.length ? 0 : 1000;
-      },
+    refetchInterval: ({ state }) => {
+      if (state.data?.items.length) return 0;
+
+      const retryCount = state.dataUpdateCount - 1;
+      const elapsedTime = Date.now() - state.dataUpdatedAt;
+
+      if (retryCount >= maxRetries || elapsedTime > retryTimeout) {
+        return 0;
+      }
+
+      return 1000;
+    },
     ...rest,
   });
 
