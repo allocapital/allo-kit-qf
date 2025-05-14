@@ -11,6 +11,7 @@ import { Button } from "~/components/ui/button";
 import { useCart } from "~/components/cart/use-cart";
 import { useProjectById } from "~/components/registration/use-register";
 import { AllocationsTable } from "~/components/allocation/allocations-table";
+import { Markdown } from "~/components/markdown";
 
 export default function ProjectDetailsPage() {
   const params = useParams();
@@ -44,7 +45,9 @@ export default function ProjectDetailsPage() {
         src={project?.metadata.image}
         className="h-40 bg-gray-200"
       />
-      <div className="py-8">{project?.metadata.description}</div>
+      <div className="py-8">
+        <Markdown>{project?.metadata.description}</Markdown>
+      </div>
 
       <h3 className=" font-semibold">Allocations</h3>
       <AllocationsTable

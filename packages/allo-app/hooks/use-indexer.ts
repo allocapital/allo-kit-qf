@@ -33,6 +33,7 @@ export type IndexerQuery = {
   where?: RegistrationWhere | AllocationWhere;
 };
 
+const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_URL!;
 export function useIndexer<T>({
   queryKey,
   queryFn,
@@ -63,7 +64,7 @@ export function useIndexer<T>({
 }) {
   const network = useCurrentChainName();
   const chainId = chains[network as keyof typeof chains]?.id;
-  const client = createClient();
+  const client = createClient(indexerUrl);
   const res = useQuery({
     enabled: !!client && enabled,
     queryKey: [...queryKey, network],

@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Address } from "viem/accounts";
-
 import {
   Form,
   FormControl,
@@ -22,6 +21,7 @@ import { BalanceCheck } from "~/components/token/balance-check";
 import { ImageUpload } from "~/components/image-upload";
 import { RegistrationSchema } from "./schemas";
 import { useRegister } from "./use-register";
+import { ImportProject } from "./import-project";
 
 export function RegistrationForm({
   strategyAddress,
@@ -42,6 +42,7 @@ export function RegistrationForm({
   const upload = useIpfsUpload();
 
   const isLoading = upload.isPending || register.isPending;
+  console.log(form.formState);
   return (
     <Form {...form}>
       <form
@@ -53,6 +54,21 @@ export function RegistrationForm({
             .then(onSuccess);
         })}
       >
+        <div className="flex justify-center">
+          <ImportProject
+            onSelect={(project) => {
+              console.log("project", project);
+              form.setValue("metadata.title", project.name);
+              form.setValue("metadata.description", project.description);
+              form.setValue("metadata.image", project.bannerImg);
+            }}
+          />
+        </div>
+        <div className="flex gap-2 items-center">
+          <div className="w-full h-[1px] bg-gray-200" />
+          <span className="text-sm text-gray-500">or</span>
+          <div className="w-full h-[1px] bg-gray-200" />
+        </div>
         <FormField
           control={form.control}
           name="metadata.title"
