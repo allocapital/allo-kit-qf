@@ -10,9 +10,10 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
   const cart = useCart();
   const { data, error, isPending } = useProjects(query);
 
+  console.log(cart);
   return (
     <Grid
-      columns={[1, 1, 2]}
+      columns={[1, 2, 3, 4]}
       data={data?.items}
       error={error}
       isPending={isPending}
@@ -22,10 +23,9 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
           key={project.id}
           inCart={cart.contains(project.address)}
           onSelect={() =>
-            cart.set(
-              project.address,
-              cart.contains(project.address) ? undefined : 0
-            )
+            cart.contains(project.address)
+              ? cart.remove(project.address)
+              : cart.set(project.address, 1)
           }
         />
       )}

@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { Contract } from "ethers";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -21,6 +22,16 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
+  await deploy("PoolFactory", {
+    from: deployer,
+    // Contract constructor arguments
+    args: [],
+    log: true,
+    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+    // automatically mining the contract deployment transaction. There is no effect on live networks.
+    autoMine: true,
+  });
+
   await deploy("ERC20Mock", {
     from: deployer,
     // Contract constructor arguments
@@ -31,15 +42,15 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const owner = deployer; // Add your owner address here
 
-  await deploy("YourStrategy", {
-    from: deployer,
-    // Contract constructor arguments
-    args: [owner],
-    log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
-    autoMine: true,
-  });
+  // await deploy("YourStrategy", {
+  //   from: deployer,
+  //   // Contract constructor arguments
+  //   args: [owner],
+  //   log: true,
+  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
+  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
+  //   autoMine: true,
+  // });
 
   await deploy("SimpleGrants", {
     from: deployer,
@@ -55,12 +66,18 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   await deploy("Strategy", {
     from: deployer,
     // Contract constructor arguments
-    args: ["StrategyName"],
+    args: ["", ""],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
+
+  // const simpleGrants = await hre.ethers.getContract<Contract>("SimpleGrants", deployer);
+
+  // const factory = await hre.ethers.getContract<Contract>("StrategyFactory", deployer);
+  // // console.log(simpleGrants.getAddress())
+  // await factory.deploy(await simpleGrants.getAddress(), "0x");
 
   await deploy("Allocator", {
     from: deployer,
@@ -86,4 +103,4 @@ export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["AlloIRL"];
+deployYourContract.tags = ["SimpleGrants"];

@@ -29,6 +29,7 @@ export const REGISTRATIONS_SCHEMA = gql`
     ) {
       items {
         id
+        chainId
         index
         address
         metadata
@@ -75,6 +76,7 @@ export const ALLOCATIONS_SCHEMA = gql`
     ) {
       items {
         id
+        chainId
         amount
         to
         from
@@ -84,6 +86,40 @@ export const ALLOCATIONS_SCHEMA = gql`
           address
           metadata
         }
+      }
+      ${META}
+    }
+  }
+`;
+
+export const POOLS_SCHEMA = gql`
+  query Pools(
+    $after: String
+    $before: String
+    $orderBy: String
+    $orderDirection: String
+    $limit: Int
+    $where: poolFilter
+  ) {
+    pools(
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      limit: $limit
+      where: $where
+    ) {
+      items {
+        chainId
+        address
+        owner
+        metadata
+        decodedData
+        strategy {
+          address
+          name
+        }
+       
       }
       ${META}
     }

@@ -4,22 +4,55 @@ import { Address, erc20Abi, Hex, zeroAddress } from "viem";
 import pRetry from "p-retry";
 import { cachedFetchWithRetry } from "./lib/fetch";
 
+import { decodeData } from "@se-2/sdk/utils";
+
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const PINATA_GATEWAY_URL = process.env.PINATA_GATEWAY_URL;
 const PINATA_GATEWAY_KEY = process.env.PINATA_GATEWAY_KEY;
 
 const MAX_RETRY_COUNT = 5;
 
-ponder.on("Strategy:Initialize", async ({ event, context }) => {
-  const { strategyName } = event.args;
+// Whenever a new Pool is created.
+ponder.on("PoolFactory:Deployed", async ({ event, context }) => {
+  const { strategy, pool, name, owner, data, schema, metadataURI } = event.args;
   const { chainId } = context.network;
+  console.log("PoolFactory:Deployed", event.args);
+  const metadata = await fetchMetadata(metadataURI);
+  await context.db
+    .insert(schemas.pool)
+    .values({
+      address: pool,
+      owner,
+      name,
+      chainId,
+      schema,
+      data,
+      strategy,
+      decodedData: decodeData(schema, data),
+      metadataURI: metadataURI,
+      metadata: metadata,
+      createdAt: event.block.timestamp * 1000n,
+      updatedAt: event.block.timestamp * 1000n,
+    })
+    .onConflictDoNothing();
+});
+
+ponder.on("Strategy:Deployed", async ({ event, context }) => {
+  const { id, name, schema } = event.args;
+  const { chainId } = context.network;
+
+  console.log("Strategy:Deployed", event.args);
+
   await context.db
     .insert(schemas.strategy)
     .values({
       chainId,
+      creator: event.args.creator,
       address: event.log.address,
-      name: strategyName,
-      createdAt: Number(event.block.timestamp),
+      name,
+      schema,
+      createdAt: event.block.timestamp * 1000n,
+      updatedAt: event.block.timestamp * 1000n,
     })
     .onConflictDoNothing();
 });
@@ -40,8 +73,8 @@ ponder.on("Registry:Register", async ({ event, context }) => {
       metadata,
       isApproved: false,
       data,
-      createdAt: Number(event.block.timestamp),
-      updatedAt: Number(event.block.timestamp),
+      createdAt: event.block.timestamp * 1000n,
+      updatedAt: event.block.timestamp * 1000n,
     })
     .onConflictDoNothing();
 });
@@ -53,7 +86,7 @@ ponder.on("Registry:Approve", async ({ event, context }) => {
     .update(schemas.registration, { id: registrationId(event) })
     .set(() => ({
       isApproved: true,
-      updatedAt: Number(event.block.timestamp),
+      updatedAt: event.block.timestamp * 1000n,
       review,
     }));
 });
@@ -76,7 +109,7 @@ ponder.on("Allocator:Allocate", async ({ event, context }) => {
     amountInUSD,
     token: { address: token, decimals, symbol },
     tokenAddress: token,
-    createdAt: Number(event.block.timestamp),
+    createdAt: event.block.timestamp * 1000n,
   });
 });
 

@@ -1,5 +1,5 @@
 "use client";
-import { defaultChain } from "~/config";
+import { chains, defaultChain } from "~/config";
 import { createGlobalState } from "./use-global-state";
 
 const useNetworkState = createGlobalState<string>(
@@ -18,3 +18,11 @@ export function useSetNetwork() {
     global.localStorage?.setItem("network", network);
   };
 }
+
+export const chainIdToNetwork = (chainId?: number) =>
+  Object.keys(chains).find((name) => chains[name]?.id === chainId);
+
+export const networkToChainId = (network?: string) =>
+  network
+    ? Object.entries(chains).find(([key, name]) => key === network)?.[1]?.id
+    : undefined;

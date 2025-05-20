@@ -11,14 +11,13 @@ import {
 import { extractErrorReason } from "~/lib/extract-error";
 import { REGISTRATIONS_SCHEMA } from "~/queries";
 import { Registration } from "~/schemas";
-import { useToast } from "~/hooks/use-toast";
 import { IndexerQuery, useIndexer } from "~/hooks/use-indexer";
 import { useWaitForEvent } from "~/hooks/use-wait-for-event";
+import { toast } from "sonner";
 
 // Register a Project or Application
 // calls contract Registry.register
 export function useRegister({ strategyAddress }: { strategyAddress: Address }) {
-  const { toast } = useToast();
   const register = useWriteRegistryRegister();
 
   const waitFor = useWaitForEvent(registryAbi);
@@ -28,13 +27,11 @@ export function useRegister({ strategyAddress }: { strategyAddress: Address }) {
       const hash = await register.writeContractAsync(
         { address: strategyAddress, args },
         {
-          onSuccess: () => toast({ title: "Project Registered!" }),
+          onSuccess: () => toast.success("Project Registered!"),
           onError: (error) =>
-            toast({
-              title:
-                extractErrorReason(String(error)) ?? "Register Project error",
-              variant: "destructive",
-            }),
+            toast.error(
+              extractErrorReason(String(error)) ?? "Register Project error"
+            ),
         }
       );
       return waitFor<{ project: string }>(hash, "Register");
@@ -49,7 +46,6 @@ export function useRegistryApprove({
 }: {
   strategyAddress: Address;
 }) {
-  const { toast } = useToast();
   const approve = useWriteRegistryApprove({});
 
   const waitFor = useWaitForEvent(allocatorAbi);
@@ -59,12 +55,9 @@ export function useRegistryApprove({
       const hash = await approve.writeContractAsync(
         { address: strategyAddress, args },
         {
-          onSuccess: () => toast({ title: "Registration approved!" }),
+          onSuccess: () => toast.success("Registration approved!"),
           onError: (error) =>
-            toast({
-              title: extractErrorReason(String(error)) ?? "Approve error",
-              variant: "destructive",
-            }),
+            toast.error(extractErrorReason(String(error)) ?? "Approve error"),
         }
       );
       return waitFor(hash, "Approve");

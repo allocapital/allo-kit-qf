@@ -10,7 +10,7 @@ export function RegistrationApproveButton({ id }: { id: string }) {
   const invalidate = useInvalidate();
 
   const approve = useRegistryApprove({
-    strategyAddress: registration?.strategy.address!,
+    strategyAddress: registration?.strategy?.address!,
   });
   if (isPending) return null;
   if (registration?.isApproved)

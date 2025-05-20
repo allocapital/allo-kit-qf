@@ -3,8 +3,26 @@ import { onchainTable, relations } from "ponder";
 export const strategy = onchainTable("strategy", (t) => ({
   chainId: t.integer().notNull(),
   address: t.hex().primaryKey(),
-  name: t.text().notNull(),
-  createdAt: t.integer().notNull(),
+  creator: t.hex().notNull(),
+  name: t.text(),
+  schema: t.text(),
+  createdAt: t.bigint().notNull(),
+  updatedAt: t.bigint().notNull(),
+}));
+
+export const pool = onchainTable("pool", (t) => ({
+  chainId: t.integer().notNull(),
+  address: t.hex().primaryKey(),
+  owner: t.hex().notNull(),
+  name: t.text(),
+  schema: t.text(),
+  data: t.hex(),
+  strategy: t.hex().notNull(),
+  decodedData: t.json(),
+  metadataURI: t.text(),
+  metadata: t.json(),
+  createdAt: t.bigint().notNull(),
+  updatedAt: t.bigint().notNull(),
 }));
 
 export const registration = onchainTable("registration", (t) => ({
@@ -18,8 +36,8 @@ export const registration = onchainTable("registration", (t) => ({
   metadata: t.json(),
   review: t.json(),
   isApproved: t.boolean().notNull(),
-  createdAt: t.integer().notNull(),
-  updatedAt: t.integer().notNull(),
+  createdAt: t.bigint().notNull(),
+  updatedAt: t.bigint().notNull(),
 }));
 
 export const allocation = onchainTable("allocation", (t) => ({
@@ -32,7 +50,7 @@ export const allocation = onchainTable("allocation", (t) => ({
   amountInUSD: t.bigint().notNull(),
   tokenAddress: t.hex().notNull(),
   token: t.json(),
-  createdAt: t.integer().notNull(),
+  createdAt: t.bigint().notNull(),
 }));
 
 export const registrationRelations = relations(
@@ -45,6 +63,13 @@ export const registrationRelations = relations(
     allocations: many(allocation),
   })
 );
+
+export const poolRelations = relations(pool, ({ one, many }) => ({
+  strategy: one(strategy, {
+    fields: [pool.strategy],
+    references: [strategy.address],
+  }),
+}));
 
 export const allocationRelations = relations(allocation, ({ one }) => ({
   registration: one(registration, {

@@ -26,15 +26,21 @@ type AllocationWhere = {
   tokenAddress_in?: Address[];
   strategy_in?: Address[];
 };
+type PoolWhere = {
+  address?: Address;
+  address_in?: Address[];
+  strategy_in?: Address[];
+  owner_in?: Address[];
+};
 export type IndexerQuery = {
   limit?: number;
   orderBy?: string;
   orderDirection?: "asc" | "desc";
-  where?: RegistrationWhere | AllocationWhere;
+  where?: RegistrationWhere | AllocationWhere | PoolWhere;
 };
 
 const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_URL!;
-export function useIndexer<T>({
+export function useIndexer<T extends { createdAt?: Date; updatedAt?: Date }>({
   queryKey,
   queryFn,
   query,
@@ -84,6 +90,18 @@ export function useIndexer<T>({
           return queryFn(r.data);
         });
     },
+    select: (data) => ({
+      ...data,
+      items: data.items.map((item) => ({
+        ...item,
+        createdAt: item.createdAt
+          ? new Date(Number(item.createdAt))
+          : undefined,
+        updatedAt: item.updatedAt
+          ? new Date(Number(item.updatedAt))
+          : undefined,
+      })),
+    }),
     refetchInterval: ({ state }) => {
       if (state.data?.items.length) return 0;
 

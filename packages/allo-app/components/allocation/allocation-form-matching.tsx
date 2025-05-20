@@ -60,35 +60,6 @@ export function AllocationFormMatching({
 
     missing.forEach(cart.remove);
   }, [projects.data?.items]);
-  // Get all donations to projects
-  // const allocations = useAllocations({
-  //   where: {
-  //     // Only fetch allocations for this strategy
-  //     strategy_in: [strategyAddress],
-  //     // Not any transfers to or from Strategy contract (fund / withdraw of matching)
-  //     to_not_in: [strategyAddress],
-  //     from_not_in: [strategyAddress],
-  //   },
-  // });
-  // const donations = allocations.data?.items ?? [];
-
-  // const matchingToken = useToken(tokenAddress, strategyAddress);
-  // const matchingFunds = matchingToken.data?.balance ?? BigInt(0);
-
-  // const existing = calculateQuadraticMatching(donations, matchingFunds);
-  // const combined = [
-  //   ...donations,
-  //   ...(Object.entries(cart.items).map(([address, amount]) => ({
-  //     amount: (amount ?? 0) * 10 ** (token.data?.decimals ?? 18),
-  //     to: address,
-  //     from: strategyAddress,
-  //     tokenAddress,
-  //     createdAt: Date.now(),
-  //   })) as unknown as Allocation[]),
-  // ];
-  // const current = calculateQuadraticMatching(combined, matchingFunds);
-
-  // console.log(current);
   const error = projects.error || allocate.error;
 
   return (
@@ -171,7 +142,7 @@ export function AllocationFormMatching({
           );
         }}
       />
-      <div className="py-4 mt-2 mb-4 border-y sm:flex items-center justify-between">
+      <div className="py-4 mt-2 mb-4 sm:flex items-center justify-between">
         <div className="flex justify-end flex-1 mr-4 gap-1">
           Total: {formatNumber(Number(cart.sum))} /
           <strong>

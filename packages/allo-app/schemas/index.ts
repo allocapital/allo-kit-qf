@@ -12,6 +12,8 @@ export type Registration = {
   allocations?: { items: Allocation[] };
   strategy: { address: Address; name: string };
   isApproved: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Allocation = {
@@ -21,9 +23,11 @@ export type Allocation = {
   to: Address;
   token: { symbol: string; address: Address; decimals: number };
   registration: { address: Address };
-  createdAt: number;
+  createdAt: Date;
 };
 export type Strategy = {
   name: string;
-  createdAt: number;
+  address: Address;
+  createdAt: Date;
+  schema: string;
 };
