@@ -34,10 +34,10 @@ export function RegistrationCard({
         }
       )}
     >
-      <ApprovedBadge
-        className="absolute top-2 left-2"
-        isApproved={project?.isApproved}
-      />
+      <div className="absolute flex gap-1 items-center top-2 left-2">
+        {/* <ApprovedBadge isApproved={project?.isApproved} /> */}
+        <NetworkBadge chainId={project?.chainId} />
+      </div>
       <Button
         className="rounded-full absolute top-2 right-2"
         size="icon"
@@ -49,13 +49,13 @@ export function RegistrationCard({
       />
       <BackgroundImage
         src={project?.metadata?.image}
-        className="size-16 bg-gray-200 rounded-xl h-16"
+        fallbackSrc={project?.metadata?.image}
+        className="aspect-video bg-gray-100 h-36"
       />
+
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">{project?.metadata?.title}</CardTitle>
-        <div className="flex gap-1 items-center">
-          <NetworkBadge chainId={project?.chainId} />
-        </div>
+        <div className="flex gap-1 items-center"></div>
       </CardHeader>
 
       {/* <CardContent>

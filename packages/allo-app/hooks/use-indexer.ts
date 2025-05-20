@@ -29,7 +29,7 @@ type AllocationWhere = {
 type PoolWhere = {
   address?: Address;
   address_in?: Address[];
-  strategy_in?: Address[];
+  pool_in?: Address[];
   owner_in?: Address[];
 };
 export type IndexerQuery = {

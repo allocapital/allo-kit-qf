@@ -9,8 +9,9 @@ export function RegistrationApproveButton({ id }: { id: string }) {
   const { data: registration, isPending, queryKey } = useRegistrationById(id);
   const invalidate = useInvalidate();
 
+  console.log("Approve button", registration);
   const approve = useRegistryApprove({
-    strategyAddress: registration?.strategy?.address!,
+    strategyAddress: registration?.pool?.address!,
   });
   if (isPending) return null;
   if (registration?.isApproved)

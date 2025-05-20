@@ -1,3 +1,5 @@
+import { Page } from "~/components/page";
+
 export default function DashboardFundsPage() {
-  return <div>Funds</div>;
+  return <Page title="Pool Funds">Funds</Page>;
 }

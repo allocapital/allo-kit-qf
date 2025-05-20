@@ -1,3 +1,5 @@
+import { Page } from "~/components/page";
+
 export default function DashboardSettingsPage() {
-  return <div>Settings</div>;
+  return <Page title="Pool Settings">Settings</Page>;
 }

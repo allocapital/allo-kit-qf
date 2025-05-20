@@ -51,6 +51,10 @@ export const REGISTRATIONS_SCHEMA = gql`
           address
           name
         }
+        pool { 
+          address
+          metadata
+        }
       }
       ${META}
     }

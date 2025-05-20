@@ -10,7 +10,6 @@ export function ProjectsList({ query }: { query: IndexerQuery }) {
   const cart = useCart();
   const { data, error, isPending } = useProjects(query);
 
-  console.log(cart);
   return (
     <Grid
       columns={[1, 2, 3, 4]}

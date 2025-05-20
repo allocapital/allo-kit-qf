@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import {
-  BarChartIcon,
-  Check,
   ChevronsUpDown,
   Coins,
   Home,
@@ -32,20 +30,6 @@ import { useAccount } from "wagmi";
 import { cn } from "~/lib/utils";
 import { Address } from "viem";
 import { BackgroundImage } from "~/components/background-image";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "~/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { Button } from "~/components/ui/button";
 
 import {
   DropdownMenu,
@@ -53,14 +37,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useSidebar } from "~/components/ui/sidebar";
-import { Pool } from "~/schemas/pool";
 import Link from "next/link";
 import { NetworkSelector } from "~/components/network-selector";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 
 const menu = {
   sections: [
@@ -128,7 +110,12 @@ export function DashboardSidebar({
             <SidebarGroupContent className="flex flex-col gap-2">
               <SidebarMenu>
                 {section.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem
+                    className={cn({
+                      "opacity-50 pointer-events-none": !poolAddress,
+                    })}
+                    key={item.title}
+                  >
                     <NavItem
                       {...item}
                       href={`/dashboard/${poolAddress}/${item.href}`}
@@ -149,21 +136,19 @@ export function DashboardSidebar({
 
 export function PoolSwitcher() {
   const { address } = useAccount();
+  const pathname = usePathname();
   const { poolAddress } = useParams();
   const router = useRouter();
   const { data: pools } = usePools(
     { where: { owner_in: [address as Address] } },
     { enabled: Boolean(address) }
   );
-
-  const activePool = pools?.items?.find((pool) => pool.address === poolAddress);
+  const page = pathname.split("/").pop();
+  const activePool = pools?.items?.find(
+    (pool) =>
+      pool.address?.toLowerCase() === (poolAddress as Address)?.toLowerCase()
+  );
   const { isMobile } = useSidebar();
-  // const [activePool, setActivePool] = React.useState<Pool | null>(null);
-
-  // const activePool = pools?.items?.[0];
-  // if (!activePool) {
-  //   return null;
-  // }
 
   return (
     <SidebarMenu>
@@ -199,9 +184,13 @@ export function PoolSwitcher() {
               <DropdownMenuItem
                 key={pool.address}
                 onClick={() => {
-                  router.push(`/dashboard/${pool.address}`);
+                  router.push(`/dashboard/${pool.address}/${page}`);
                 }}
-                className="gap-2 p-2"
+                className={cn("gap-2 p-2", {
+                  "bg-sidebar-accent":
+                    pool.address?.toLowerCase() ===
+                    (poolAddress as Address)?.toLowerCase(),
+                })}
               >
                 <BackgroundImage
                   src={pool.metadata?.image}

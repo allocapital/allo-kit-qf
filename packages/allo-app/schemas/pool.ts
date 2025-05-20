@@ -6,16 +6,18 @@ import { MetadataSchema } from "./metadata";
 export const PoolSchema = z.object({
   metadata: MetadataSchema,
   strategy: EthAddressSchema,
-  token: EthAddressSchema,
-  maxAmount: z.string().regex(/^\d+(\.\d+)?$/, {
-    message: "Please enter a valid number.",
-  }),
+  // token: EthAddressSchema,
+  // maxAmount: z.string().regex(/^\d+(\.\d+)?$/, {
+  //   message: "Please enter a valid number.",
+  // }),
   admins: z.array(EthAddressSchema),
+  strategyData: z.record(z.string(), z.any()),
 });
 
 export type Pool = z.infer<typeof PoolSchema> & {
   address: Address;
   owner: Address;
+  chainId: number;
   createdAt: Date;
   updatedAt: Date;
   strategy: {

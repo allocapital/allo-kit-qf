@@ -1,17 +1,20 @@
+"use client";
+import { useParams } from "next/navigation";
+import { Address } from "viem";
+import { Page } from "~/components/page";
 import { ApplicationsList } from "~/components/registration/applications-list";
 
 export default function DashboardApplicationsPage() {
+  const { poolAddress } = useParams();
   return (
-    <div>
+    <Page title={`Applications`}>
       <ApplicationsList
-        query={
-          {
-            // where: {
-            //   strategy_in: [],
-            // },
-          }
-        }
+        query={{
+          where: {
+            pool_in: [poolAddress as Address],
+          },
+        }}
       />
-    </div>
+    </Page>
   );
 }

@@ -1,3 +1,5 @@
+import { Page } from "~/components/page";
+
 export default function DashboardTeamPage() {
-  return <div>Team</div>;
+  return <Page title="Team">Team</Page>;
 }

@@ -19,8 +19,9 @@ export function useSetNetwork() {
   };
 }
 
-export const chainIdToNetwork = (chainId?: number) =>
-  Object.keys(chains).find((name) => chains[name]?.id === chainId);
+export const chainIdToNetwork = (chainId?: number) => {
+  return Object.values(chains).find((chain) => chain.id === chainId);
+};
 
 export const networkToChainId = (network?: string) =>
   network

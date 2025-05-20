@@ -24,7 +24,7 @@ export function useDeployStrategy() {
             toast.error(extractErrorReason(String(error)) ?? "Create error"),
         }
       );
-      return waitFor<{ strategy: Address }>(hash, "Deployed");
+      return waitFor<{ pool: Address }>(hash, "Deployed");
     },
   });
 }

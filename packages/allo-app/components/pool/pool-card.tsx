@@ -16,6 +16,7 @@ import {
 } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
+import { NetworkBadge } from "../network-badge";
 
 export function PoolCard({
   isLoading,
@@ -23,6 +24,7 @@ export function PoolCard({
 }: Pool & {
   isLoading?: boolean;
 } & ComponentProps<"button">) {
+  console.log(pool);
   if (isLoading)
     return (
       <div className="aspect-video rounded-xl bg-muted/50 animate-pulse" />
@@ -40,12 +42,13 @@ export function PoolCard({
         <Badge className="absolute top-2 right-2">{pool?.strategy?.name}</Badge>
         <BackgroundImage
           src={pool?.metadata?.image}
-          className="size-16 bg-gray-200 rounded-xl h-16"
+          fallbackSrc={pool?.metadata?.image}
+          className="aspect-video bg-gray-100 h-36"
         />
         <CardHeader className="flex justify-between items-center">
           <CardTitle className="text-xl">{pool?.metadata?.title}</CardTitle>
           <div className="flex gap-1 items-center">
-            <Badge variant="outline">Optimism</Badge>
+            <NetworkBadge chainId={pool?.chainId} />
           </div>
         </CardHeader>
         <CardContent>
