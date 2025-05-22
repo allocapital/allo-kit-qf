@@ -15,11 +15,19 @@ const networks = {
   },
 };
 
-const { Allocator, Strategy, Registry } = deployedContracts[targetNetwork.id];
+const { Allocator, Registry, Strategy, PoolFactory } =
+  deployedContracts[targetNetwork.id];
 
 export default createConfig({
   networks: networks,
   contracts: {
+    PoolFactory: {
+      network: targetNetwork.name,
+      abi: PoolFactory.abi,
+      address: PoolFactory.address,
+      filter: { event: "Deployed" },
+      startBlock: PoolFactory.startBlock || 0,
+    },
     Allocator: {
       network: targetNetwork.name,
       abi: Allocator.abi,

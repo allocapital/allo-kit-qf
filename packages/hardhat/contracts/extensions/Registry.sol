@@ -11,13 +11,12 @@ interface IRegistry {
         Status status;
         address owner;
         bytes data; // Data can contain information that can be accessed later
+        string metadataURI;
     }
 
-    event Register(address indexed project, uint256 indexed index, string metadataURI, bytes data);
-    event Approve(address indexed project, uint256 indexed index, string metadataURI, bytes data);
-    event Update(address indexed project, uint256 indexed index, string metadataURI, bytes data);
-
-    function register(address project, string memory metadataURI, bytes memory data) external;
+    event Register(address indexed project, uint256 indexed index, address indexed owner, string metadataURI, bytes data);
+    event Approve(address indexed project, uint256 indexed index, address indexed approver, string metadataURI, bytes data);
+    event Update(address indexed project, uint256 indexed index, address indexed updater, string metadataURI, bytes data);
 }
 
 contract Registry is IRegistry {
@@ -25,40 +24,27 @@ contract Registry is IRegistry {
     mapping(address => uint256) private indexes;
 
     // MetadataURI can contain details about project / application / campaign
-    function register(address project, string memory metadataURI, bytes memory data) public virtual {
-        _register(project, metadataURI, data);
-    }
-
-    // MetadataURI can contain review details
-    function update(address project, uint256 index, string memory metadataURI, bytes memory data) public virtual {
-        _update(project, index, metadataURI, data);
-    }
-
-    function approve(address project, uint256 index, string memory metadataURI, bytes memory data) public virtual {
-        _approve(project, index, metadataURI, data);
-    }
-
-    // Register project / application / campaign
-    function _register(address project, string memory metadataURI, bytes memory data) internal virtual {
+    function _register(address project, string memory metadataURI, bytes memory data) external virtual {
         uint256 index = indexes[project]++;
-        require(projects[project][index].status == Status.pending, "Project already registered");
+        require(projects[project][index].status == Status.pending, "Already registered");
 
         // When index is 0 we interpret it as the project registration.
         // This way we have a simple and flexible way to handle
         // project registration, applications, creation of campaigns etc.
-        projects[project][index] = Registration(Status.pending, msg.sender, data);
-        emit Register(project, index, metadataURI, data);
+        projects[project][index] = Registration(Status.pending, msg.sender, data, metadataURI);
+        emit Register(project, index, msg.sender, metadataURI, data);
     }
 
     // MetadataURI can contain Review information
-    function _approve(address project, uint256 index, string memory metadataURI, bytes memory data) internal virtual {
-        require(projects[project][index].status == Status.pending, "Project already approved or not registered yet");
-        projects[project][index] = Registration(Status.approved, msg.sender, data);
-        emit Approve(project, index, metadataURI, data);
+    function _approve(address project, uint256 index, string memory metadataURI, bytes memory data) public virtual {
+        Registration memory registration = projects[project][index];
+        require(registration.status == Status.pending, "Already approved or not registered yet");
+        registration.status = Status.approved;
+        emit Approve(project, index, msg.sender, metadataURI, data);
     }
 
-    function _update(address project, uint256 index, string memory metadataURI, bytes memory data) internal virtual {
+    function _update(address project, uint256 index, string memory metadataURI, bytes memory data) public virtual {
         require(projects[project][index].owner == msg.sender, "Must be owner to update");
-        emit Update(project, index, metadataURI, data);
+        emit Update(project, index, msg.sender, metadataURI, data);
     }
 }

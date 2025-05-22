@@ -5,7 +5,6 @@ import {
   useWriteAllocatorAllocate,
   useWriteAllocatorDistribute,
 } from "~/generated/wagmi";
-import { useToast } from "~/hooks/use-toast";
 import { useWaitForEvent } from "~/hooks/use-wait-for-event";
 import { useMutation } from "@tanstack/react-query";
 import { Address, Hex } from "viem";
@@ -14,9 +13,9 @@ import { ALLOCATIONS_SCHEMA } from "~/queries";
 import { useIndexer, IndexerQuery } from "~/hooks/use-indexer";
 import { useAccount } from "wagmi";
 import { Allocation } from "~/schemas";
+import { toast } from "sonner";
 
 export function useAllocate({ strategyAddress }: { strategyAddress: Address }) {
-  const { toast } = useToast();
   const allocate = useWriteAllocatorAllocate({});
 
   const waitFor = useWaitForEvent(allocatorAbi);
@@ -26,12 +25,9 @@ export function useAllocate({ strategyAddress }: { strategyAddress: Address }) {
       const hash = await allocate.writeContractAsync(
         { address: strategyAddress, args },
         {
-          onSuccess: () => toast({ title: "Allocated!" }),
+          onSuccess: () => toast.success("Allocated!"),
           onError: (error) =>
-            toast({
-              title: extractErrorReason(String(error)) ?? "Allocated error",
-              variant: "destructive",
-            }),
+            toast.error(extractErrorReason(String(error)) ?? "Allocated error"),
         }
       );
       return waitFor(hash, "Allocate");
@@ -44,7 +40,6 @@ export function useDistribute({
 }: {
   strategyAddress: Address;
 }) {
-  const { toast } = useToast();
   const distribute = useWriteAllocatorDistribute();
 
   const waitFor = useWaitForEvent(allocatorAbi);
@@ -54,12 +49,11 @@ export function useDistribute({
       const hash = await distribute.writeContractAsync(
         { address: strategyAddress, args },
         {
-          onSuccess: () => toast({ title: "Distributed!" }),
+          onSuccess: () => toast.success("Distributed!"),
           onError: (error) =>
-            toast({
-              title: extractErrorReason(String(error)) ?? "Distributed error",
-              variant: "destructive",
-            }),
+            toast.error(
+              extractErrorReason(String(error)) ?? "Distributed error"
+            ),
         }
       );
       return waitFor(hash, "Allocate");
