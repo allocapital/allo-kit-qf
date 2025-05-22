@@ -15,6 +15,8 @@ export type RegistrationWhere = {
   address_in?: Address[];
   strategy_in?: Address[];
   isApproved?: boolean;
+  pool_in?: Address[];
+  chainId_in?: number[];
 };
 type AllocationWhere = {
   amount_gt?: number;

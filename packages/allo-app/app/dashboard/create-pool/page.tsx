@@ -29,8 +29,11 @@ export default function CreatePool() {
               description: "My Pool Description",
             },
             strategy: strategies?.items[0]?.address,
-            token: ERC20Mock?.address,
-            maxAmount: "100",
+            strategyData: {
+              voteToken: ERC20Mock?.address,
+              matchToken: ERC20Mock?.address,
+              poolCap: "100",
+            },
             admins: [],
           }}
         />

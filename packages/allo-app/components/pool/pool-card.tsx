@@ -17,6 +17,9 @@ import {
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { NetworkBadge } from "../network-badge";
+import { useToken } from "../token/use-token";
+import { Address } from "viem";
+import { TokenAmount } from "../token/token-amount";
 
 export function PoolCard({
   isLoading,
@@ -25,41 +28,51 @@ export function PoolCard({
   isLoading?: boolean;
 } & ComponentProps<"button">) {
   console.log(pool);
+
+  const matchingToken = useToken(
+    pool?.decodedData?.matchToken as Address,
+    pool?.address
+  );
+  const matchingFunds = matchingToken.data?.balance ?? BigInt(0);
+
   if (isLoading)
     return (
       <div className="aspect-video rounded-xl bg-muted/50 animate-pulse" />
     );
   return (
-    <Link href={`/app/pools/${pool?.address}`} prefetch>
-      <Card
-        className={cn(
-          "pt-0 shadow-none aspect-video hover:opacity-90 transition-opacity relative",
-          {
-            ["animate-pulse"]: isLoading,
-          }
-        )}
-      >
-        <Badge className="absolute top-2 right-2">{pool?.strategy?.name}</Badge>
-        <BackgroundImage
-          src={pool?.metadata?.image}
-          fallbackSrc={pool?.metadata?.image}
-          className="aspect-video bg-gray-100 h-36"
-        />
-        <CardHeader className="flex justify-between items-center">
-          <CardTitle className="text-xl">{pool?.metadata?.title}</CardTitle>
-          <div className="flex gap-1 items-center">
-            <NetworkBadge chainId={pool?.chainId} />
+    <Card
+      className={cn(
+        "pt-0 shadow-none aspect-video hover:opacity-90 transition-opacity relative",
+        {
+          ["animate-pulse"]: isLoading,
+        }
+      )}
+    >
+      <Badge className="absolute top-2 right-2">{pool?.strategy?.name}</Badge>
+      <BackgroundImage
+        src={pool?.metadata?.image}
+        fallbackSrc={pool?.metadata?.image}
+        className="aspect-video bg-gray-100 h-36"
+      />
+      <CardHeader className="flex justify-between items-center">
+        <CardTitle className="text-xl">{pool?.metadata?.title}</CardTitle>
+        <div className="flex gap-1 items-center">
+          <NetworkBadge chainId={pool?.chainId} />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <p>{pool?.metadata?.description}</p>
+        <Separator className="my-4" />
+        <div className="flex gap-2 items-end">
+          <div className="text-lg font-bold">
+            <TokenAmount
+              amount={matchingFunds}
+              token={pool?.decodedData?.matchToken as Address}
+            />
           </div>
-        </CardHeader>
-        <CardContent>
-          <p>{pool?.metadata?.description}</p>
-          <Separator className="my-4" />
-          <div className="flex gap-1 items-end">
-            <div className="text-lg font-bold">$50,000</div>
-            <div className="text-sm pb-0.5">USDC</div>
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
+          <div className="text-sm pb-0.5">in matching</div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

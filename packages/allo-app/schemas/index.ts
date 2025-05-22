@@ -2,6 +2,7 @@ import { Address, Hex } from "viem";
 
 export type Registration = {
   id: string;
+  chainId: number;
   index: number;
   address: Address;
   metadata: {
@@ -11,6 +12,7 @@ export type Registration = {
   };
   allocations?: { items: Allocation[] };
   strategy: { address: Address; name: string };
+  pool: { address: Address; name: string };
   isApproved: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -24,6 +26,7 @@ export type Allocation = {
   token: { symbol: string; address: Address; decimals: number };
   registration: { address: Address };
   createdAt: Date;
+  pool: { address: Address; name: string };
 };
 export type Strategy = {
   name: string;

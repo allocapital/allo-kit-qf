@@ -5,10 +5,9 @@ import { QuadraticDistribution } from "~/components/distribution/distribution-qu
 import { MintTokens } from "~/components/mint-tokens";
 import { Page } from "~/components/page";
 import { usePoolById } from "~/components/pool/use-pool";
-import { PoolFunds } from "~/components/pool/pool-funds";
 import { useContracts } from "~/hooks/use-contracts";
 
-export default function DashboardFundsPage() {
+export default function DashboardDistributionPage() {
   const { poolAddress } = useParams();
   const { ERC20Mock } = useContracts();
 
@@ -16,8 +15,12 @@ export default function DashboardFundsPage() {
   const tokenAddress = pool?.decodedData.matchToken ?? ERC20Mock?.address;
 
   return (
-    <Page title="Pool Funds">
-      <PoolFunds pool={pool} />
+    <Page title="Pool Distribution">
+      <QuadraticDistribution
+        strategyAddress={poolAddress as Address}
+        tokenAddress={tokenAddress}
+      />
+      <MintTokens tokenAddress={tokenAddress} />
     </Page>
   );
 }

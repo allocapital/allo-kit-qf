@@ -8,19 +8,11 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Badge } from "~/components/ui/badge";
+import { Pool } from "~/schemas/pool";
+import { PoolForm } from "./pool-form";
 
-interface PoolDetailsProps {
-  pool: {
-    id: string;
-    name: string;
-    description: string;
-    createdAt: string;
-    status: string;
-  };
-}
-
-export function PoolDetails({ pool }: PoolDetailsProps) {
-  console.log(pool);
+export function PoolDetails({ pool }: { pool: Pool }) {
+  if (!pool) return null;
   // Format date for display
   const formattedDate = new Date(pool.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
@@ -33,12 +25,12 @@ export function PoolDetails({ pool }: PoolDetailsProps) {
       <Card className="md:col-span-2">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>{pool.name}</CardTitle>
-            <Badge variant={pool.status === "Active" ? "default" : "secondary"}>
+            <CardTitle>{pool.metadata.title}</CardTitle>
+            {/* <Badge variant={pool.status === "Active" ? "default" : "secondary"}>
               {pool.status}
-            </Badge>
+            </Badge> */}
           </div>
-          <CardDescription>{pool.description}</CardDescription>
+          <CardDescription>{pool.metadata.description}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2">
@@ -58,7 +50,7 @@ export function PoolDetails({ pool }: PoolDetailsProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      {/* <Card>
         <CardHeader>
           <CardTitle>Pool Settings</CardTitle>
           <CardDescription>Configuration and parameters</CardDescription>
@@ -110,7 +102,7 @@ export function PoolDetails({ pool }: PoolDetailsProps) {
             </li>
           </ul>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   );
 }

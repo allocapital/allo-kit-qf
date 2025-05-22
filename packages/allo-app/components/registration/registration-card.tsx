@@ -43,7 +43,10 @@ export function RegistrationCard({
         size="icon"
         variant="outline"
         disabled={isLoading}
-        onClick={onSelect}
+        onClick={(e) => {
+          e.preventDefault();
+          onSelect?.(e);
+        }}
         icon={inCart ? Heart : HeartPlus}
         iconProps={inCart ? { fill: "red", stroke: "none" } : {}}
       />
@@ -57,10 +60,6 @@ export function RegistrationCard({
         <CardTitle className="text-xl">{project?.metadata?.title}</CardTitle>
         <div className="flex gap-1 items-center"></div>
       </CardHeader>
-
-      {/* <CardContent>
-        <p>{project?.metadata?.description}</p>
-      </CardContent> */}
     </Card>
   );
   return (

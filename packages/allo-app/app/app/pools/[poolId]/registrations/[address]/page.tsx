@@ -4,7 +4,6 @@ import { Address } from "viem";
 
 import { useParams, useRouter } from "next/navigation";
 import { BackgroundImage } from "~/components/background-image";
-import { Badge } from "~/components/ui/badge";
 import { Page } from "~/components/page";
 import { Button } from "~/components/ui/button";
 
@@ -14,7 +13,7 @@ import { AllocationsTable } from "~/components/allocation/allocations-table";
 import { Markdown } from "~/components/markdown";
 import { ApprovedBadge } from "~/components/registration/approved-badge";
 
-export default function ProjectDetailsPage() {
+export default function RegistrationDetailsPage() {
   const params = useParams();
   const address = params.address as Address;
   const cart = useCart();
@@ -33,8 +32,8 @@ export default function ProjectDetailsPage() {
         <div className="flex gap-1">
           <Button
             onClick={() => {
-              cart.set(address, cart.items[address] || 1);
-              router.push("/checkout");
+              cart.set(project?.id!, cart.items[project?.id!] || 1);
+              router.push(`/app/pools/${params.poolId}/checkout`);
             }}
           >
             Add To Cart

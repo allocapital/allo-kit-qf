@@ -1,11 +1,7 @@
 import { Footer } from "./footer";
 import { Header } from "./header";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />

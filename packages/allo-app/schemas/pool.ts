@@ -28,4 +28,5 @@ export type Pool = z.infer<typeof PoolSchema> & {
     name: string;
     address: Address;
   };
+  decodedData: Record<string, unknown>;
 };

@@ -1,8 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { IndexerQuery } from "~/hooks/use-indexer";
 import { Grid } from "../grid";
-// import { PoolCard } from "./pool-card";
 import { usePools } from "./use-pool";
 import { PoolCard } from "./pool-card";
 
@@ -16,7 +16,11 @@ export function PoolList({ query }: { query: IndexerQuery }) {
       error={error}
       isPending={isPending}
       renderItem={(pool) => {
-        return <PoolCard {...pool} key={pool.address ?? pool.id} />;
+        return (
+          <Link href={`/app/pools/${pool?.address}`} prefetch>
+            <PoolCard {...pool} key={pool.address ?? pool.id} />
+          </Link>
+        );
       }}
     />
   );

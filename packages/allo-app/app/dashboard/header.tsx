@@ -34,8 +34,10 @@ export function SiteHeader() {
 export const BREADCRUMB_LABELS: Record<string, string> = {
   dashboard: "Dashboard",
   pools: "Pools",
-  create: "Create",
+  "create-pool": "Create Pool",
   manage: "Manage Pools",
+  funds: "Pool Funds",
+  distribute: "Distribute",
   view: "View Pool",
   register: "Register Pool",
   applications: "Applications",

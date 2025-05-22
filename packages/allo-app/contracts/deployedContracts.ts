@@ -10,49 +10,6 @@ const deployedContracts = {
       address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
       abi: [
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "target",
-              type: "address",
-            },
-          ],
-          name: "AddressEmptyCode",
-          type: "error",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "AddressInsufficientBalance",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "FailedInnerCall",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "ReentrancyGuardReentrantCall",
-          type: "error",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "token",
-              type: "address",
-            },
-          ],
-          name: "SafeERC20FailedOperation",
-          type: "error",
-        },
-        {
           anonymous: false,
           inputs: [
             {
@@ -112,7 +69,7 @@ const deployedContracts = {
               type: "bytes[]",
             },
           ],
-          name: "allocate",
+          name: "_allocate",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -140,7 +97,7 @@ const deployedContracts = {
               type: "bytes[]",
             },
           ],
-          name: "distribute",
+          name: "_distribute",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -594,36 +551,14 @@ const deployedContracts = {
               name: "owner",
               type: "address",
             },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
           ],
           stateMutability: "nonpayable",
           type: "constructor",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "target",
-              type: "address",
-            },
-          ],
-          name: "AddressEmptyCode",
-          type: "error",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "AddressInsufficientBalance",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "FailedInnerCall",
-          type: "error",
         },
         {
           inputs: [],
@@ -655,22 +590,6 @@ const deployedContracts = {
             },
           ],
           name: "OwnableUnauthorizedAccount",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "ReentrancyGuardReentrantCall",
-          type: "error",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "token",
-              type: "address",
-            },
-          ],
-          name: "SafeERC20FailedOperation",
           type: "error",
         },
         {
@@ -726,6 +645,12 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              indexed: true,
+              internalType: "address",
+              name: "approver",
+              type: "address",
+            },
+            {
               indexed: false,
               internalType: "string",
               name: "metadataURI",
@@ -766,6 +691,12 @@ const deployedContracts = {
               indexed: false,
               internalType: "string",
               name: "schema",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
               type: "string",
             },
           ],
@@ -820,6 +751,12 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
               indexed: false,
               internalType: "string",
               name: "metadataURI",
@@ -851,6 +788,12 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              indexed: true,
+              internalType: "address",
+              name: "updater",
+              type: "address",
+            },
+            {
               indexed: false,
               internalType: "string",
               name: "metadataURI",
@@ -865,6 +808,141 @@ const deployedContracts = {
           ],
           name: "Update",
           type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "_allocate",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_approve",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "_distribute",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_update",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
         },
         {
           inputs: [
@@ -1009,6 +1087,19 @@ const deployedContracts = {
         },
         {
           inputs: [],
+          name: "metadataURI",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
           name: "owner",
           outputs: [
             {
@@ -1050,31 +1141,13 @@ const deployedContracts = {
               name: "data",
               type: "bytes",
             },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "project",
-              type: "address",
-            },
             {
               internalType: "string",
               name: "metadataURI",
               type: "string",
             },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
           ],
-          name: "register",
-          outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -1124,34 +1197,6 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "project",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "index",
-              type: "uint256",
-            },
-            {
-              internalType: "string",
-              name: "metadataURI",
-              type: "string",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-          ],
-          name: "update",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
           stateMutability: "payable",
           type: "receive",
         },
@@ -1159,14 +1204,15 @@ const deployedContracts = {
       inheritedFunctions: {
         id: "contracts/base/Strategy.sol",
         initialize: "contracts/base/Strategy.sol",
+        metadataURI: "contracts/base/Strategy.sol",
         schema: "contracts/base/Strategy.sol",
         strategyName: "contracts/base/Strategy.sol",
-        allocate: "contracts/extensions/Allocator.sol",
-        distribute: "contracts/extensions/Allocator.sol",
-        approve: "contracts/extensions/Registry.sol",
+        _allocate: "contracts/extensions/Allocator.sol",
+        _distribute: "contracts/extensions/Allocator.sol",
+        _approve: "contracts/extensions/Registry.sol",
+        _register: "contracts/extensions/Registry.sol",
+        _update: "contracts/extensions/Registry.sol",
         projects: "contracts/extensions/Registry.sol",
-        register: "contracts/extensions/Registry.sol",
-        update: "contracts/extensions/Registry.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -1189,6 +1235,12 @@ const deployedContracts = {
               internalType: "uint256",
               name: "index",
               type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "approver",
+              type: "address",
             },
             {
               indexed: false,
@@ -1222,6 +1274,12 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
               indexed: false,
               internalType: "string",
               name: "metadataURI",
@@ -1251,6 +1309,12 @@ const deployedContracts = {
               internalType: "uint256",
               name: "index",
               type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "updater",
+              type: "address",
             },
             {
               indexed: false,
@@ -1291,7 +1355,58 @@ const deployedContracts = {
               type: "bytes",
             },
           ],
-          name: "approve",
+          name: "_approve",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_update",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1326,59 +1441,13 @@ const deployedContracts = {
               name: "data",
               type: "bytes",
             },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
           ],
           stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "project",
-              type: "address",
-            },
-            {
-              internalType: "string",
-              name: "metadataURI",
-              type: "string",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-          ],
-          name: "register",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "project",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "index",
-              type: "uint256",
-            },
-            {
-              internalType: "string",
-              name: "metadataURI",
-              type: "string",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-          ],
-          name: "update",
-          outputs: [],
-          stateMutability: "nonpayable",
           type: "function",
         },
       ],
@@ -1394,36 +1463,14 @@ const deployedContracts = {
               name: "owner",
               type: "address",
             },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
           ],
           stateMutability: "nonpayable",
           type: "constructor",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "target",
-              type: "address",
-            },
-          ],
-          name: "AddressEmptyCode",
-          type: "error",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "account",
-              type: "address",
-            },
-          ],
-          name: "AddressInsufficientBalance",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "FailedInnerCall",
-          type: "error",
         },
         {
           inputs: [],
@@ -1455,22 +1502,6 @@ const deployedContracts = {
             },
           ],
           name: "OwnableUnauthorizedAccount",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "ReentrancyGuardReentrantCall",
-          type: "error",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "token",
-              type: "address",
-            },
-          ],
-          name: "SafeERC20FailedOperation",
           type: "error",
         },
         {
@@ -1526,6 +1557,12 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              indexed: true,
+              internalType: "address",
+              name: "approver",
+              type: "address",
+            },
+            {
               indexed: false,
               internalType: "string",
               name: "metadataURI",
@@ -1566,6 +1603,12 @@ const deployedContracts = {
               indexed: false,
               internalType: "string",
               name: "schema",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
               type: "string",
             },
           ],
@@ -1620,6 +1663,12 @@ const deployedContracts = {
               type: "uint256",
             },
             {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
               indexed: false,
               internalType: "string",
               name: "metadataURI",
@@ -1649,6 +1698,12 @@ const deployedContracts = {
               internalType: "uint256",
               name: "index",
               type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "updater",
+              type: "address",
             },
             {
               indexed: false,
@@ -1689,7 +1744,7 @@ const deployedContracts = {
               type: "bytes[]",
             },
           ],
-          name: "allocate",
+          name: "_allocate",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1717,7 +1772,7 @@ const deployedContracts = {
               type: "bytes",
             },
           ],
-          name: "approve",
+          name: "_approve",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1745,7 +1800,58 @@ const deployedContracts = {
               type: "bytes[]",
             },
           ],
-          name: "distribute",
+          name: "_distribute",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "index",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_update",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",
@@ -1779,6 +1885,19 @@ const deployedContracts = {
           name: "initialize",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "metadataURI",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -1824,31 +1943,13 @@ const deployedContracts = {
               name: "data",
               type: "bytes",
             },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "project",
-              type: "address",
-            },
             {
               internalType: "string",
               name: "metadataURI",
               type: "string",
             },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
           ],
-          name: "register",
-          outputs: [],
-          stateMutability: "nonpayable",
+          stateMutability: "view",
           type: "function",
         },
         {
@@ -1898,34 +1999,6 @@ const deployedContracts = {
           type: "function",
         },
         {
-          inputs: [
-            {
-              internalType: "address",
-              name: "project",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "index",
-              type: "uint256",
-            },
-            {
-              internalType: "string",
-              name: "metadataURI",
-              type: "string",
-            },
-            {
-              internalType: "bytes",
-              name: "data",
-              type: "bytes",
-            },
-          ],
-          name: "update",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
           stateMutability: "payable",
           type: "receive",
         },
@@ -1933,14 +2006,15 @@ const deployedContracts = {
       inheritedFunctions: {
         id: "contracts/base/Strategy.sol",
         initialize: "contracts/base/Strategy.sol",
+        metadataURI: "contracts/base/Strategy.sol",
         schema: "contracts/base/Strategy.sol",
         strategyName: "contracts/base/Strategy.sol",
-        allocate: "contracts/extensions/Allocator.sol",
-        distribute: "contracts/extensions/Allocator.sol",
-        approve: "contracts/extensions/Registry.sol",
+        _allocate: "contracts/extensions/Allocator.sol",
+        _distribute: "contracts/extensions/Allocator.sol",
+        _approve: "contracts/extensions/Registry.sol",
+        _register: "contracts/extensions/Registry.sol",
+        _update: "contracts/extensions/Registry.sol",
         projects: "contracts/extensions/Registry.sol",
-        register: "contracts/extensions/Registry.sol",
-        update: "contracts/extensions/Registry.sol",
         owner: "@openzeppelin/contracts/access/Ownable.sol",
         renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
@@ -1959,6 +2033,11 @@ const deployedContracts = {
             {
               internalType: "string",
               name: "_schema",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
               type: "string",
             },
           ],
@@ -2000,6 +2079,12 @@ const deployedContracts = {
               indexed: false,
               internalType: "string",
               name: "schema",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
               type: "string",
             },
           ],
@@ -2048,6 +2133,19 @@ const deployedContracts = {
           name: "initialize",
           outputs: [],
           stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "metadataURI",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {

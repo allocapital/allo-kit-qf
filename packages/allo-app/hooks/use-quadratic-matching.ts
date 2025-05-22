@@ -16,7 +16,7 @@ export function useQuadraticMatching({
 }: UseQuadraticMatchingProps) {
   const allocations = useAllocations({
     where: {
-      strategy_in: [strategyAddress],
+      pool_in: [strategyAddress],
       to_not_in: [strategyAddress],
       from_not_in: [strategyAddress],
     },

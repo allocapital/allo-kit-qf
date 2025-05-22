@@ -79,17 +79,20 @@ export function PoolForm({
           if (!strategy) throw new Error("Strategy not found");
 
           function encodeSimpleGrants(schema: string) {
-            const token = tokens.find(
-              (t) => t.address === values.strategyData.token
+            const voteToken = tokens.find(
+              (t) => t.address === values.strategyData.voteToken
             );
-            if (!token) throw new Error("Token not found");
-            console.log(token);
+            const matchToken = tokens.find(
+              (t) => t.address === values.strategyData.matchToken
+            );
+            if (!voteToken || !matchToken) throw new Error("Token not found");
             /*
             TODO: Handle different Strategies with different schemas
             */
             return encodeData(schema, [
-              values.strategyData.token,
-              parseUnits(values.strategyData.maxAmount, token.decimals),
+              values.strategyData.voteToken,
+              values.strategyData.matchToken,
+              parseUnits(values.strategyData.poolCap, matchToken.decimals),
             ]);
           }
           function encodeQuadraticFunding(schema: string) {
@@ -205,39 +208,73 @@ const strategyComponents = {
 function SimpleGrantsForm({ tokens }: { tokens: Token[] }) {
   const form = useFormContext();
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <>
+      <div className="grid grid-cols-2 gap-2">
+        <FormField
+          control={form.control}
+          name="strategyData.voteToken"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Vote Token</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a token" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {tokens.map((token) => (
+                      <SelectItem key={token.address} value={token.address}>
+                        {token.symbol}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="strategyData.matchToken"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Match Token</FormLabel>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a token" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {tokens.map((token) => (
+                      <SelectItem key={token.address} value={token.address}>
+                        {token.symbol}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
       <FormField
         control={form.control}
-        name="strategyData.token"
-        render={({ field }) => (
-          <FormItem className="w-full">
-            <FormLabel>Token</FormLabel>
-            <FormControl>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a token" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {tokens.map((token) => (
-                    <SelectItem key={token.address} value={token.address}>
-                      {token.symbol}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="strategyData.maxAmount"
+        name="strategyData.poolCap"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Max amount</FormLabel>
+            <FormLabel>Pool Max Amount</FormLabel>
             <FormControl>
               <Input autoFocus placeholder="0x..." {...field} />
             </FormControl>
@@ -245,7 +282,7 @@ function SimpleGrantsForm({ tokens }: { tokens: Token[] }) {
           </FormItem>
         )}
       />
-    </div>
+    </>
   );
 }
 

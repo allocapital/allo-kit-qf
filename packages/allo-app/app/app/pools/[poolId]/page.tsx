@@ -2,7 +2,7 @@
 
 import { Address } from "viem";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Pencil } from "lucide-react";
 
 import { BackgroundImage } from "~/components/background-image";
@@ -10,11 +10,9 @@ import { Badge } from "~/components/ui/badge";
 import { Page } from "~/components/page";
 import { Button } from "~/components/ui/button";
 
-import { useCart } from "~/components/cart/use-cart";
 import { usePoolById } from "~/components/pool/use-pool";
-import { AllocationsTable } from "~/components/allocation/allocations-table";
 import { Markdown } from "~/components/markdown";
-import { ProjectsList } from "~/components/registration/projects-list";
+import { RegistrationsList } from "~/components/registration/registrations-list";
 import Link from "next/link";
 import { NetworkBadge } from "~/components/network-badge";
 function PoolActions({ poolId }: { poolId: Address }) {
@@ -35,9 +33,6 @@ function PoolActions({ poolId }: { poolId: Address }) {
 export default function PoolDetailsPage() {
   const params = useParams();
   const poolId = params.poolId as Address;
-  const cart = useCart();
-  const router = useRouter();
-  // const pool = { metadata: { title: "Pool title" } };
   const { data: pool } = usePoolById(poolId);
 
   return (
@@ -60,19 +55,11 @@ export default function PoolDetailsPage() {
       </div>
 
       <h3 className=" font-semibold">Projects</h3>
-      <ProjectsList
+      <RegistrationsList
         query={{
-          where: { pool_in: [poolId] },
+          where: { pool_in: [poolId], isApproved: true },
         }}
       />
     </Page>
-  );
-}
-
-function ApprovedBadge({ isApproved }: { isApproved?: boolean }) {
-  return typeof isApproved === "undefined" ? null : (
-    <Badge variant={isApproved ? "success" : "outline"}>
-      {isApproved ? "Approved" : "Pending"}
-    </Badge>
   );
 }

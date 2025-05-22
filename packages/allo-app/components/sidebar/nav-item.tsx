@@ -21,9 +21,11 @@ export function NavItem({
 }) {
   const pathname = usePathname();
   const isActive = pathname === href;
+
   return (
     <SidebarMenuButton
       asChild
+      // isActive={isActive}
       tooltip={title}
       className={cn({
         ["bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"]:

@@ -8,6 +8,7 @@ import {
   ListTodo,
   Plus,
   SettingsIcon,
+  Share2,
   ShieldUser,
   Users,
 } from "lucide-react";
@@ -25,7 +26,7 @@ import {
 } from "~/components/ui/sidebar";
 import { Logo } from "~/components/logo";
 import { NavItem } from "~/components/sidebar/nav-item";
-import { usePools } from "~/components/pool/use-pool";
+import { usePools, usePoolsByOwner } from "~/components/pool/use-pool";
 import { useAccount } from "wagmi";
 import { cn } from "~/lib/utils";
 import { Address } from "viem";
@@ -63,6 +64,11 @@ const menu = {
           title: "Pool Funds",
           href: "/funds",
           icon: Coins,
+        },
+        {
+          title: "Distribution",
+          href: "/distribution",
+          icon: Share2,
         },
         {
           title: "Voters",
@@ -118,7 +124,7 @@ export function DashboardSidebar({
                   >
                     <NavItem
                       {...item}
-                      href={`/dashboard/${poolAddress}/${item.href}`}
+                      href={`/dashboard/${poolAddress}${item.href}`}
                     />
                   </SidebarMenuItem>
                 ))}
@@ -135,15 +141,11 @@ export function DashboardSidebar({
 }
 
 export function PoolSwitcher() {
-  const { address } = useAccount();
   const pathname = usePathname();
   const { poolAddress } = useParams();
   const router = useRouter();
-  const { data: pools } = usePools(
-    { where: { owner_in: [address as Address] } },
-    { enabled: Boolean(address) }
-  );
-  const page = pathname.split("/").pop();
+  const { data: pools } = usePoolsByOwner();
+  const page = pathname.split("/")[3];
   const activePool = pools?.items?.find(
     (pool) =>
       pool.address?.toLowerCase() === (poolAddress as Address)?.toLowerCase()
@@ -184,7 +186,7 @@ export function PoolSwitcher() {
               <DropdownMenuItem
                 key={pool.address}
                 onClick={() => {
-                  router.push(`/dashboard/${pool.address}/${page}`);
+                  router.push(`/dashboard/${pool.address}/${page || ""}`);
                 }}
                 className={cn("gap-2 p-2", {
                   "bg-sidebar-accent":

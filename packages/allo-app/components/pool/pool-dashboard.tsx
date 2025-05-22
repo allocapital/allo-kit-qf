@@ -16,6 +16,11 @@ import { PoolFunds } from "./pool-funds";
 import { PoolVoters } from "./pool-voters";
 import { PoolApplications } from "./pool-applications";
 import { PoolDistribution } from "./pool-distribution";
+import { Address } from "viem";
+import { Pool } from "~/schemas/pool";
+import { usePoolById } from "./use-pool";
+import { useToken } from "../token/use-token";
+import { TokenAmount } from "../token/token-amount";
 
 // Mock data for funding pools
 const pools = [
@@ -66,22 +71,20 @@ const pools = [
   },
 ];
 
-export function PoolDashboard() {
+export function PoolDashboard({ poolAddress }: { poolAddress: Address }) {
   const [selectedPool, setSelectedPool] = useState(pools[0]);
   const [activeTab, setActiveTab] = useState("details");
 
+  const { data: pool } = usePoolById(poolAddress);
+
+  const matchingToken = useToken(
+    pool?.decodedData?.matchToken as Address,
+    pool?.address
+  );
+  const matchingFunds = matchingToken.data?.balance ?? BigInt(0);
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Funding Pools</h2>
-          <p className="text-muted-foreground">
-            Manage your funding pools and view detailed information.
-          </p>
-        </div>
-        {/* <PoolSelector pools={pools} selectedPool={selectedPool} onSelectPool={setSelectedPool} /> */}
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card className="gap-0">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -90,7 +93,10 @@ export function PoolDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${selectedPool.totalFunds.toLocaleString()}
+              <TokenAmount
+                amount={matchingFunds}
+                token={pool?.decodedData.matchToken as Address}
+              />
             </div>
           </CardContent>
         </Card>
@@ -101,7 +107,8 @@ export function PoolDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {selectedPool.applicationsCount}
+              {"-"}
+              {/* {selectedPool.applicationsCount} */}
             </div>
           </CardContent>
         </Card>
@@ -111,7 +118,7 @@ export function PoolDashboard() {
             <HandCoins className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{3}</div>
+            <div className="text-2xl font-bold">{"-"}</div>
           </CardContent>
         </Card>
         <Card className="gap-0">
@@ -120,7 +127,7 @@ export function PoolDashboard() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{selectedPool.votersCount}</div>
+            <div className="text-2xl font-bold">{"-"}</div>
           </CardContent>
         </Card>
       </div>
@@ -153,7 +160,7 @@ export function PoolDashboard() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="details" className="space-y-4">
-          <PoolDetails pool={selectedPool} />
+          <PoolDetails pool={pool} />
         </TabsContent>
         <TabsContent value="funds" className="space-y-4">
           <PoolFunds pool={selectedPool} />

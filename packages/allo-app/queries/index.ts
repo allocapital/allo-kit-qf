@@ -90,6 +90,10 @@ export const ALLOCATIONS_SCHEMA = gql`
           address
           metadata
         }
+        pool { 
+          address
+          metadata
+        }
       }
       ${META}
     }
@@ -123,7 +127,8 @@ export const POOLS_SCHEMA = gql`
           address
           name
         }
-       
+        createdAt
+        updatedAt
       }
       ${META}
     }
