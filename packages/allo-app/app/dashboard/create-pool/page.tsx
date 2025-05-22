@@ -32,7 +32,7 @@ export default function CreatePool() {
             strategyData: {
               voteToken: ERC20Mock?.address,
               matchToken: ERC20Mock?.address,
-              poolCap: "100",
+              poolCap: "10000",
             },
             admins: [],
           }}

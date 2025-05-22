@@ -17,11 +17,12 @@ import { EnsName } from "../ens";
 import { MatchingFunds } from "../allocation/matching-funds";
 import { MintTokens } from "../mint-tokens";
 import { useAllocations } from "../allocation/use-allocate";
+import { Label } from "../ui/label";
 
 export function PoolFunds({ pool }: { pool: Pool }) {
   // Calculate some mock data for the funding progress
 
-  const tokenAddress = pool?.decodedData.matchToken as Address;
+  const tokenAddress = pool?.decodedData?.matchToken as Address;
 
   const Contributions = useAllocations({
     where: {
@@ -60,36 +61,7 @@ export function PoolFunds({ pool }: { pool: Pool }) {
               </div>
               <Progress value={progressPercentage} className="h-2" />
             </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Matching Pool</p>
-                <div className="flex items-center">
-                  <DollarSign className="mr-1 h-4 w-4 text-muted-foreground" />
-                  <span className="text-2xl font-bold">
-                    {/* ${(pool.totalFunds * 0.4).toLocaleString()} */}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  40% of total funds allocated for matching
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Matching Ratio</p>
-                <div className="flex items-center">
-                  <TrendingUp className="mr-1 h-4 w-4 text-muted-foreground" />
-                  <span className="text-2xl font-bold">
-                    {/* {pool.matchingRatio}x */}
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  For every $1 contributed
-                </p>
-              </div>
-            </div>
-
-            <div className="flex justify-end space-x-2">
+            <div className="pt-8 flex justify-end space-x-2">
               <MatchingFunds
                 strategyAddress={pool?.address}
                 tokenAddress={tokenAddress}

@@ -104,23 +104,13 @@ export function AllocationFormMatching({
           icon: ShoppingCart,
         }}
         renderItem={(project, i) => {
-          // const estimated = estimateMatching([
-          //   {
-          //     amount:
-          //       (cart.items[project?.id as Address] ?? 0) *
-          //       10 ** (token.data?.decimals ?? 18),
-          //     to: project?.address,
-          //     from: strategyAddress,
-          //   } as Allocation,
-          // ]);
-
-          const amount = estimated[project?.address as Address];
+          const amount = estimated[project?.id as Address];
           return (
             <AllocationItem
               {...project}
               key={project?.id}
               actions={
-                <>
+                <div className="sm:flex items-center gap-2">
                   {amount ? (
                     <div className="p-2 text-sm">
                       Matching:{" "}
@@ -147,7 +137,7 @@ export function AllocationFormMatching({
                     type="button"
                     onClick={() => cart.remove(project.id)}
                   />
-                </>
+                </div>
               }
             />
           );
