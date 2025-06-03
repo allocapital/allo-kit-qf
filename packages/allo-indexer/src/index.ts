@@ -13,7 +13,7 @@ const PINATA_GATEWAY_KEY = process.env.PINATA_GATEWAY_KEY;
 const MAX_RETRY_COUNT = 5;
 
 // Whenever a new Pool is created.
-ponder.on("PoolFactory:Deployed", async ({ event, context }) => {
+ponder.on("PoolFactory:Created", async ({ event, context }) => {
   const { strategy, pool, name, owner, data, schema, metadataURI } = event.args;
   const { chainId } = context.network;
   console.log("PoolFactory:Deployed", event.args);
@@ -37,7 +37,7 @@ ponder.on("PoolFactory:Deployed", async ({ event, context }) => {
     .onConflictDoNothing();
 });
 
-ponder.on("Strategy:Deployed", async ({ event, context }) => {
+ponder.on("Pool:Deployed", async ({ event, context }) => {
   const { id, name, schema, metadataURI } = event.args;
   const { chainId } = context.network;
   const metadata = await fetchMetadata(metadataURI);
@@ -48,7 +48,7 @@ ponder.on("Strategy:Deployed", async ({ event, context }) => {
     .insert(schemas.strategy)
     .values({
       chainId,
-      creator: event.args.creator,
+      creator: event.args.owner,
       address: event.log.address,
       name,
       schema,
@@ -60,7 +60,7 @@ ponder.on("Strategy:Deployed", async ({ event, context }) => {
     .onConflictDoNothing();
 });
 
-ponder.on("Registry:Register", async ({ event, context }) => {
+ponder.on("Pool:Register", async ({ event, context }) => {
   const { chainId } = context.network;
   const { index, project, metadataURI, data, owner } = event.args;
   const metadata = await fetchMetadata(metadataURI);
@@ -85,7 +85,7 @@ ponder.on("Registry:Register", async ({ event, context }) => {
     .onConflictDoNothing();
 });
 
-ponder.on("Registry:Approve", async ({ event, context }) => {
+ponder.on("Pool:Approve", async ({ event, context }) => {
   const review = await fetchMetadata(event.args.metadataURI);
 
   await context.db
@@ -100,7 +100,7 @@ ponder.on("Registry:Approve", async ({ event, context }) => {
     }));
 });
 
-ponder.on("Registry:Update", async ({ event, context }) => {
+ponder.on("Pool:Update", async ({ event, context }) => {
   const metadata = await fetchMetadata(event.args.metadataURI);
 
   await context.db
@@ -114,7 +114,7 @@ ponder.on("Registry:Update", async ({ event, context }) => {
     }));
 });
 
-ponder.on("Allocator:Allocate", async ({ event, context }) => {
+ponder.on("Pool:Allocate", async ({ event, context }) => {
   const { chainId } = context.network;
   const { to, from, token, amount } = event.args;
 

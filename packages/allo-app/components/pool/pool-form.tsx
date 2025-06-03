@@ -181,13 +181,88 @@ export function PoolForm({
             </FormItem>
           )}
         />
-        {selectedStrategy &&
+
+        <div className="grid grid-cols-2 gap-2">
+          <FormField
+            control={form.control}
+            name="allocationToken"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Vote Token</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a token" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tokens.map((token) => (
+                        <SelectItem key={token.address} value={token.address}>
+                          {token.symbol}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="distributionToken"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Match Token</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a token" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tokens.map((token) => (
+                        <SelectItem key={token.address} value={token.address}>
+                          {token.symbol}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <FormField
+          control={form.control}
+          name="strategyData.poolCap"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Pool Max Amount</FormLabel>
+              <FormControl>
+                <Input autoFocus placeholder="0x..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* {selectedStrategy &&
           createElement(
             strategyComponents[
               selectedStrategy as keyof typeof strategyComponents
             ],
             { tokens }
-          )}
+          )} */}
 
         <div className="flex items-center justify-end">
           <BalanceCheck>
@@ -202,10 +277,10 @@ export function PoolForm({
 }
 
 const strategyComponents = {
-  SimpleGrants: SimpleGrantsForm,
+  RetroFunding: RetroFundingForm,
   QuadraticFunding: QuadraticFundingForm,
 };
-function SimpleGrantsForm({ tokens }: { tokens: Token[] }) {
+function RetroFundingForm({ tokens }: { tokens: Token[] }) {
   const form = useFormContext();
   return (
     <>

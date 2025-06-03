@@ -15,8 +15,7 @@ const networks = {
   },
 };
 
-const { Allocator, Registry, Strategy, PoolFactory } =
-  deployedContracts[targetNetwork.id];
+const { Pool, PoolFactory } = deployedContracts[targetNetwork.id];
 
 export default createConfig({
   networks: networks,
@@ -25,23 +24,23 @@ export default createConfig({
       network: targetNetwork.name,
       abi: PoolFactory.abi,
       address: PoolFactory.address,
-      filter: { event: "Deployed" },
+      filter: { event: "Created" },
       startBlock: PoolFactory.startBlock || 0,
     },
-    Allocator: {
+    Pool: {
       network: targetNetwork.name,
-      abi: Allocator.abi,
-      startBlock: Allocator.startBlock || START_BLOCK,
+      abi: Pool.abi,
+      startBlock: Pool.startBlock || START_BLOCK,
     },
-    Strategy: {
-      network: targetNetwork.name,
-      abi: Strategy.abi,
-      startBlock: Strategy.startBlock || START_BLOCK,
-    },
-    Registry: {
-      network: targetNetwork.name,
-      abi: Registry.abi,
-      startBlock: Registry.startBlock || START_BLOCK,
-    },
+    // Strategy: {
+    //   network: targetNetwork.name,
+    //   abi: Strategy.abi,
+    //   startBlock: Strategy.startBlock || START_BLOCK,
+    // },
+    // Registry: {
+    //   network: targetNetwork.name,
+    //   abi: Registry.abi,
+    //   startBlock: Registry.startBlock || START_BLOCK,
+    // },
   },
 });

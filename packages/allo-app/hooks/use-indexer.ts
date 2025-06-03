@@ -3,11 +3,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { OperationResult, TypedDocumentNode } from "urql";
 import { Address, Hex } from "viem";
-import { useChainId } from "wagmi";
 import { createClient } from "~/lib/graphql";
 import { useCurrentChainName } from "./use-current-chain";
 import { chains } from "~/config";
-import { baseSepolia } from "viem/chains";
 
 export type RegistrationWhere = {
   id?: Hex;
@@ -34,6 +32,7 @@ type PoolWhere = {
   pool_in?: Address[];
   owner_in?: Address[];
 };
+
 export type IndexerQuery = {
   limit?: number;
   orderBy?: string;
@@ -42,6 +41,7 @@ export type IndexerQuery = {
 };
 
 const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_URL!;
+
 export function useIndexer<T extends { createdAt?: Date; updatedAt?: Date }>({
   queryKey,
   queryFn,
@@ -105,17 +105,11 @@ export function useIndexer<T extends { createdAt?: Date; updatedAt?: Date }>({
       })),
     }),
     refetchInterval: ({ state }) => {
-      if (state.data?.items.length) return 0;
-
-      const retryCount = state.dataUpdateCount - 1;
-      const elapsedTime = Date.now() - state.dataUpdatedAt;
-
-      if (retryCount >= maxRetries || elapsedTime > retryTimeout) {
-        return 0;
-      }
-
-      return 1000;
+      // Stop refetching if we have data or if we've hit the retry limit
+      return (state.data?.items?.length ?? 0) > 0 ? 0 : 1000;
     },
+    retry: 5, // Will retry failed requests 5 times
+    retryDelay: 1000, // Wait 1 second between retries
     ...rest,
   });
 

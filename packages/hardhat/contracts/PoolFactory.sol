@@ -2,35 +2,23 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/proxy/Clones.sol";
-import { IStrategy } from "./base/Strategy.sol";
+import {IPool, Pool, PoolConfig} from "./Pool.sol";
 
-
-import "hardhat/console.sol";
 contract PoolFactory {
-    event Deployed(address indexed strategy, address indexed pool, address indexed owner, string name, string metadataURI, bytes data, string schema);
+    event Created(address indexed strategy, address indexed pool, PoolConfig config);
 
-    /**
-     * @dev Deploys a minimal proxy that points to `implementation`,
-     *      then initializes it by calling `data`.
-     *
-     * @param implementation The address of the logic contract to clone.
-     * @param metadataURI The metadataURI for initializing the pool.
-     * @param data The calldata for initializing the pool.
-     */
-    function deploy(address implementation, string calldata metadataURI, bytes calldata data) external returns (address) {
-        address strategyAddress = Clones.clone(implementation);
+    function deploy(address implementation, PoolConfig calldata config, bytes calldata data) external returns (address) {
+        // Pool pool = new Pool(config);
+        // emit Created(implementation, address(pool), config);
+        // return address(pool);
 
-        emit Deployed(
-            implementation,
-            strategyAddress,
-            msg.sender,
-            IStrategy(implementation).strategyName(),
-            metadataURI,
-            data,
-            IStrategy(implementation).schema()
-        );
-        IStrategy(strategyAddress).initialize(msg.sender, data);
+        address poolAddress = Clones.clone(implementation);
+        IPool(poolAddress).initialize(config, data);
+        emit Created(implementation, poolAddress,  config);
+        return poolAddress;
+        /*
+        Clone not supported by PolkaVM?
 
-        return strategyAddress;
+        */
     }
 }
