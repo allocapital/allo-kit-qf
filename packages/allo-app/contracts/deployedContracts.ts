@@ -2824,6 +2824,2015 @@ const deployedContracts = {
       },
     },
   },
+  84532: {
+    ERC20Mock: {
+      address: "0x400F3ffBf94bcc9E86ebd01E69d4B83b56F6e21a",
+      abi: [
+        {
+          inputs: [],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "allowance",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "needed",
+              type: "uint256",
+            },
+          ],
+          name: "ERC20InsufficientAllowance",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "balance",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "needed",
+              type: "uint256",
+            },
+          ],
+          name: "ERC20InsufficientBalance",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "approver",
+              type: "address",
+            },
+          ],
+          name: "ERC20InvalidApprover",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "receiver",
+              type: "address",
+            },
+          ],
+          name: "ERC20InvalidReceiver",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "ERC20InvalidSender",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+          ],
+          name: "ERC20InvalidSpender",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "Approval",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "Transfer",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+          ],
+          name: "allowance",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "spender",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "approve",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "balanceOf",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "decimals",
+          outputs: [
+            {
+              internalType: "uint8",
+              name: "",
+              type: "uint8",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+          ],
+          name: "mint",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "name",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "symbol",
+          outputs: [
+            {
+              internalType: "string",
+              name: "",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalSupply",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "transfer",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+          ],
+          name: "transferFrom",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        allowance: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        approve: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        balanceOf: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        decimals: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        name: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        symbol: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        totalSupply: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        transfer: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        transferFrom: "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+      },
+    },
+    Pool: {
+      address: "0x59B53E43AA8C5060348F6F01980f286444242dFD",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_schema",
+              type: "string",
+            },
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              internalType: "struct PoolConfig",
+              name: "_config",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Allocate",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "approver",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Approve",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "schema",
+              type: "string",
+            },
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              indexed: false,
+              internalType: "struct PoolConfig",
+              name: "config",
+              type: "tuple",
+            },
+          ],
+          name: "Deployed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Register",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "rejecter",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Reject",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "updater",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Update",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "_allocate",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_approve",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "_distribute",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_reject",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_update",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "config",
+          outputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "allocationToken",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "distributionToken",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "maxAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              internalType: "struct PoolConfig",
+              name: "_config",
+              type: "tuple",
+            },
+            {
+              internalType: "bytes",
+              name: "",
+              type: "bytes",
+            },
+          ],
+          name: "initialize",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "registrations",
+          outputs: [
+            {
+              internalType: "enum IPool.Status",
+              name: "status",
+              type: "uint8",
+            },
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+    PoolFactory: {
+      address: "0xf391B2abe96cac194f266c5ecD0197c1F3785C5f",
+      abi: [
+        {
+          inputs: [],
+          name: "ERC1167FailedCreateClone",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "strategy",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "pool",
+              type: "address",
+            },
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              indexed: false,
+              internalType: "struct PoolConfig",
+              name: "config",
+              type: "tuple",
+            },
+          ],
+          name: "Created",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "implementation",
+              type: "address",
+            },
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              internalType: "struct PoolConfig",
+              name: "config",
+              type: "tuple",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "deploy",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+    RetroFunding: {
+      address: "0x156BbFd1B33Dd31a53b2e1F0D51DEe9658E0E8bc",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_name",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_schema",
+              type: "string",
+            },
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              internalType: "struct PoolConfig",
+              name: "_config",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "AccessControlBadConfirmation",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              internalType: "bytes32",
+              name: "neededRole",
+              type: "bytes32",
+            },
+          ],
+          name: "AccessControlUnauthorizedAccount",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "ReentrancyGuardReentrantCall",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "from",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "amount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Allocate",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "approver",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Approve",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "string",
+              name: "name",
+              type: "string",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "schema",
+              type: "string",
+            },
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              indexed: false,
+              internalType: "struct PoolConfig",
+              name: "config",
+              type: "tuple",
+            },
+          ],
+          name: "Deployed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Register",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "rejecter",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Reject",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "previousAdminRole",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "newAdminRole",
+              type: "bytes32",
+            },
+          ],
+          name: "RoleAdminChanged",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "RoleGranted",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "sender",
+              type: "address",
+            },
+          ],
+          name: "RoleRevoked",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "updater",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "Update",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "DEFAULT_ADMIN_ROLE",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "_allocate",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_approve",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "_distribute",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_reject",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "_update",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "allocate",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "approve",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "config",
+          outputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "allocationToken",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "distributionToken",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "maxAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address[]",
+              name: "recipients",
+              type: "address[]",
+            },
+            {
+              internalType: "uint256[]",
+              name: "amounts",
+              type: "uint256[]",
+            },
+            {
+              internalType: "address",
+              name: "token",
+              type: "address",
+            },
+            {
+              internalType: "bytes[]",
+              name: "data",
+              type: "bytes[]",
+            },
+          ],
+          name: "distribute",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+          ],
+          name: "getRoleAdmin",
+          outputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "grantRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "hasRole",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "owner",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "admins",
+                  type: "address[]",
+                },
+                {
+                  internalType: "address",
+                  name: "allocationToken",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "distributionToken",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "maxAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint64[]",
+                  name: "timestamps",
+                  type: "uint64[]",
+                },
+                {
+                  internalType: "string",
+                  name: "metadataURI",
+                  type: "string",
+                },
+              ],
+              internalType: "struct PoolConfig",
+              name: "_config",
+              type: "tuple",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "initialize",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "register",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          name: "registrations",
+          outputs: [
+            {
+              internalType: "enum IPool.Status",
+              name: "status",
+              type: "uint8",
+            },
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "reject",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "callerConfirmation",
+              type: "address",
+            },
+          ],
+          name: "renounceRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "role",
+              type: "bytes32",
+            },
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "revokeRole",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes4",
+              name: "interfaceId",
+              type: "bytes4",
+            },
+          ],
+          name: "supportsInterface",
+          outputs: [
+            {
+              internalType: "bool",
+              name: "",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "project",
+              type: "address",
+            },
+            {
+              internalType: "string",
+              name: "_metadataURI",
+              type: "string",
+            },
+            {
+              internalType: "bytes",
+              name: "data",
+              type: "bytes",
+            },
+          ],
+          name: "update",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        _allocate: "contracts/Pool.sol",
+        _approve: "contracts/Pool.sol",
+        _distribute: "contracts/Pool.sol",
+        _register: "contracts/Pool.sol",
+        _reject: "contracts/Pool.sol",
+        _update: "contracts/Pool.sol",
+        config: "contracts/Pool.sol",
+        initialize: "contracts/Pool.sol",
+        registrations: "contracts/Pool.sol",
+        DEFAULT_ADMIN_ROLE: "@openzeppelin/contracts/access/AccessControl.sol",
+        getRoleAdmin: "@openzeppelin/contracts/access/AccessControl.sol",
+        grantRole: "@openzeppelin/contracts/access/AccessControl.sol",
+        hasRole: "@openzeppelin/contracts/access/AccessControl.sol",
+        renounceRole: "@openzeppelin/contracts/access/AccessControl.sol",
+        revokeRole: "@openzeppelin/contracts/access/AccessControl.sol",
+        supportsInterface: "@openzeppelin/contracts/access/AccessControl.sol",
+      },
+    },
+  },
 } as const;
 
 export default deployedContracts satisfies GenericContractsDeclaration;
