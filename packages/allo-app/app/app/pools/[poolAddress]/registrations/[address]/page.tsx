@@ -1,6 +1,6 @@
 "use client";
 
-import { Address } from "viem";
+import { Address, Hex } from "viem";
 
 import { useParams, useRouter } from "next/navigation";
 import { BackgroundImage } from "~/components/background-image";
@@ -8,17 +8,50 @@ import { Page } from "~/components/page";
 import { Button } from "~/components/ui/button";
 
 import { useCart } from "~/components/cart/use-cart";
-import { useProjectById } from "~/components/registration/use-register";
 import { AllocationsTable } from "~/components/allocation/allocations-table";
 import { Markdown } from "~/components/markdown";
 import { ApprovedBadge } from "~/components/registration/approved-badge";
+import { useRegistration } from "~/components/registration/use-register";
+import { Pencil } from "lucide-react";
+
+function AddToCartButton({ id }: { id: string }) {
+  // TODO: Check if project is approved
+  const cart = useCart();
+  const router = useRouter();
+  const { poolAddress } = useParams();
+  return (
+    <Button
+      onClick={() => {
+        cart.set(id, cart.items[id] || 1n);
+        router.push(`/app/pools/${poolAddress}/checkout`);
+      }}
+    >
+      Add To Cart
+    </Button>
+  );
+}
+
+function EditProjectButton({ id }: { id: string }) {
+  return (
+    <Button
+      variant="outline"
+      icon={Pencil}
+      onClick={() => alert("not implemented")}
+    >
+      Edit Project
+    </Button>
+  );
+}
 
 export default function RegistrationDetailsPage() {
   const params = useParams();
   const address = params.address as Address;
   const cart = useCart();
   const router = useRouter();
-  const { data: project } = useProjectById(address);
+  const { data: project } = useRegistration({
+    address,
+    poolAddress: params.poolAddress as Address,
+  });
 
   return (
     <Page
@@ -29,16 +62,10 @@ export default function RegistrationDetailsPage() {
         </div>
       }
       actions={
-        <div className="flex gap-1">
-          <Button
-            onClick={() => {
-              cart.set(project?.id!, cart.items[project?.id!] || 1);
-              router.push(`/app/pools/${params.poolId}/checkout`);
-            }}
-          >
-            Add To Cart
-          </Button>
-        </div>
+        <>
+          <AddToCartButton id={project?.id!} />
+          <EditProjectButton id={project?.id!} />
+        </>
       }
     >
       <BackgroundImage

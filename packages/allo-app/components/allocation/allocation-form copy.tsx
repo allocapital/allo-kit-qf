@@ -10,7 +10,7 @@ import { buildAllocations, useCart } from "~/components/cart/use-cart";
 import { AllowanceCheck } from "../token/allowance-check";
 import { formatNumber } from "~/lib/format";
 import { useToken } from "~/components/token/use-token";
-import { useProjects } from "../registration/use-register";
+import { useRegistrations } from "../registration/use-register";
 import { Grid } from "../grid";
 import { AllocationItem } from "./allocation-item";
 import { TokenAmount } from "../token/token-amount";
@@ -27,7 +27,7 @@ export function AllocationForm({
   const token = useToken(tokenAddress, address);
   const cart = useCart();
   const allocate = useAllocate({ strategyAddress });
-  const projects = useProjects({
+  const projects = useRegistrations({
     where: {
       address_in: Object.keys(cart.items) as Address[],
     },

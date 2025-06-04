@@ -1,4 +1,4 @@
-import { ArrowUpRight, DollarSign, TrendingUp } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 import {
   Card,
@@ -9,7 +9,6 @@ import {
 } from "~/components/ui/card";
 import { Progress } from "~/components/ui/progress";
 import { Button } from "~/components/ui/button";
-import { Pool } from "~/schemas/pool";
 import { Address } from "viem";
 import { TokenAmount } from "../token/token-amount";
 import { useQuadraticMatching } from "~/hooks/use-quadratic-matching";
@@ -17,25 +16,24 @@ import { EnsName } from "../ens";
 import { MatchingFunds } from "../allocation/matching-funds";
 import { MintTokens } from "../mint-tokens";
 import { useAllocations } from "../allocation/use-allocate";
-import { Label } from "../ui/label";
+import { Pool } from "./schemas";
 
 export function PoolFunds({ pool }: { pool: Pool }) {
-  // Calculate some mock data for the funding progress
-
-  const tokenAddress = pool?.decodedData?.matchToken as Address;
+  const poolAddress = pool?.address;
+  const tokenAddress = pool?.distributionToken as Address;
 
   const Contributions = useAllocations({
     where: {
-      pool_in: [pool?.address],
-      to_in: [pool?.address],
+      pool_in: [poolAddress],
+      to_in: [poolAddress],
     },
   });
 
   const { donations, matchingFunds, matching } = useQuadraticMatching({
-    strategyAddress: pool?.address,
+    poolAddress,
     tokenAddress,
   });
-  const targetFunds = 5_000 * 10 ** 18;
+  const targetFunds = pool?.maxAmount ?? 0n;
   const progressPercentage =
     (Number(matchingFunds ?? 0) / Number(targetFunds ?? 0)) * 100;
 
@@ -63,7 +61,7 @@ export function PoolFunds({ pool }: { pool: Pool }) {
             </div>
             <div className="pt-8 flex justify-end space-x-2">
               <MatchingFunds
-                strategyAddress={pool?.address}
+                poolAddress={poolAddress}
                 tokenAddress={tokenAddress}
               />
             </div>

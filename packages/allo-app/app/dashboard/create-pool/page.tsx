@@ -5,8 +5,10 @@ import { PoolForm } from "~/components/pool/pool-form";
 import { useStrategies } from "~/components/strategy/use-strategy";
 import { useContracts } from "~/hooks/use-contracts";
 import { useToken } from "~/components/token/use-token";
+import { useAccount } from "wagmi";
 
 export default function CreatePool() {
+  const { address } = useAccount();
   const { ERC20Mock } = useContracts();
   const { data: strategies, isPending } = useStrategies({
     limit: 100,
@@ -28,12 +30,12 @@ export default function CreatePool() {
               image: "",
               description: "My Pool Description",
             },
+            owner: address,
             strategy: strategies?.items[0]?.address,
-            strategyData: {
-              voteToken: ERC20Mock?.address,
-              matchToken: ERC20Mock?.address,
-              poolCap: "10000",
-            },
+            allocationToken: ERC20Mock?.address,
+            distributionToken: ERC20Mock?.address,
+            strategyData: {},
+            maxAmount: 10000,
             admins: [],
           }}
         />

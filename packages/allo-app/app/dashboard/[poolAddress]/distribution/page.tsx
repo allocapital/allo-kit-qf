@@ -9,15 +9,14 @@ import { useContracts } from "~/hooks/use-contracts";
 
 export default function DashboardDistributionPage() {
   const { poolAddress } = useParams();
-  const { ERC20Mock } = useContracts();
 
   const { data: pool } = usePoolById(poolAddress as Address);
-  const tokenAddress = pool?.decodedData.matchToken ?? ERC20Mock?.address;
+  const tokenAddress = pool?.distributionToken as Address;
 
   return (
     <Page title="Pool Distribution">
       <QuadraticDistribution
-        strategyAddress={poolAddress as Address}
+        poolAddress={poolAddress as Address}
         tokenAddress={tokenAddress}
       />
       <MintTokens tokenAddress={tokenAddress} />

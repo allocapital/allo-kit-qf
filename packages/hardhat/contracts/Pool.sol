@@ -98,7 +98,6 @@ contract Pool is IPool {
         require(registration.status == Status.pending, "Already approved or not registered yet");
         registration.status = Status.approved;
         // MetadataURI here is Review information so we don't need to store it
-        registration.data = data;
         emit Approve(project, msg.sender, _metadataURI, data);
     }
 
@@ -125,7 +124,7 @@ contract Pool is IPool {
             require(amounts[i] > 0, "Amount is zero");
             _beforeAllocate(recipients[i], amounts[i], token, _data);
             IERC20(token).transferFrom(msg.sender, recipients[i], amounts[i]);
-            emit Allocate(address(this), recipients[i], amounts[i], token, _data);
+            emit Allocate(msg.sender, recipients[i], amounts[i], token, _data);
         }
     }
 

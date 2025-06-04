@@ -14,21 +14,48 @@ const MAX_RETRY_COUNT = 5;
 
 // Whenever a new Pool is created.
 ponder.on("PoolFactory:Created", async ({ event, context }) => {
-  const { strategy, pool, name, owner, data, schema, metadataURI } = event.args;
+  const {
+    strategy,
+    pool,
+    // name,
+    // data,
+    // schema,
+    config: {
+      owner,
+      metadataURI,
+      allocationToken,
+      distributionToken,
+      admins,
+      maxAmount,
+      timestamps,
+    },
+  } = event.args;
   const { chainId } = context.network;
-  console.log("PoolFactory:Deployed", event.args);
+  console.log("PoolFactory:Deployed", event.args, {
+    owner,
+    metadataURI,
+    allocationToken,
+    distributionToken,
+    admins,
+    maxAmount,
+  });
   const metadata = await fetchMetadata(metadataURI);
   await context.db
     .insert(schemas.pool)
     .values({
       address: pool,
       owner,
-      name,
+      // name,
       chainId,
-      schema,
-      data,
+      // schema,
+      // data,
       strategy,
-      decodedData: decodeData(schema, data),
+      // decodedData: decodeData(schema, data),
+      allocationToken,
+      distributionToken,
+      admins,
+      maxAmount,
+      timestamps,
       metadataURI: metadataURI,
       metadata: metadata,
       createdAt: event.block.timestamp * 1000n,
@@ -70,7 +97,7 @@ ponder.on("Pool:Register", async ({ event, context }) => {
     .values({
       id: registrationId(event, context.network.chainId),
       chainId,
-      index,
+      // index,
       address: project,
       strategy: event.log.address,
       pool: event.log.address,

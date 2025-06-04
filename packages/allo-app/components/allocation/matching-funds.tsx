@@ -14,21 +14,21 @@ import { useToken } from "~/components/token/use-token";
 import { useInvalidate } from "~/hooks/use-invalidate";
 
 export function MatchingFunds({
-  strategyAddress,
+  poolAddress,
   tokenAddress,
 }: {
-  strategyAddress: Address;
+  poolAddress: Address;
   tokenAddress: Address;
 }) {
   const invalidate = useInvalidate();
   const [value, setValue] = useState<string>("");
-  const fund = useDeposit({ strategyAddress });
-  const withdraw = useWithdraw({ strategyAddress });
-  const token = useToken(tokenAddress, strategyAddress);
+  const fund = useDeposit(poolAddress);
+  const withdraw = useWithdraw(poolAddress);
+  const token = useToken(tokenAddress, poolAddress);
   const contributions = useAllocations({
     where: {
-      pool_in: [strategyAddress],
-      to_in: [strategyAddress],
+      pool_in: [poolAddress],
+      to_in: [poolAddress],
     },
   });
   return (
@@ -55,7 +55,7 @@ export function MatchingFunds({
       />
       <AllowanceCheck
         amount={BigInt(value ?? 0)}
-        spenderAddress={strategyAddress}
+        spenderAddress={poolAddress}
         tokenAddress={tokenAddress}
       >
         <Button type="submit" disabled={!value}>

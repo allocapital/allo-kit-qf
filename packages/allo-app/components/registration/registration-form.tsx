@@ -54,7 +54,7 @@ export function RegistrationForm({
             .then(onSuccess);
         })}
       >
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <ImportProject
             onSelect={(project) => {
               console.log("project", project);
@@ -68,7 +68,7 @@ export function RegistrationForm({
           <div className="w-full h-px bg-gray-200" />
           <span className="text-sm text-gray-500">or</span>
           <div className="w-full h-px bg-gray-200" />
-        </div>
+        </div> */}
         <FormField
           control={form.control}
           name="metadata.title"

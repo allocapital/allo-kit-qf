@@ -17,7 +17,7 @@ export function Page({
     <>
       <div className="mb-2 flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+          <h1 className="text-xl font-bold tracking-tight">{title}</h1>
           {description && (
             <p className="text-muted-foreground py-2">{description}</p>
           )}

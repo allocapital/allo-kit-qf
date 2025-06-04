@@ -5,5 +5,5 @@ export function NetworkBadge({ chainId }: { chainId?: number }) {
   if (!chainId) return null;
   const network = chainIdToNetwork(chainId);
 
-  return <Badge>{network?.name}</Badge>;
+  return <Badge variant="outline">{network?.name}</Badge>;
 }

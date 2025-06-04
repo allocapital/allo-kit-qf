@@ -26,7 +26,11 @@ import {
 } from "~/components/ui/sidebar";
 import { Logo } from "~/components/logo";
 import { NavItem } from "~/components/sidebar/nav-item";
-import { usePools, usePoolsByOwner } from "~/components/pool/use-pool";
+import {
+  usePoolById,
+  usePools,
+  usePoolsByOwner,
+} from "~/components/pool/use-pool";
 import { useAccount } from "wagmi";
 import { cn } from "~/lib/utils";
 import { Address } from "viem";
@@ -43,7 +47,7 @@ import {
 import { useSidebar } from "~/components/ui/sidebar";
 import Link from "next/link";
 import { NetworkSelector } from "~/components/network-selector";
-import { useRouter, useParams, usePathname } from "next/navigation";
+import { useRouter, useParams, usePathname, redirect } from "next/navigation";
 
 const menu = {
   sections: [
@@ -75,11 +79,11 @@ const menu = {
           href: "/voters",
           icon: ShieldUser,
         },
-        {
-          title: "Team",
-          href: "/team",
-          icon: Users,
-        },
+        // { // Team is managed in Settings
+        //   title: "Team",
+        //   href: "/team",
+        //   icon: Users,
+        // },
         {
           title: "Settings",
           href: "/settings",
@@ -94,6 +98,12 @@ export function DashboardSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { poolAddress } = useParams();
+
+  const { data: pool, isPending } = usePoolById(poolAddress as Address);
+  if (poolAddress && !isPending && !pool) {
+    redirect("/dashboard");
+  }
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -106,11 +116,11 @@ export function DashboardSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupContent>
             <PoolSwitcher />
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
         {menu.sections.map((section) => (
           <SidebarGroup key={section.name}>
             <SidebarGroupContent className="flex flex-col gap-2">

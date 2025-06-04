@@ -3,9 +3,6 @@ import { type z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFormContext } from "react-hook-form";
-import { Address } from "viem/accounts";
-
-import { encodeData } from "@se-2/sdk/utils";
 
 import {
   Form,
@@ -21,8 +18,7 @@ import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { useIpfsUpload } from "~/hooks/use-ipfs-upload";
 import { ImageUpload } from "~/components/image-upload";
-import { PoolSchema } from "~/schemas/pool";
-import { createElement, useState } from "react";
+import { PoolSchema } from "./schemas";
 import {
   Select,
   SelectContent,
@@ -32,8 +28,10 @@ import {
 } from "~/components/ui/select";
 import { Strategy } from "~/schemas";
 import { BalanceCheck } from "~/components/token/balance-check";
-import { useDeployStrategy } from "~/components/strategy/use-deploy";
+import { useCreatePool } from "./use-pool";
 import { parseUnits } from "viem";
+import { createElement } from "react";
+import { PlusIcon } from "lucide-react";
 
 type Token = {
   symbol: string;
@@ -49,7 +47,7 @@ export function PoolForm({
   strategies: Strategy[];
   tokens: Token[];
   defaultValues?: Partial<z.infer<typeof PoolSchema>>;
-  onSuccess?(value: { poolId: string }): void;
+  onSuccess?(value: { poolAddress: string }): void;
 }) {
   const router = useRouter();
   const form = useForm<z.infer<typeof PoolSchema>>({
@@ -57,7 +55,7 @@ export function PoolForm({
     defaultValues,
   });
 
-  const create = useDeployStrategy();
+  const create = useCreatePool();
   const upload = useIpfsUpload();
   const isLoading = upload.isPending || create.isPending;
 
@@ -68,16 +66,43 @@ export function PoolForm({
     <Form {...form}>
       <form
         className="relative space-y-2 mx-auto w-full max-w-(--breakpoint-sm)"
-        onSubmit={form.handleSubmit(async (values) => {
+        onSubmit={form.handleSubmit(async ({ metadata, ...values }) => {
           console.log(values);
-          const { cid: metadataURI } = await upload.mutateAsync(
-            values.metadata
-          );
+          // const metadataURI = ""; // Quick debug
+          const { cid: metadataURI } = await upload.mutateAsync(metadata);
           const strategy = strategies.find(
             (s) => s.address === values.strategy
           );
           if (!strategy) throw new Error("Strategy not found");
 
+          console.log("strategy", strategy);
+
+          const allocationToken = tokens.find(
+            (t) => t.address === values.allocationToken
+          );
+          if (!allocationToken) throw new Error("Allocation token not found");
+
+          create
+            .mutateAsync([
+              strategy.address,
+              {
+                ...values,
+                metadataURI,
+                maxAmount: parseUnits(
+                  String(values.maxAmount),
+                  allocationToken.decimals
+                ),
+                timestamps: [],
+              },
+              "0x",
+            ])
+            .then(({ pool }) => {
+              console.log("created pool", pool);
+              router.push(`/dashboard/${pool}`);
+            });
+          return;
+
+          /*
           function encodeSimpleGrants(schema: string) {
             const voteToken = tokens.find(
               (t) => t.address === values.strategyData.voteToken
@@ -86,9 +111,6 @@ export function PoolForm({
               (t) => t.address === values.strategyData.matchToken
             );
             if (!voteToken || !matchToken) throw new Error("Token not found");
-            /*
-            TODO: Handle different Strategies with different schemas
-            */
             return encodeData(schema, [
               values.strategyData.voteToken,
               values.strategyData.matchToken,
@@ -101,17 +123,12 @@ export function PoolForm({
               values.strategyData.matchingToken,
             ]);
           }
-          console.log("strategy", strategy);
           const data =
             selectedStrategy === "SimpleGrants"
               ? encodeSimpleGrants(strategy.schema)
               : encodeQuadraticFunding(strategy.schema);
-          create
-            .mutateAsync([strategy.address, metadataURI, data])
-            .then(({ pool }) => {
-              console.log("created pool", pool);
-              router.push(`/dashboard/${pool}`);
-            });
+
+          */
         })}
       >
         <FormField
@@ -156,31 +173,19 @@ export function PoolForm({
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
-          name="strategy"
+          name="owner"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Strategy</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a strategy" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {strategies.map((strategy) => (
-                    <SelectItem key={strategy.address} value={strategy.address}>
-                      {strategy.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
+              <FormLabel>Owner</FormLabel>
+              <FormControl>
+                <Input autoFocus placeholder="Owner address..." {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <div className="grid grid-cols-2 gap-2">
           <FormField
@@ -244,30 +249,55 @@ export function PoolForm({
         </div>
         <FormField
           control={form.control}
-          name="strategyData.poolCap"
+          name="maxAmount"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Pool Max Amount</FormLabel>
               <FormControl>
-                <Input autoFocus placeholder="0x..." {...field} />
+                <Input autoFocus placeholder="0" {...field} type="number" />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* {selectedStrategy &&
+        <FormField
+          control={form.control}
+          name="strategy"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Strategy</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a strategy" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {strategies.map((strategy) => (
+                    <SelectItem key={strategy.address} value={strategy.address}>
+                      {strategy.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {selectedStrategy &&
           createElement(
             strategyComponents[
               selectedStrategy as keyof typeof strategyComponents
             ],
             { tokens }
-          )} */}
+          )}
 
         <div className="flex items-center justify-end">
           <BalanceCheck>
             <Button isLoading={isLoading} type="submit">
-              Create Project
+              Create Pool
             </Button>
           </BalanceCheck>
         </div>
@@ -284,79 +314,7 @@ function RetroFundingForm({ tokens }: { tokens: Token[] }) {
   const form = useFormContext();
   return (
     <>
-      <div className="grid grid-cols-2 gap-2">
-        <FormField
-          control={form.control}
-          name="strategyData.voteToken"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Vote Token</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a token" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {tokens.map((token) => (
-                      <SelectItem key={token.address} value={token.address}>
-                        {token.symbol}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="strategyData.matchToken"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Match Token</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a token" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {tokens.map((token) => (
-                      <SelectItem key={token.address} value={token.address}>
-                        {token.symbol}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-      <FormField
-        control={form.control}
-        name="strategyData.poolCap"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Pool Max Amount</FormLabel>
-            <FormControl>
-              <Input autoFocus placeholder="0x..." {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <pre>Additional RetroFunding data</pre>
     </>
   );
 }
@@ -365,58 +323,7 @@ function QuadraticFundingForm({ tokens }: { tokens: Token[] }) {
   const form = useFormContext();
   return (
     <div className="grid grid-cols-2 gap-2">
-      <FormField
-        control={form.control}
-        name="strategyData.donationToken"
-        render={({ field }) => (
-          <FormItem className="w-full">
-            <FormLabel>Donation Token</FormLabel>
-            <FormControl>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a token" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {tokens.map((token) => (
-                    <SelectItem key={token.address} value={token.address}>
-                      {token.symbol}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="strategyData.matchingToken"
-        render={({ field }) => (
-          <FormItem className="w-full">
-            <FormLabel>Matching Token</FormLabel>
-            <FormControl>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a token" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {tokens.map((token) => (
-                    <SelectItem key={token.address} value={token.address}>
-                      {token.symbol}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <pre>Additional QuadraticFunding data</pre>
     </div>
   );
 }

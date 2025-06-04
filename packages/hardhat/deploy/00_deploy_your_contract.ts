@@ -42,25 +42,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
 
   const owner = deployer; // Add your owner address here
 
-  // await deploy("YourStrategy", {
-  //   from: deployer,
-  //   // Contract constructor arguments
-  //   args: [owner],
-  //   log: true,
-  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
-  //   autoMine: true,
-  // });
-
-  // await deploy("SimpleGrants", {
-  //   from: deployer,
-  //   // Contract constructor arguments
-  //   args: [owner, ""],
-  //   log: true,
-  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
-  //   autoMine: true,
-  // });
   await deploy("Pool", {
     from: deployer,
     // Contract constructor arguments
@@ -108,43 +89,19 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   // await deploy("QuadraticFunding", {
   //   from: deployer,
   //   // Contract constructor arguments
-  //   args: [owner, ""],
-  //   log: true,
-  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
-  //   autoMine: true,
-  // });
-
-  // Deploy these so we can index them from packages/allo-indexer
-  // await deploy("Strategy", {
-  //   from: deployer,
-  //   // Contract constructor arguments
-  //   args: ["", "", ""],
-  //   log: true,
-  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
-  //   autoMine: true,
-  // });
-
-  // // const simpleGrants = await hre.ethers.getContract<Contract>("SimpleGrants", deployer);
-
-  // // const factory = await hre.ethers.getContract<Contract>("StrategyFactory", deployer);
-  // // // console.log(simpleGrants.getAddress())
-  // // await factory.deploy(await simpleGrants.getAddress(), "0x");
-
-  // await deploy("Allocator", {
-  //   from: deployer,
-  //   // Contract constructor arguments
-  //   args: [],
-  //   log: true,
-  //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-  //   // automatically mining the contract deployment transaction. There is no effect on live networks.
-  //   autoMine: true,
-  // });
-  // await deploy("Registry", {
-  //   from: deployer,
-  //   // Contract constructor arguments
-  //   args: [],
+  //   args: [
+  //     "QuadraticFunding",
+  //     "uint256 amount",
+  //     {
+  //       owner,
+  //       allocationToken: "0x0000000000000000000000000000000000000000",
+  //       distributionToken: "0x0000000000000000000000000000000000000000",
+  //       maxAmount: 0n,
+  //       metadataURI: "",
+  //       admins: [],
+  //       timestamps: [],
+  //     },
+  //   ],
   //   log: true,
   //   // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
   //   // automatically mining the contract deployment transaction. There is no effect on live networks.

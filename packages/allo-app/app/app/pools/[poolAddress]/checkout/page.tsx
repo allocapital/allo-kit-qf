@@ -10,22 +10,22 @@ import { AllocationFormMatching } from "~/components/allocation/allocation-form-
 export default function CheckoutPage() {
   const { ERC20Mock } = useContracts();
   const params = useParams();
-  const { data } = usePoolById(params.poolId as Address);
+  const { data } = usePoolById(params.poolAddress as Address);
 
-  const tokenAddress = data?.decodedData.tokenAddress ?? ERC20Mock?.address;
-  const strategyAddress = data?.address as Address;
+  const tokenAddress = data?.allocationToken ?? ERC20Mock?.address;
+  const poolAddress = data?.address as Address;
 
   return (
     <Page title="Checkout">
       <p className="pb-4 text-lg">Add amounts to fund projects with.</p>
-      {strategyAddress ? (
+      {poolAddress ? (
         <AllocationFormMatching
           tokenAddress={tokenAddress}
-          strategyAddress={strategyAddress}
+          poolAddress={poolAddress}
         />
       ) : null}
       <div className="mt-32">
-        <MintTokens tokenAddress={ERC20Mock?.address} />
+        <MintTokens tokenAddress={tokenAddress} />
       </div>
     </Page>
   );

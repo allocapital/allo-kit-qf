@@ -21,7 +21,6 @@ export default function DashboardPage() {
     },
   });
 
-  console.log(pools);
   return (
     <Page
       title="Dashboard"
@@ -31,17 +30,12 @@ export default function DashboardPage() {
         </Link>
       }
     >
-      <div className="grid grid-cols-2 gap-4  lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((pool) => (
-          <PoolCardSkeleton key={pool} />
-        ))}
-      </div>
       <Grid
         emptyState={{
           title: "No pools found",
           description: "Create a new pool to get started",
         }}
-        columns={[1, 2, 2, 3]}
+        columns={[1, 2, 3, 3]}
         data={pools?.items}
         error={error}
         isPending={isPending}

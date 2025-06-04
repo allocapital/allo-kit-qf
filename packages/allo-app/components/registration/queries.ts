@@ -1,25 +1,17 @@
 import gql from "graphql-tag";
 
-export const META_SCHEMA = `
-    totalCount
-    pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-    }
-`;
+import { META_SCHEMA } from "~/queries";
 
-export const ALLOCATIONS_SCHEMA = gql`
-  query Allocations(
+export const REGISTRATIONS_SCHEMA = gql`
+  query Registrations(
     $after: String
     $before: String
     $orderBy: String
     $orderDirection: String
     $limit: Int
-    $where: allocationFilter
+    $where: registrationFilter
   ) {
-    allocations(
+    registrations(
       after: $after
       before: $before
       orderBy: $orderBy
@@ -30,14 +22,25 @@ export const ALLOCATIONS_SCHEMA = gql`
       items {
         id
         chainId
-        amount
-        to
-        from
-        token
+        address
+        metadata
+        review
         createdAt
-        registration {
+        updatedAt
+        isApproved    
+        allocations {
+          items {
+            id
+            amount
+            to
+            from
+            token
+            createdAt
+          }
+        }
+        strategy {
           address
-          metadata
+          name
         }
         pool { 
           address

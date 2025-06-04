@@ -4,7 +4,6 @@ import Link from "next/link";
 import { ComponentProps } from "react";
 
 import { cn } from "~/lib/utils";
-import { Pool } from "~/schemas/pool";
 import { BackgroundImage } from "../background-image";
 import { EnsName } from "../ens";
 import {
@@ -20,6 +19,7 @@ import { NetworkBadge } from "../network-badge";
 import { useToken } from "../token/use-token";
 import { Address } from "viem";
 import { TokenAmount } from "../token/token-amount";
+import { Pool } from "./schemas";
 
 export function PoolCard({
   isLoading,
@@ -29,10 +29,8 @@ export function PoolCard({
 } & ComponentProps<"button">) {
   console.log(pool);
 
-  const matchingToken = useToken(
-    pool?.decodedData?.matchToken as Address,
-    pool?.address
-  );
+  const tokenAddress = pool?.distributionToken as Address;
+  const matchingToken = useToken(tokenAddress, pool?.address);
   const matchingFunds = matchingToken.data?.balance ?? BigInt(0);
 
   if (isLoading)
@@ -48,7 +46,7 @@ export function PoolCard({
         }
       )}
     >
-      <Badge className="absolute top-2 right-2">{pool?.strategy?.name}</Badge>
+      <Badge className="absolute top-2 left-2">{pool?.strategy?.name}</Badge>
       <BackgroundImage
         src={pool?.metadata?.image}
         fallbackSrc={pool?.metadata?.image}
@@ -56,19 +54,16 @@ export function PoolCard({
       />
       <CardHeader className="flex justify-between items-center">
         <CardTitle className="text-xl">{pool?.metadata?.title}</CardTitle>
-        <div className="flex gap-1 items-center">
+        {/* <div className="flex gap-1 items-center">
           <NetworkBadge chainId={pool?.chainId} />
-        </div>
+        </div> */}
       </CardHeader>
       <CardContent>
         <p>{pool?.metadata?.description}</p>
         <Separator className="my-4" />
         <div className="flex gap-2 items-end">
           <div className="text-lg font-bold">
-            <TokenAmount
-              amount={matchingFunds}
-              token={pool?.decodedData?.matchToken as Address}
-            />
+            <TokenAmount amount={matchingFunds} token={tokenAddress} />
           </div>
           <div className="text-sm pb-0.5">in matching</div>
         </div>

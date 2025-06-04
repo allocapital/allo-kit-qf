@@ -18,7 +18,6 @@ import {
 import { AllowanceCheck } from "../token/allowance-check";
 import { formatNumber } from "~/lib/format";
 import { useToken } from "~/components/token/use-token";
-import { useProjects } from "../registration/use-register";
 import { Grid } from "../grid";
 import { AllocationItem } from "./allocation-item";
 import { formatTokenAmount, TokenAmount } from "../token/token-amount";
@@ -27,21 +26,22 @@ import { Allocation, Registration } from "~/schemas";
 import { NumberInput } from "../number-input";
 import { useQuadraticMatching } from "~/hooks/use-quadratic-matching";
 import { useEffect } from "react";
+import { useRegistrations } from "../registration/use-register";
 
 export function AllocationFormMatching({
-  strategyAddress,
+  poolAddress,
   tokenAddress,
 }: {
-  strategyAddress: Address;
+  poolAddress: Address;
   tokenAddress: Address;
 }) {
   const { address } = useAccount();
   const token = useToken(tokenAddress, address);
   const cart = useCart();
-  const allocate = useAllocate({ strategyAddress });
+  const allocate = useAllocate(poolAddress);
 
   const { pools, ids, chainIds } = cartItemsToIds(cart.items);
-  const projects = useProjects({
+  const projects = useRegistrations({
     where: { pool_in: pools, address_in: ids, chainId_in: chainIds },
   });
 
@@ -55,7 +55,7 @@ export function AllocationFormMatching({
     isLoading,
     queryKeys,
   } = useQuadraticMatching({
-    strategyAddress,
+    poolAddress,
     tokenAddress,
   });
 
@@ -67,7 +67,7 @@ export function AllocationFormMatching({
     Object.entries(cart.items).map(([id, amount]) => ({
       amount: BigInt(amount ?? 0) * 10n ** BigInt(token.data?.decimals ?? 18),
       to: id,
-      from: strategyAddress,
+      from: poolAddress,
       token: tokenAddress,
     }))
   );
@@ -157,7 +157,7 @@ export function AllocationFormMatching({
           <AllowanceCheck
             amount={cart.sum}
             tokenAddress={tokenAddress}
-            spenderAddress={strategyAddress}
+            spenderAddress={poolAddress}
           >
             <Button
               className="w-48"

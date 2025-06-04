@@ -6,6 +6,7 @@ import { RegistrationsList } from "~/components/registration/registrations-list"
 
 export default function ProfilePage() {
   const { address } = useAccount();
+
   return (
     <Page
       title="Profile"

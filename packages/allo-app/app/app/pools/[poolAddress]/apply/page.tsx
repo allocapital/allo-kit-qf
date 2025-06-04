@@ -7,14 +7,14 @@ import { Address } from "viem";
 
 export default function PoolApplyPage() {
   const params = useParams();
-  const poolId = params.poolId as Address;
+  const poolAddress = params.poolAddress as Address;
   const router = useRouter();
   const { address } = useAccount();
 
   return (
     <Page title="Apply to Pool">
       <RegistrationForm
-        strategyAddress={poolId}
+        strategyAddress={poolAddress}
         defaultValues={{
           address,
           metadata: {
@@ -23,7 +23,9 @@ export default function PoolApplyPage() {
             description: `This is a project...`,
           },
         }}
-        onSuccess={({ project }) => router.push(`/app/pools/${poolId}`)}
+        onSuccess={({ project }) =>
+          router.push(`/app/pools/${poolAddress}/registrations/${project}`)
+        }
       />
     </Page>
   );

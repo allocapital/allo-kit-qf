@@ -12,7 +12,7 @@ export function Header() {
   const params = useParams();
 
   console.log(params);
-  const poolAddress = params.poolId as string;
+  const poolAddress = params.poolAddress as string;
   return (
     <div className="border-b">
       <header className="max-w-screen-xl mx-auto flex items-center p-2">

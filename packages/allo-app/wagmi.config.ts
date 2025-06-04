@@ -5,14 +5,9 @@ import { Abi } from "viem";
 
 const contracts = Object.entries<{ abi: Abi }>(deployedContracts["31337"])
   .map(([name, { abi }]) => {
-    return {
-      name: name === "YourContract" ? "Strategy" : name,
-      abi,
-    };
+    return { name, abi };
   })
-  .filter((contract) =>
-    ["Allocator", "Strategy", "Registry", "PoolFactory"].includes(contract.name)
-  );
+  .filter((contract) => ["Pool", "PoolFactory"].includes(contract.name));
 
 console.log(contracts);
 
